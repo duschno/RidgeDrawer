@@ -97,6 +97,8 @@ namespace ImageDrawer
 
 		private static void RenderLine(Graphics graphics, List<System.Drawing.Point> coords, RenderParams param)
 		{
+			if (coords.Count == 1)
+				return;
 			System.Drawing.Pen pen = new System.Drawing.Pen(System.Drawing.Color.Black, param.Width);
 
 			switch (param.LineType)

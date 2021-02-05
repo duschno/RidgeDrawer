@@ -1,5 +1,4 @@
-﻿using ImageDrawer;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,73 +7,28 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
-using System.Drawing.Drawing2D;
 using System.Windows.Input;
+using System.Diagnostics;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Reflection;
-using System.Drawing;
 
-namespace ImageDrawerUI
+namespace preview_test
 {
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
 	/// </summary>
 	public partial class MainWindow : Window
 	{
-		double scaleFactor = 2;
-		System.Windows.Point startPos;
-		System.Windows.Point endPos;
-		Thickness oldMargin;
-		string filename;
-		ImageSource orig;
 
+		double scaleFactor = 2;
+		Point startPos;
+		Point endPos;
+		Thickness oldMargin;
 		public MainWindow()
 		{
 			InitializeComponent();
-			RenderParams param = new RenderParams { };
-			//FieldInfo[] amountField = param.GetType().GetFields();
-			//foreach (var item in amountField)
-			//{
-			//	var someVar = Activator.CreateInstance(item.GetType(), item.GetValue(param));
-			//}
-			//yourComboBox.ItemsSource = Enum.GetValues(typeof(EffectStyle)).Cast<EffectStyle>();
-
-		}
-
-		private void button_Click(object sender, RoutedEventArgs e)
-		{
-			Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-			dlg.Filter = "Image files (*.jpg, *.jpeg, *.jpe, *.jfif, *.png) | *.jpg; *.jpeg; *.jpe; *.jfif; *.png";
-
-			bool? result = dlg.ShowDialog();
-
-			if (result == true)
-			{
-				filename = dlg.FileName;
-				RenderOnUI(filename);
-			}
-		}
-
-		private void RenderOnUI(string filename)
-		{
-			RenderParams param = new RenderParams
-			{
-				LinesCount = Convert.ToInt32(linescounttb.Text),
-				Width = Convert.ToInt32(Widthtb.Text),
-				Factor = Convert.ToInt32(Factortb.Text),
-				ChunkSize = Convert.ToInt32(ChunkSizetb.Text),
-				Smoothing = SmoothingMode.None,
-				LineType = RenderType.Curve,
-				Method = RenderMethod.Squiggle
-			};
-
-			Cursor = Cursors.Wait;
-			orig = Program.ImageSourceFromBitmap(new Bitmap(filename));
-			image.Source = Program.DrawUI(filename, param);
-			Cursor = Cursors.Arrow;
 		}
 
 		private void image_MouseWheel(object sender, MouseWheelEventArgs e)
@@ -98,7 +52,7 @@ namespace ImageDrawerUI
 					if (image.Width <= ((Grid)sender).ActualWidth)
 						image.Width = image.Height = double.NaN;
 				}
-
+				
 			}
 
 			if (NoScale)
@@ -131,7 +85,7 @@ namespace ImageDrawerUI
 				if (margin.Left < -image.Width) margin.Left = -image.Width;
 				image.Margin = margin;
 
-				//Debug.WriteLine(image.Margin.Left + " " + image.Margin.Top);
+				Debug.WriteLine(image.Margin.Left + " " + image.Margin.Top);
 			}
 		}
 
@@ -152,30 +106,6 @@ namespace ImageDrawerUI
 			{
 				return double.IsNaN(image.Width);
 			}
-		}
-
-		private void Grid_GiveFeedback(object sender, GiveFeedbackEventArgs e)
-		{
-
-		}
-
-		private void comparebuton_Click(object sender, RoutedEventArgs e)
-		{
-			var t = orig;
-			orig = image.Source;
-			image.Source = t;
-		}
-
-		private void linescounttb_TextChanged(object sender, TextChangedEventArgs e)
-		{
-			if (filename != null)
-				RenderOnUI(filename);
-		}
-
-		private void Smoothingcb_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			if (filename != null)
-				RenderOnUI(filename);
 		}
 	}
 }
