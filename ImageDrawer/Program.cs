@@ -5,27 +5,32 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Interop;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace ImageDrawer
 {
-	class Program
+	public class Program
 	{
 		static void MethodRidge(Graphics graphics, Bitmap bmp, RenderParams param)
 		{
 			int lineNumber = 0;
 			while (lineNumber < param.LinesCount)
 			{
-				List<Point> coords = new List<Point>();
+				List<System.Drawing.Point> coords = new List<System.Drawing.Point>();
 				int y = bmp.Height * lineNumber / param.LinesCount + bmp.Height / (param.LinesCount * 2);
-				coords.Add(new Point(0, y));
+				coords.Add(new System.Drawing.Point(0, y));
 				for (int x = 1; x < bmp.Width; x += param.ChunkSize)
 				{
-					Color pixel = bmp.GetPixel(x, y);
+					System.Drawing.Color pixel = bmp.GetPixel(x, y);
 					int grayscale = (pixel.R + pixel.G + pixel.B) / 3;
 					int factor = param.Factor * (grayscale - 127) / 127;
-					coords.Add(new Point(x, y + factor));
+					coords.Add(new System.Drawing.Point(x, y + factor));
 				}
 
 				RenderLine(graphics, coords, param);
@@ -38,23 +43,23 @@ namespace ImageDrawer
 			int lineNumber = 0;
 			while (lineNumber < param.LinesCount)
 			{
-				List<Point> coords = new List<Point>();
+				List<System.Drawing.Point> coords = new List<System.Drawing.Point>();
 				int sign = -1;
 				int y = bmp.Height * lineNumber / param.LinesCount + bmp.Height / (param.LinesCount * 2);
-				coords.Add(new Point(0, y));
+				coords.Add(new System.Drawing.Point(0, y));
 				int accumulator = 0;
 				int xStepsCount = 0;
 				//int xPossibleSteps = (bmp.Width - 1) / param.ChunkSize;
 				for (int x = 1; x < bmp.Width; x += param.ChunkSize)
 				{
 					xStepsCount++;
-					Color pixel = bmp.GetPixel(x, y);
+					System.Drawing.Color pixel = bmp.GetPixel(x, y);
 					int grayscale = 255 - (pixel.R + pixel.G + pixel.B) / 3;
 					accumulator += grayscale;
 					if (accumulator > 127)
 					{
 						int factor = param.Factor;
-						coords.Add(new Point(
+						coords.Add(new System.Drawing.Point(
 							x, y + sign * factor / xStepsCount));
 						sign *= -1;
 						accumulator = 0;
@@ -90,9 +95,9 @@ namespace ImageDrawer
 			return empty;
 		}
 
-		private static void RenderLine(Graphics graphics, List<Point> coords, RenderParams param)
+		private static void RenderLine(Graphics graphics, List<System.Drawing.Point> coords, RenderParams param)
 		{
-			Pen pen = new Pen(Color.Black, param.Width);
+			System.Drawing.Pen pen = new System.Drawing.Pen(System.Drawing.Color.Black, param.Width);
 
 			switch (param.LineType)
 			{
@@ -103,7 +108,7 @@ namespace ImageDrawer
 					graphics.DrawCurve(pen, coords.ToArray());
 					break;
 				case RenderType.Dot:
-					foreach (Point coord in coords)
+					foreach (System.Drawing.Point coord in coords)
 						graphics.DrawRectangle(pen, coord.X, coord.Y, 1f, 1f);
 					break;
 				default:
@@ -139,6 +144,34 @@ namespace ImageDrawer
 				parameters);
 		}
 
+		public static ImageSource DrawUI(string inputFileName, RenderParams param)
+		{
+			Bitmap bmp = new Bitmap(inputFileName);
+
+			bmp = RenderImage(bmp, param);
+
+			EncoderParameters parameters = new EncoderParameters(1);
+			parameters.Param[0] = new EncoderParameter(
+				System.Drawing.Imaging.Encoder.Quality, 100L);
+
+			return ImageSourceFromBitmap(bmp);
+		}
+
+		//If you get 'dllimport unknown'-, then add 'using System.Runtime.InteropServices;'
+		[DllImport("gdi32.dll", EntryPoint = "DeleteObject")]
+		[return: MarshalAs(UnmanagedType.Bool)]
+		public static extern bool DeleteObject([In] IntPtr hObject);
+
+		public static ImageSource ImageSourceFromBitmap(Bitmap bmp)
+		{
+			var handle = bmp.GetHbitmap();
+			try
+			{
+				return Imaging.CreateBitmapSourceFromHBitmap(handle, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+			}
+			finally { DeleteObject(handle); }
+		}
+
 		static void Main(string[] args)
 		{
 			RenderParams param = new RenderParams
@@ -156,16 +189,16 @@ namespace ImageDrawer
 			Draw(imageName, AddPostfix(imageName), param);
 		}
 
-		private static string GetImageName(string defaultName, string[] args)
+		public static string GetImageName(string defaultName, string[] args = null)
 		{
 			string imageName = defaultName;
-			if (args.Length > 0)
+			if (args != null && args.Length > 0)
 				imageName = args[0];
 
 			return imageName;
 		}
 
-		private static string AddPostfix(string imageName)
+		public static string AddPostfix(string imageName)
 		{
 			string filename = Path.GetFileNameWithoutExtension(imageName);
 			string outputExt = ImageFormat.Png.ToString().ToLower();

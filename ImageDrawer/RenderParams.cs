@@ -7,20 +7,20 @@ using System.Threading.Tasks;
 
 namespace ImageDrawer
 {
-	enum RenderType
+	public enum RenderType
 	{
 		Line,
 		Dot,
 		Curve
 	}
 
-	enum RenderMethod
+	public enum RenderMethod
 	{
 		Ridge,
 		Squiggle
 	}
 
-	struct RenderParams
+	public struct RenderParams
 	{
 		public int LinesCount;
 		public int Width;
