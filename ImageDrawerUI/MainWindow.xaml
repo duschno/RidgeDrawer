@@ -12,12 +12,11 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid Grid.Column="0" MinWidth="200" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-            <Rectangle Fill="Red" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
-            <Button x:Name="button" Content="Button" HorizontalAlignment="Left" Margin="56,193,0,0" VerticalAlignment="Top" Width="75" Click="button_Click"/>
+            <Button x:Name="button" Content="Select image" HorizontalAlignment="Left" Margin="56,193,0,0" VerticalAlignment="Top" Width="75" Click="button_Click"/>
         </Grid>
         <Viewbox Grid.Column="1">
             <Image x:Name="image" HorizontalAlignment="Stretch" Stretch="Uniform" VerticalAlignment="Stretch" 
-                   Source="merc_photos_v2_x2.png" RenderOptions.BitmapScalingMode="HighQuality"/>
+                   RenderOptions.BitmapScalingMode="HighQuality"/>
         </Viewbox>
     </Grid>
 </Window>
