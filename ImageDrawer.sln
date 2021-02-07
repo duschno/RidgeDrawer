@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageDrawerUI", "ImageDrawe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "preview_test", "preview_test\preview_test.csproj", "{203BB8FF-6CBF-49F5-9006-C21C1074EF77}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "drag_test", "draw_test\drag_test.csproj", "{08D8ADDA-3CC1-4700-950C-A109D073D264}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{203BB8FF-6CBF-49F5-9006-C21C1074EF77}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{203BB8FF-6CBF-49F5-9006-C21C1074EF77}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{203BB8FF-6CBF-49F5-9006-C21C1074EF77}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08D8ADDA-3CC1-4700-950C-A109D073D264}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08D8ADDA-3CC1-4700-950C-A109D073D264}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08D8ADDA-3CC1-4700-950C-A109D073D264}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08D8ADDA-3CC1-4700-950C-A109D073D264}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

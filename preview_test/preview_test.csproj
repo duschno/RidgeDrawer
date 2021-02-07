@@ -96,7 +96,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Ladas.jpg" />
+    <Resource Include="wrongDpiImage.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="gunplace.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

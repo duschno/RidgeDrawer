@@ -67,8 +67,8 @@ namespace ImageDrawerUI
 				Factor = Convert.ToInt32(Factortb.Text),
 				ChunkSize = Convert.ToInt32(ChunkSizetb.Text),
 				Smoothing = SmoothingMode.None,
-				LineType = RenderType.Curve,
-				Method = RenderMethod.Squiggle
+				LineType = RenderType.Dot,
+				Method = RenderMethod.Ridge
 			};
 
 			Cursor = Cursors.Wait;
@@ -77,9 +77,10 @@ namespace ImageDrawerUI
 			Cursor = Cursors.Arrow;
 		}
 
-		private void image_MouseWheel(object sender, MouseWheelEventArgs e)
+
+		private void ChangeZoom(bool zoomIn)
 		{
-			if (e.Delta > 0)
+			if (zoomIn)
 			{
 				image.Width = image.ActualWidth * scaleFactor;
 				image.Height = image.ActualHeight * scaleFactor;
@@ -89,13 +90,13 @@ namespace ImageDrawerUI
 				if (NoScale)
 					return;
 
-				if (image.Width <= ((Grid)sender).ActualWidth)
+				if (image.Width <= ImageGrid.ActualWidth)
 					image.Width = image.Height = double.NaN;
 				else
 				{
 					image.Width = image.ActualWidth / scaleFactor;
 					image.Height = image.ActualHeight / scaleFactor;
-					if (image.Width <= ((Grid)sender).ActualWidth)
+					if (image.Width <= ImageGrid.ActualWidth) // why grid, not the image?
 						image.Width = image.Height = double.NaN;
 				}
 
@@ -103,16 +104,21 @@ namespace ImageDrawerUI
 
 			if (NoScale)
 			{
-				((Grid)sender).Cursor = Cursors.Arrow;
+				ImageGrid.Cursor = Cursors.Arrow;
 				RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.Linear);
 				image.Margin = new Thickness();
 				oldMargin = new Thickness();
 			}
 			else
 			{
-				((Grid)sender).Cursor = Cursors.Hand;
+				ImageGrid.Cursor = Cursors.Hand;
 				RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.NearestNeighbor);
 			}
+		}
+
+		private void image_MouseWheel(object sender, MouseWheelEventArgs e)
+		{
+			ChangeZoom(e.Delta > 0);
 		}
 
 		private void image_MouseMove(object sender, MouseEventArgs e)
@@ -176,6 +182,18 @@ namespace ImageDrawerUI
 		{
 			if (filename != null)
 				RenderOnUI(filename);
+		}
+
+		private void Window_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.Key == Key.Add || e.Key == Key.OemPlus)
+			{
+				ChangeZoom(true);
+			}
+			if (e.Key == Key.Subtract || e.Key == Key.OemMinus)
+			{
+				ChangeZoom(false);
+			}
 		}
 	}
 }

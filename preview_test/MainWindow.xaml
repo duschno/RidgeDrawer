@@ -6,10 +6,11 @@
         xmlns:local="clr-namespace:preview_test"
         mc:Ignorable="d"
         x:Name="Window"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid MouseWheel="image_MouseWheel">
-        <Image x:Name="image" HorizontalAlignment="Stretch" Stretch="Uniform" VerticalAlignment="Stretch"
-                RenderOptions.BitmapScalingMode="Linear" Source="Ladas.jpg" MouseMove="image_MouseMove" 
-               MouseLeftButtonDown="image_MouseLeftButtonDown" MouseLeftButtonUp="image_MouseLeftButtonUp" UseLayoutRounding="True"/>
+        Title="MainWindow" KeyDown="Window_KeyDown"  Height="500" Width="500">
+    <Grid Name="ImageGrid" SnapsToDevicePixels="True" UseLayoutRounding="True"
+          MouseWheel="image_MouseWheel"  MouseMove="image_MouseMove" 
+          MouseLeftButtonDown="image_MouseLeftButtonDown" MouseLeftButtonUp="image_MouseLeftButtonUp" Loaded="ImageGrid_Loaded">
+        <Image x:Name="image" Stretch="None" Source="wrongDpiImage.png" Panel.ZIndex="1"/>
+        <Rectangle Fill="Gray"/>
     </Grid>
 </Window>
