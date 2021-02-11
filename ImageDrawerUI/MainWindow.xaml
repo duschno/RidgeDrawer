@@ -7,22 +7,37 @@
         mc:Ignorable="d"
         x:Name="Window"
         Title="MainWindow" Height="450" Width="800" MinWidth="400" MinHeight="400" KeyDown="Window_KeyDown">
+    <Window.Resources>
+        <ResourceDictionary>
+            <Style TargetType="{x:Type Button}" x:Key="FullsizeButtonStyle">
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Opacity" Value="1"/>
+                        <Setter Property="Cursor" Value="Arrow"/>
+                    </Trigger>
+                    <Trigger Property="IsMouseOver" Value="False">
+                        <Setter Property="Opacity" Value="0.5"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid Grid.Column="0" MinWidth="200" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Panel.ZIndex="1" Background="White">
-            <TextBox x:Name="linescounttb" Height="20" TextWrapping="Wrap" Text="120" VerticalAlignment="Top" Width="83" Margin="103,190,0,0" HorizontalAlignment="Left" TextChanged="linescounttb_TextChanged"/>
+            <TextBox x:Name="linescounttb" PreviewTextInput="NumberValidationTextBox" Height="20" TextWrapping="Wrap" Text="120" VerticalAlignment="Top" Width="83" Margin="103,190,0,0" HorizontalAlignment="Left" TextChanged="linescounttb_TextChanged"/>
             <Label x:Name="linescountl" Content="LinesCount" VerticalAlignment="Top" Margin="29,187,0,0" HorizontalAlignment="Left"/>
 
-            <TextBox x:Name="Widthtb" Height="20" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="83" Margin="103,218,0,0" HorizontalAlignment="Left" TextChanged="linescounttb_TextChanged"/>
+            <TextBox x:Name="Widthtb" Height="20" PreviewTextInput="NumberValidationTextBox" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="83" Margin="103,218,0,0" HorizontalAlignment="Left" TextChanged="linescounttb_TextChanged"/>
             <Label x:Name="Widthl" Content="Width" VerticalAlignment="Top" Margin="29,215,0,0" HorizontalAlignment="Left"/>
 
-            <TextBox x:Name="Factortb" Height="20" TextWrapping="Wrap" Text="5" VerticalAlignment="Top" Width="83" Margin="103,246,0,0" HorizontalAlignment="Left" TextChanged="linescounttb_TextChanged"/>
+            <TextBox x:Name="Factortb" Height="20" PreviewTextInput="NumberValidationTextBox" TextWrapping="Wrap" Text="5" VerticalAlignment="Top" Width="83" Margin="103,246,0,0" HorizontalAlignment="Left" TextChanged="linescounttb_TextChanged"/>
             <Label x:Name="Factorl" Content="Factor" VerticalAlignment="Top" Margin="29,243,0,0" HorizontalAlignment="Left"/>
 
-            <TextBox x:Name="ChunkSizetb" Height="20" TextWrapping="Wrap" Text="5" VerticalAlignment="Top" Width="83" Margin="103,274,0,0" HorizontalAlignment="Left" TextChanged="linescounttb_TextChanged"/>
+            <TextBox x:Name="ChunkSizetb" Height="20" PreviewTextInput="NumberValidationTextBox" TextWrapping="Wrap" Text="5" VerticalAlignment="Top" Width="83" Margin="103,274,0,0" HorizontalAlignment="Left" TextChanged="linescounttb_TextChanged"/>
             <Label x:Name="ChunkSizel" Content="ChunkSize" VerticalAlignment="Top" Margin="29,271,0,0" HorizontalAlignment="Left"/>
             <Button x:Name="button" Content="Select image" HorizontalAlignment="Center" Margin="0,40,0,0"
                     VerticalAlignment="Top" Width="100" Click="button_Click"/>
@@ -35,11 +50,13 @@
             <Label x:Name="LineTypel" Content="LineType" VerticalAlignment="Top" Margin="29,338,0,0" HorizontalAlignment="Left"/>
             <Label x:Name="Methodl" Content="Method" VerticalAlignment="Top" Margin="29,369,0,0" HorizontalAlignment="Left"/>
         </Grid>
-        <Grid MouseWheel="image_MouseWheel" Grid.Column="1" GiveFeedback="Grid_GiveFeedback" Name="ImageGrid" >
-            <Image x:Name="image" HorizontalAlignment="Stretch" Stretch="None" VerticalAlignment="Stretch"
-                RenderOptions.BitmapScalingMode="Linear" MouseMove="image_MouseMove"
-               MouseLeftButtonDown="image_MouseLeftButtonDown" MouseLeftButtonUp="image_MouseLeftButtonUp" UseLayoutRounding="True"/>
-            <Label x:Name="zoomFactor" Content="1.5x" HorizontalAlignment="Right" Margin="0,0,5,5" VerticalAlignment="Bottom" Background="White" Width="auto" Height="auto" Foreground="Black" BorderThickness="1" BorderBrush="Black" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+        <Grid Name="ImageGrid" SnapsToDevicePixels="True" UseLayoutRounding="True" Grid.Column="1"
+          MouseWheel="image_MouseWheel"  MouseMove="image_MouseMove" 
+          MouseLeftButtonDown="image_MouseLeftButtonDown" MouseLeftButtonUp="image_MouseLeftButtonUp"
+          Loaded="ImageGrid_Loaded" SizeChanged="ImageGrid_SizeChanged">
+            <Button x:Name="FullsizeButton" Content="Fullsize" Style="{StaticResource FullsizeButtonStyle}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Panel.ZIndex="2" Width="50" Height="25" Click="FullsizeButton_Click"/>
+            <Image x:Name="image" Stretch="None" Panel.ZIndex="1"/>
+            <Rectangle Fill="Gray"/>
         </Grid>
     </Grid>
 </Window>

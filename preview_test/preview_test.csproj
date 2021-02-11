@@ -99,7 +99,10 @@
     <Resource Include="wrongDpiImage.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="gunplace.jpg" />
+    <Resource Include="wrongDpiHigh.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="etl_replica%28alagard font%29.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

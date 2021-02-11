@@ -7,10 +7,26 @@
         mc:Ignorable="d"
         x:Name="Window"
         Title="MainWindow" KeyDown="Window_KeyDown"  Height="500" Width="500">
+    <Window.Resources>
+        <ResourceDictionary>
+            <Style TargetType="{x:Type Button}">
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Opacity" Value="1"/>
+                    </Trigger>
+                    <Trigger Property="IsMouseOver" Value="False">
+                        <Setter Property="Opacity" Value="0.5"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
     <Grid Name="ImageGrid" SnapsToDevicePixels="True" UseLayoutRounding="True"
           MouseWheel="image_MouseWheel"  MouseMove="image_MouseMove" 
-          MouseLeftButtonDown="image_MouseLeftButtonDown" MouseLeftButtonUp="image_MouseLeftButtonUp" Loaded="ImageGrid_Loaded">
-        <Image x:Name="image" Stretch="None" Source="wrongDpiImage.png" Panel.ZIndex="1"/>
+          MouseLeftButtonDown="image_MouseLeftButtonDown" MouseLeftButtonUp="image_MouseLeftButtonUp"
+          Loaded="ImageGrid_Loaded" SizeChanged="ImageGrid_SizeChanged">
+        <Button x:Name="button" Content="Fullsize" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Panel.ZIndex="2" Width="50" Height="25" Click="button_Click"/>
+        <Image x:Name="image" Stretch="None" Source="etl_replica(alagard font).png" Panel.ZIndex="1"/>
         <Rectangle Fill="Gray"/>
     </Grid>
 </Window>

@@ -16,6 +16,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Reflection;
 using System.Drawing;
+using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace ImageDrawerUI
 {
@@ -24,12 +26,11 @@ namespace ImageDrawerUI
 	/// </summary>
 	public partial class MainWindow : Window
 	{
-		double scaleFactor = 2;
-		System.Windows.Point startPos;
-		System.Windows.Point endPos;
-		Thickness oldMargin;
 		string filename;
 		ImageSource orig;
+		double scaleFactor = 1.5;
+		System.Windows.Point startPos;
+		Thickness oldMargin;
 
 		public MainWindow()
 		{
@@ -40,7 +41,12 @@ namespace ImageDrawerUI
 			//{
 			//	var someVar = Activator.CreateInstance(item.GetType(), item.GetValue(param));
 			//}
-			//yourComboBox.ItemsSource = Enum.GetValues(typeof(EffectStyle)).Cast<EffectStyle>();
+			Smoothingcb.ItemsSource = Enum.GetValues(typeof(SmoothingMode)).Cast<SmoothingMode>();
+			Smoothingcb.SelectedItem = Smoothingcb.Items[3];
+			LineTypecb.ItemsSource = Enum.GetValues(typeof(RenderType)).Cast<RenderType>();
+			LineTypecb.SelectedItem = LineTypecb.Items[0];
+			Methodcb.ItemsSource = Enum.GetValues(typeof(RenderMethod)).Cast<RenderMethod>();
+			Methodcb.SelectedItem = Methodcb.Items[0];
 
 		}
 
@@ -66,98 +72,34 @@ namespace ImageDrawerUI
 				Width = Convert.ToInt32(Widthtb.Text),
 				Factor = Convert.ToInt32(Factortb.Text),
 				ChunkSize = Convert.ToInt32(ChunkSizetb.Text),
-				Smoothing = SmoothingMode.None,
-				LineType = RenderType.Dot,
-				Method = RenderMethod.Ridge
+				Smoothing = (SmoothingMode)Smoothingcb.Items[Smoothingcb.SelectedIndex],
+				LineType = (RenderType)LineTypecb.Items[LineTypecb.SelectedIndex],
+				Method = (RenderMethod)Methodcb.Items[Methodcb.SelectedIndex]
 			};
 
 			Cursor = Cursors.Wait;
-			orig = Program.ImageSourceFromBitmap(new Bitmap(filename));
-			image.Source = Program.DrawUI(filename, param);
+			orig = ConvertToNativeDpi(new Bitmap(filename));
+			image.Source = ConvertToNativeDpi(Program.DrawUI(filename, param));
+			image.MaxWidth = image.Source.Width * scaleFactor * 8;
+			image.MaxHeight = image.Source.Height * scaleFactor * 8;
 			Cursor = Cursors.Arrow;
 		}
 
-
-		private void ChangeZoom(bool zoomIn)
+		BitmapSource ConvertToNativeDpi(Bitmap bitmap)
 		{
-			if (zoomIn)
-			{
-				image.Width = image.ActualWidth * scaleFactor;
-				image.Height = image.ActualHeight * scaleFactor;
-			}
-			else
-			{
-				if (NoScale)
-					return;
+			BitmapSource bitmapSource = Program.ImageSourceFromBitmap(bitmap);
+			DpiScale dpiScale = VisualTreeHelper.GetDpi(this);
+			int width = bitmapSource.PixelWidth;
+			int height = bitmapSource.PixelHeight;
 
-				if (image.Width <= ImageGrid.ActualWidth)
-					image.Width = image.Height = double.NaN;
-				else
-				{
-					image.Width = image.ActualWidth / scaleFactor;
-					image.Height = image.ActualHeight / scaleFactor;
-					if (image.Width <= ImageGrid.ActualWidth) // why grid, not the image?
-						image.Width = image.Height = double.NaN;
-				}
+			int stride = width * bitmapSource.Format.BitsPerPixel;
+			byte[] pixelData = new byte[stride * height];
+			bitmapSource.CopyPixels(pixelData, stride, 0);
 
-			}
-
-			if (NoScale)
-			{
-				ImageGrid.Cursor = Cursors.Arrow;
-				RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.Linear);
-				image.Margin = new Thickness();
-				oldMargin = new Thickness();
-			}
-			else
-			{
-				ImageGrid.Cursor = Cursors.Hand;
-				RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.NearestNeighbor);
-			}
-		}
-
-		private void image_MouseWheel(object sender, MouseWheelEventArgs e)
-		{
-			ChangeZoom(e.Delta > 0);
-		}
-
-		private void image_MouseMove(object sender, MouseEventArgs e)
-		{
-			if (e.LeftButton == MouseButtonState.Pressed && !NoScale)
-			{
-				var c = Mouse.GetPosition(Window);
-
-				Thickness margin = image.Margin;
-				margin.Left = oldMargin.Left - (startPos - c).X;
-				margin.Top = oldMargin.Top - (startPos - c).Y;
-
-				if (margin.Left > 0) margin.Left = 0;
-				if (margin.Top > 0) margin.Top = 0;
-				if (margin.Top < -image.Height) margin.Top = -image.Height;
-				if (margin.Left < -image.Width) margin.Left = -image.Width;
-				image.Margin = margin;
-
-				//Debug.WriteLine(image.Margin.Left + " " + image.Margin.Top);
-			}
-		}
-
-		private void image_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-		{
-			startPos = Mouse.GetPosition(Window);
-		}
-
-		private void image_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-		{
-			oldMargin = image.Margin;
-			endPos = Mouse.GetPosition(Window);
-		}
-
-		private bool NoScale
-		{
-			get
-			{
-				return double.IsNaN(image.Width);
-			}
+			return BitmapSource.Create(width, height,
+				dpiScale.PixelsPerInchX, dpiScale.PixelsPerInchY,
+				bitmapSource.Format, bitmapSource.Palette,
+				pixelData, stride);
 		}
 
 		private void Grid_GiveFeedback(object sender, GiveFeedbackEventArgs e)
@@ -174,6 +116,9 @@ namespace ImageDrawerUI
 
 		private void linescounttb_TextChanged(object sender, TextChangedEventArgs e)
 		{
+			int t;
+			if (string.IsNullOrWhiteSpace(((TextBox)e.Source).Text) || !int.TryParse(((TextBox)e.Source).Text, out t))
+				return;
 			if (filename != null)
 				RenderOnUI(filename);
 		}
@@ -184,16 +129,197 @@ namespace ImageDrawerUI
 				RenderOnUI(filename);
 		}
 
+		bool IsFitsGrid
+		{
+			get
+			{
+				return image.ActualWidth <= ImageGrid.ActualWidth &&
+					image.ActualHeight <= ImageGrid.ActualHeight;
+			}
+		}
+
+		private bool IsNonScaled
+		{
+			get
+			{
+				return double.IsNaN(image.Width) || image.Source.Width == image.Width;
+			}
+		}
+
+		private void SetNonScaled()
+		{
+			image.Width = image.Height = double.NaN;
+		}
+
+		private void ChangeScale(bool zoomIn)
+		{
+			if (zoomIn)
+			{
+				image.Width = image.ActualWidth * scaleFactor;
+				image.Height = image.ActualHeight * scaleFactor;
+			}
+			else
+			{
+				if (IsNonScaled)
+					return;
+
+				if (image.Width <= image.Source.Width)
+					SetNonScaled();
+				else
+				{
+					image.Width = image.ActualWidth / scaleFactor;
+					image.Height = image.ActualHeight / scaleFactor;
+					if (image.Width <= image.Source.Width)
+						SetNonScaled();
+				}
+
+				if (!IsNonScaled)
+					image.Margin = CheckBoundaries(image.Margin);
+			}
+		}
+
+		private void ChangeZoom(bool zoomIn)
+		{
+			ChangeScale(zoomIn);
+			ChangeUIProps();
+			Debug.WriteLine("width = {0}, height = {1}, ac. width = {2}, ac. height = {3}",
+				image.Width, image.Height, image.ActualWidth, image.ActualHeight);
+		}
+
+		private void ChangeUIProps()
+		{
+			if (IsNonScaled)
+			{
+				if (image.Source.Width < ImageGrid.ActualWidth &&
+					image.Source.Height < ImageGrid.ActualHeight)
+					image.Stretch = Stretch.None;
+				else
+					image.Stretch = Stretch.Uniform;
+
+				ImageGrid.Cursor = Cursors.Arrow;
+				RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.HighQuality);
+				image.Margin = new Thickness();
+				oldMargin = new Thickness();
+			}
+			else
+			{
+				if (image.Width <= ImageGrid.ActualWidth &&
+					image.Height <= ImageGrid.ActualHeight)
+				{
+					image.Margin = new Thickness();
+					oldMargin = new Thickness();
+					ImageGrid.Cursor = Cursors.Arrow;
+				}
+				else
+				{
+					ImageGrid.Cursor = Cursors.SizeAll;
+				}
+
+				image.Stretch = Stretch.Uniform;
+				RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.NearestNeighbor);
+			}
+		}
+
+		private void image_MouseWheel(object sender, MouseWheelEventArgs e)
+		{
+			ChangeZoom(e.Delta > 0);
+		}
+
+		private Thickness CheckBoundaries(Thickness margin)
+		{
+			double widthOver = ImageGrid.ActualWidth - image.Width;
+			double heightOver = ImageGrid.ActualHeight - image.Height;
+
+			if (widthOver >= 0 || margin.Left > 0)
+				margin.Left = 0;
+			if (heightOver >= 0 || margin.Top > 0)
+				margin.Top = 0;
+			if (widthOver < 0 && margin.Left < widthOver)
+				margin.Left = widthOver;
+			if (heightOver < 0 && margin.Top < heightOver)
+				margin.Top = heightOver;
+
+			return margin;
+		}
+
+		private void image_MouseMove(object sender, MouseEventArgs e)
+		{
+			if ((e.LeftButton == MouseButtonState.Pressed || e.MiddleButton == MouseButtonState.Pressed) && !IsNonScaled)
+			{
+				System.Windows.Point newPos = Mouse.GetPosition(Window);
+				Thickness margin = image.Margin;
+				if (ImageGrid.ActualHeight < image.ActualHeight)
+					margin.Top = oldMargin.Top - (startPos - newPos).Y;
+				if (ImageGrid.ActualWidth < image.ActualWidth)
+					margin.Left = oldMargin.Left - (startPos - newPos).X;
+
+				image.Margin = CheckBoundaries(margin);
+
+				Debug.WriteLine("* margin.left = {0}, margin.top = {1}", image.Margin.Left, image.Margin.Top);
+				Debug.WriteLine("* width = {0}, height = {1}, ac. width = {2}, ac. height = {3}",
+					image.Width, image.Height, image.ActualWidth, image.ActualHeight);
+				Debug.WriteLine("* grid.width = {0}, grid.height = {1}, grid.ac. width = {2}, grid.ac. height = {3}\n",
+					ImageGrid.Width, ImageGrid.Height, ImageGrid.ActualWidth, ImageGrid.ActualHeight);
+			}
+		}
+
+		private void image_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		{
+			startPos = Mouse.GetPosition(Window);
+			Mouse.Capture(image);
+		}
+
+		private void image_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+		{
+			oldMargin = image.Margin;
+			Mouse.Capture(null);
+		}
+
 		private void Window_KeyDown(object sender, KeyEventArgs e)
 		{
+			if (e.Key == Key.O)
+				button_Click(null, null);
+			if (e.Key == Key.C)
+				comparebuton_Click(null, null);
+			if (e.Key == Key.D0 || e.Key == Key.NumPad0 || e.Key == Key.F)
+				SetFullsize();
 			if (e.Key == Key.Add || e.Key == Key.OemPlus)
-			{
 				ChangeZoom(true);
-			}
 			if (e.Key == Key.Subtract || e.Key == Key.OemMinus)
-			{
 				ChangeZoom(false);
+		}
+
+		private void ImageGrid_Loaded(object sender, RoutedEventArgs e)
+		{
+			if (!IsFitsGrid)
+			{
+				image.Stretch = Stretch.Uniform;
+				RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.HighQuality);
 			}
+		}
+
+		private void ImageGrid_SizeChanged(object sender, SizeChangedEventArgs e)
+		{
+			if (ImageGrid.IsLoaded)
+				ChangeUIProps();
+		}
+
+		private void FullsizeButton_Click(object sender, RoutedEventArgs e)
+		{
+			SetFullsize();
+		}
+
+		private void SetFullsize()
+		{
+			image.Width = image.Source.Width;
+			image.Height = image.Source.Height;
+			ChangeUIProps();
+		}
+
+		private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
+		{
+			Regex regex = new Regex("[^0-9]+");
+			e.Handled = regex.IsMatch(e.Text);
 		}
 	}
 }

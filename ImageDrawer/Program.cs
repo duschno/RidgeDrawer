@@ -78,6 +78,11 @@ namespace ImageDrawer
 
 			using (var graphics = Graphics.FromImage(empty))
 			{
+				using (SolidBrush brush = new SolidBrush(System.Drawing.Color.White))
+				{
+					graphics.FillRectangle(brush, 0, 0, bmp.Width, bmp.Height);
+				}
+
 				graphics.SmoothingMode = param.Smoothing;
 				switch (param.Method)
 				{
@@ -146,7 +151,7 @@ namespace ImageDrawer
 				parameters);
 		}
 
-		public static ImageSource DrawUI(string inputFileName, RenderParams param)
+		public static Bitmap DrawUI(string inputFileName, RenderParams param)
 		{
 			Bitmap bmp = new Bitmap(inputFileName);
 
@@ -156,7 +161,7 @@ namespace ImageDrawer
 			parameters.Param[0] = new EncoderParameter(
 				System.Drawing.Imaging.Encoder.Quality, 100L);
 
-			return ImageSourceFromBitmap(bmp);
+			return bmp;
 		}
 
 		//If you get 'dllimport unknown'-, then add 'using System.Runtime.InteropServices;'
@@ -164,7 +169,7 @@ namespace ImageDrawer
 		[return: MarshalAs(UnmanagedType.Bool)]
 		public static extern bool DeleteObject([In] IntPtr hObject);
 
-		public static ImageSource ImageSourceFromBitmap(Bitmap bmp)
+		public static BitmapSource ImageSourceFromBitmap(Bitmap bmp)
 		{
 			var handle = bmp.GetHbitmap();
 			try

@@ -18,47 +18,6 @@ using System.Runtime.InteropServices;
 
 namespace preview_test
 {
-	////public static class Render
-	////{
-	////	static Render()
-	////	{
-	////		var flags = BindingFlags.NonPublic | BindingFlags.Static;
-	////		var dpiProperty = typeof(SystemParameters).GetProperty("Dpi", flags);
-
-	////		Dpi = (int)dpiProperty.GetValue(null, null);
-	////		PixelSize = 96.0 / Dpi;
-	////	}
-
-	////	//Размер физического пикселя в виртуальных единицах
-	////	public static double PixelSize { get; private set; }
-
-	////	//Текущее разрешение
-	////	public static int Dpi { get; private set; }
-	////}
-
-
-	////public class StaticImage : Image
-	////{
-	////	static StaticImage()
-	////	{
-	////		//Отслеживание смены исходной картинки
-	////		Image.SourceProperty.OverrideMetadata(
-	////			typeof(StaticImage),
-	////			new FrameworkPropertyMetadata(SourceChanged));
-	////	}
-
-	////	private static void SourceChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
-	////	{
-	////		var image = obj as StaticImage;
-	////		if (image == null) return;
-
-	////		//Поправка размера картинки под текущее разрешение
-	////		image.Width = image.Source.Width * Render.PixelSize;
-	////		image.Height = image.Source.Height * Render.PixelSize;
-	////	}
-	////}
-
-
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
 	/// </summary>
@@ -71,11 +30,12 @@ namespace preview_test
 		public MainWindow()
 		{
 			InitializeComponent();
-			image.Source = PixelToPixelConvert((BitmapSource)image.Source);
-			
+			image.Source = ConvertToNativeDpi((BitmapSource)image.Source);
+			image.MaxWidth = image.Source.Width * scaleFactor * 8;
+			image.MaxHeight = image.Source.Height * scaleFactor * 8;
 		}
 
-		BitmapSource PixelToPixelConvert(BitmapSource bitmapSource)
+		BitmapSource ConvertToNativeDpi(BitmapSource bitmapSource)
 		{
 			DpiScale dpiScale = VisualTreeHelper.GetDpi(this);
 			int width = bitmapSource.PixelWidth;
@@ -85,70 +45,101 @@ namespace preview_test
 			byte[] pixelData = new byte[stride * height];
 			bitmapSource.CopyPixels(pixelData, stride, 0);
 
-			return BitmapSource.Create(width, height, 
+			return BitmapSource.Create(width, height,
 				dpiScale.PixelsPerInchX, dpiScale.PixelsPerInchY,
 				bitmapSource.Format, bitmapSource.Palette,
 				pixelData, stride);
 		}
 
-		bool NeedToUniform
+		bool IsFitsGrid
 		{
 			get
 			{
-				return double.IsNaN(image.Width) &&
-					(image.ActualWidth > ImageGrid.ActualWidth || image.ActualHeight > ImageGrid.ActualHeight);
+				return image.ActualWidth <= ImageGrid.ActualWidth &&
+					image.ActualHeight <= ImageGrid.ActualHeight;
 			}
 		}
 
-		private void ChangeZoom(bool zoomIn)
+		private bool IsNonScaled
+		{
+			get
+			{
+				return double.IsNaN(image.Width) || image.Source.Width == image.Width;
+			}
+		}
+
+		private void SetNonScaled()
+		{
+			image.Width = image.Height = double.NaN;
+		}
+
+		private void ChangeScale(bool zoomIn)
 		{
 			if (zoomIn)
 			{
-				var c = VisualTreeHelper.GetDpi(this);
 				image.Width = image.ActualWidth * scaleFactor;
 				image.Height = image.ActualHeight * scaleFactor;
 			}
 			else
 			{
-				if (NoScale)
-					if (NeedToUniform)
-					{
-						image.Stretch = Stretch.Uniform;
-						RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.HighQuality);
-						return;
-					}
-					else
-						return;
+				if (IsNonScaled)
+					return;
 
-				if (image.Width <= ImageGrid.ActualWidth || image.Height <= ImageGrid.ActualHeight)
-					image.Width = image.Height = double.NaN;
+				if (image.Width <= image.Source.Width)
+					SetNonScaled();
 				else
 				{
-					image.Width = image.Width / scaleFactor;
-					image.Height = image.Height / scaleFactor;
-					if (image.Width <= ImageGrid.ActualWidth)
-						image.Width = image.Height = double.NaN;
+					image.Width = image.ActualWidth / scaleFactor;
+					image.Height = image.ActualHeight / scaleFactor;
+					if (image.Width <= image.Source.Width)
+						SetNonScaled();
 				}
-				image.Stretch = NeedToUniform ? Stretch.Uniform : Stretch.None;
-			}
 
-			if (NoScale)
+				if (!IsNonScaled)
+					image.Margin = CheckBoundaries(image.Margin);
+			}
+		}
+
+		private void ChangeZoom(bool zoomIn)
+		{
+			ChangeScale(zoomIn);
+			ChangeUIProps();
+			Debug.WriteLine("width = {0}, height = {1}, ac. width = {2}, ac. height = {3}", 
+				image.Width, image.Height, image.ActualWidth, image.ActualHeight);
+		}
+
+		private void ChangeUIProps()
+		{
+			if (IsNonScaled)
 			{
-				image.Stretch = NeedToUniform ? Stretch.Uniform : Stretch.None;
+				if (image.Source.Width < ImageGrid.ActualWidth &&
+					image.Source.Height < ImageGrid.ActualHeight)
+					image.Stretch = Stretch.None;
+				else
+					image.Stretch = Stretch.Uniform;
+
 				ImageGrid.Cursor = Cursors.Arrow;
-				RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.Linear);
+				RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.HighQuality);
 				image.Margin = new Thickness();
 				oldMargin = new Thickness();
 			}
 			else
 			{
+				if (image.Width <= ImageGrid.ActualWidth &&
+					image.Height <= ImageGrid.ActualHeight)
+				{
+					image.Margin = new Thickness();
+					oldMargin = new Thickness();
+					ImageGrid.Cursor = Cursors.Arrow;
+				}
+				else
+				{
+					ImageGrid.Cursor = Cursors.SizeAll;
+				}
+
 				image.Stretch = Stretch.Uniform;
-				ImageGrid.Cursor = Cursors.SizeAll;
 				RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.NearestNeighbor);
 			}
-
-			Debug.WriteLine("width = {0}, height = {1}, ac. width = {2}, ac. height = {3}", 
-				image.Width, image.Height, image.ActualWidth, image.ActualHeight);
 		}
 
 		private void image_MouseWheel(object sender, MouseWheelEventArgs e)
@@ -156,29 +147,35 @@ namespace preview_test
 			ChangeZoom(e.Delta > 0);
 		}
 
+		private Thickness CheckBoundaries(Thickness margin)
+		{
+			double widthOver = ImageGrid.ActualWidth - image.Width;
+			double heightOver = ImageGrid.ActualHeight - image.Height;
+
+			if (widthOver >= 0 || margin.Left > 0)
+				margin.Left = 0;
+			if (heightOver >= 0 || margin.Top > 0)
+				margin.Top = 0;
+			if (widthOver < 0 && margin.Left < widthOver)
+				margin.Left = widthOver;
+			if (heightOver < 0 && margin.Top < heightOver)
+				margin.Top = heightOver;
+
+			return margin;
+		}
+
 		private void image_MouseMove(object sender, MouseEventArgs e)
 		{
-			if (e.LeftButton == MouseButtonState.Pressed && !NoScale)
+			if (e.LeftButton == MouseButtonState.Pressed && !IsNonScaled)
 			{
 				Point newPos = Mouse.GetPosition(Window);
-
 				Thickness margin = image.Margin;
 				if (ImageGrid.ActualHeight < image.ActualHeight)
 					margin.Top = oldMargin.Top - (startPos - newPos).Y;
 				if (ImageGrid.ActualWidth < image.ActualWidth)
 					margin.Left = oldMargin.Left - (startPos - newPos).X;
 
-				if (margin.Left > 0)
-					margin.Left = 0;
-				if (margin.Top > 0)
-					margin.Top = 0;
-				if (ImageGrid.ActualHeight < image.ActualHeight && 
-					margin.Top < ImageGrid.ActualHeight - image.ActualHeight)
-					margin.Top = ImageGrid.ActualHeight - image.ActualHeight;
-				if (ImageGrid.ActualWidth < image.ActualWidth && 
-					margin.Left < ImageGrid.ActualWidth - image.ActualWidth)
-					margin.Left = ImageGrid.ActualWidth - image.ActualWidth;
-				image.Margin = margin;
+				image.Margin = CheckBoundaries(margin);
 
 				Debug.WriteLine("* margin.left = {0}, margin.top = {1}", image.Margin.Left, image.Margin.Top);
 				Debug.WriteLine("* width = {0}, height = {1}, ac. width = {2}, ac. height = {3}",
@@ -200,14 +197,6 @@ namespace preview_test
 			Mouse.Capture(null);
 		}
 
-		private bool NoScale
-		{
-			get
-			{
-				return double.IsNaN(image.Width);
-			}
-		}
-
 		private void Window_KeyDown(object sender, KeyEventArgs e)
 		{
 			if (e.Key == Key.Add || e.Key == Key.OemPlus)
@@ -218,11 +207,22 @@ namespace preview_test
 
 		private void ImageGrid_Loaded(object sender, RoutedEventArgs e)
 		{
-			if (NeedToUniform)
+			if (!IsFitsGrid)
 			{
 				image.Stretch = Stretch.Uniform;
 				RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.HighQuality);
 			}
+		}
+
+		private void ImageGrid_SizeChanged(object sender, SizeChangedEventArgs e)
+		{
+			if (ImageGrid.IsLoaded)
+				ChangeUIProps();
+		}
+
+		private void button_Click(object sender, RoutedEventArgs e)
+		{
+
 		}
 	}
 }
