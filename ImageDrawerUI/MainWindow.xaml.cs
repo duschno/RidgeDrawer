@@ -18,6 +18,7 @@ using System.Reflection;
 using System.Drawing;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using System.IO;
 
 namespace ImageDrawerUI
 {
@@ -27,8 +28,9 @@ namespace ImageDrawerUI
 	public partial class MainWindow : Window
 	{
 		string filename;
-		ImageSource orig;
-		double scaleFactor = 1.5;
+		ImageSource original;
+		ImageSource processed;
+		double scaleFactor = 2;
 		System.Windows.Point startPos;
 		Thickness oldMargin;
 
@@ -53,7 +55,7 @@ namespace ImageDrawerUI
 		private void button_Click(object sender, RoutedEventArgs e)
 		{
 			Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-			dlg.Filter = "Image files (*.jpg, *.jpeg, *.jpe, *.jfif, *.png) | *.jpg; *.jpeg; *.jpe; *.jfif; *.png";
+			dlg.Filter = "Image files (*.jpg, *.jpeg, *.jpe, *.jfif, *.png, *.bmp) | *.jpg; *.jpeg; *.jpe; *.jfif; *.png; *.bmp";
 
 			bool? result = dlg.ShowDialog();
 
@@ -78,8 +80,9 @@ namespace ImageDrawerUI
 			};
 
 			Cursor = Cursors.Wait;
-			orig = ConvertToNativeDpi(new Bitmap(filename));
-			image.Source = ConvertToNativeDpi(Program.DrawUI(filename, param));
+			original = ConvertToNativeDpi(new Bitmap(filename));
+			processed = ConvertToNativeDpi(Program.DrawUI(filename, param));
+			image.Source = processed;
 			image.MaxWidth = image.Source.Width * scaleFactor * 8;
 			image.MaxHeight = image.Source.Height * scaleFactor * 8;
 			Cursor = Cursors.Arrow;
@@ -109,18 +112,31 @@ namespace ImageDrawerUI
 
 		private void comparebuton_Click(object sender, RoutedEventArgs e)
 		{
-			var t = orig;
-			orig = image.Source;
+			var t = original;
+			original = image.Source;
 			image.Source = t;
 		}
 
-		private void linescounttb_TextChanged(object sender, TextChangedEventArgs e)
+		private void savebuton_Click(object sender, RoutedEventArgs e)
 		{
-			int t;
-			if (string.IsNullOrWhiteSpace(((TextBox)e.Source).Text) || !int.TryParse(((TextBox)e.Source).Text, out t))
+			if (processed == null)
 				return;
-			if (filename != null)
-				RenderOnUI(filename);
+
+			Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
+			dlg.Filter = "Image files (*.bmp) | *.bmp";
+
+			bool? result = dlg.ShowDialog();
+
+			if (result == true)
+			{
+				filename = dlg.FileName;
+				using (var fileStream = new FileStream(filename, FileMode.Create))
+				{
+					BitmapEncoder encoder = new PngBitmapEncoder();
+					encoder.Frames.Add(BitmapFrame.Create(processed as BitmapSource));
+					encoder.Save(fileStream);
+				}
+			}
 		}
 
 		private void Smoothingcb_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -153,6 +169,10 @@ namespace ImageDrawerUI
 
 		private void ChangeScale(bool zoomIn)
 		{
+
+			if (image.Source == null)
+				return;
+
 			if (zoomIn)
 			{
 				image.Width = image.ActualWidth * scaleFactor;
@@ -182,12 +202,15 @@ namespace ImageDrawerUI
 		{
 			ChangeScale(zoomIn);
 			ChangeUIProps();
-			Debug.WriteLine("width = {0}, height = {1}, ac. width = {2}, ac. height = {3}",
-				image.Width, image.Height, image.ActualWidth, image.ActualHeight);
+			//Debug.WriteLine("width = {0}, height = {1}, ac. width = {2}, ac. height = {3}",
+			//	image.Width, image.Height, image.ActualWidth, image.ActualHeight);
 		}
 
 		private void ChangeUIProps()
 		{
+			if (image.Source == null)
+				return;
+
 			if (IsNonScaled)
 			{
 				if (image.Source.Width < ImageGrid.ActualWidth &&
@@ -197,7 +220,7 @@ namespace ImageDrawerUI
 					image.Stretch = Stretch.Uniform;
 
 				ImageGrid.Cursor = Cursors.Arrow;
-				RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.HighQuality);
+				RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.Linear);
 				image.Margin = new Thickness();
 				oldMargin = new Thickness();
 			}
@@ -255,11 +278,11 @@ namespace ImageDrawerUI
 
 				image.Margin = CheckBoundaries(margin);
 
-				Debug.WriteLine("* margin.left = {0}, margin.top = {1}", image.Margin.Left, image.Margin.Top);
-				Debug.WriteLine("* width = {0}, height = {1}, ac. width = {2}, ac. height = {3}",
-					image.Width, image.Height, image.ActualWidth, image.ActualHeight);
-				Debug.WriteLine("* grid.width = {0}, grid.height = {1}, grid.ac. width = {2}, grid.ac. height = {3}\n",
-					ImageGrid.Width, ImageGrid.Height, ImageGrid.ActualWidth, ImageGrid.ActualHeight);
+				//Debug.WriteLine("* margin.left = {0}, margin.top = {1}", image.Margin.Left, image.Margin.Top);
+				//Debug.WriteLine("* width = {0}, height = {1}, ac. width = {2}, ac. height = {3}",
+				//	image.Width, image.Height, image.ActualWidth, image.ActualHeight);
+				//Debug.WriteLine("* grid.width = {0}, grid.height = {1}, grid.ac. width = {2}, grid.ac. height = {3}\n",
+				//	ImageGrid.Width, ImageGrid.Height, ImageGrid.ActualWidth, ImageGrid.ActualHeight);
 			}
 		}
 
@@ -281,6 +304,8 @@ namespace ImageDrawerUI
 				button_Click(null, null);
 			if (e.Key == Key.C)
 				comparebuton_Click(null, null);
+			if (e.Key == Key.S)
+				savebuton_Click(null, null);
 			if (e.Key == Key.D0 || e.Key == Key.NumPad0 || e.Key == Key.F)
 				SetFullsize();
 			if (e.Key == Key.Add || e.Key == Key.OemPlus)
@@ -294,7 +319,7 @@ namespace ImageDrawerUI
 			if (!IsFitsGrid)
 			{
 				image.Stretch = Stretch.Uniform;
-				RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.HighQuality);
+				RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.Linear);
 			}
 		}
 
@@ -320,6 +345,17 @@ namespace ImageDrawerUI
 		{
 			Regex regex = new Regex("[^0-9]+");
 			e.Handled = regex.IsMatch(e.Text);
+		}
+
+		private void paramchange_KeyDown(object sender, KeyEventArgs e)
+		{
+			int t;
+			if (e.Key != Key.Enter)
+				return;
+			if (string.IsNullOrWhiteSpace(((TextBox)e.Source).Text) || !int.TryParse(((TextBox)e.Source).Text, out t))
+				return;
+			if (filename != null)
+				RenderOnUI(filename);
 		}
 	}
 }

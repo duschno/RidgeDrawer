@@ -104,7 +104,8 @@ namespace ImageDrawer
 		{
 			if (coords.Count == 1)
 				return;
-			System.Drawing.Pen pen = new System.Drawing.Pen(System.Drawing.Color.Black, param.Width);
+			System.Drawing.Brush brush = new SolidBrush(System.Drawing.Color.Black);
+			System.Drawing.Pen pen = new System.Drawing.Pen(brush, param.Width);
 
 			switch (param.LineType)
 			{
@@ -116,7 +117,7 @@ namespace ImageDrawer
 					break;
 				case RenderType.Dot:
 					foreach (System.Drawing.Point coord in coords)
-						graphics.DrawRectangle(pen, coord.X, coord.Y, 1f, 1f);
+						graphics.FillRectangle(brush, coord.X, coord.Y, param.Width, param.Width);
 					break;
 				default:
 					break;
