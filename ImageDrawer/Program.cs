@@ -47,24 +47,18 @@ namespace ImageDrawer
 				int sign = -1;
 				int y = bmp.Height * lineNumber / param.LinesCount + bmp.Height / (param.LinesCount * 2);
 				coords.Add(new System.Drawing.Point(0, y));
-				int accumulator = 0;
-				int xStepsCount = 0;
-				//int xPossibleSteps = (bmp.Width - 1) / param.ChunkSize;
-				for (int x = 1; x < bmp.Width; x += param.ChunkSize)
+				int accumulator = param.ChunkSize;
+				for (int x = 1; x < bmp.Width; x += accumulator)
 				{
-					xStepsCount++;
 					System.Drawing.Color pixel = bmp.GetPixel(x, y);
 					int grayscale = 255 - (pixel.R + pixel.G + pixel.B) / 3;
-					accumulator += grayscale;
-					if (accumulator > 127)
-					{
-						int factor = param.Factor;
-						coords.Add(new System.Drawing.Point(
-							x, y + sign * factor / xStepsCount));
-						sign *= -1;
-						accumulator = 0;
-						xStepsCount = 0;
-					}
+					accumulator = (param.ChunkSize * (255 - grayscale) + 10) / 10;
+					int factor = param.Factor;
+					/**/
+					grayscale = grayscale == 0 ? 1 : grayscale;
+					coords.Add(new System.Drawing.Point(
+						x + accumulator, y + (sign * factor * grayscale / 80)));
+					sign *= -1;
 				}
 
 				RenderLine(graphics, coords, param);
