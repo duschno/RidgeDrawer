@@ -43,7 +43,7 @@
                      VerticalAlignment="Top" Width="83" Margin="103,274,0,0" HorizontalAlignment="Left" KeyDown="paramchange_KeyDown"/>
             <Label x:Name="ChunkSizel" Content="ChunkSize" VerticalAlignment="Top" Margin="29,271,0,0" HorizontalAlignment="Left"/>
             
-            <Button x:Name="button" Content="Select image (O)" HorizontalAlignment="Center" Margin="0,40,0,0"
+            <Button x:Name="button" Content="Open image (O)" HorizontalAlignment="Center" Margin="0,40,0,0"
                     VerticalAlignment="Top" Width="100" Click="button_Click"/>
             <Button x:Name="comparebuton" Content="Compare (C)" HorizontalAlignment="Center" Margin="0,80,0,0"
                     VerticalAlignment="Top" Width="100" Click="comparebuton_Click"/>
