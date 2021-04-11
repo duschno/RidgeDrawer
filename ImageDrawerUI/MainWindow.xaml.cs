@@ -99,11 +99,6 @@ namespace ImageDrawerUI
 				pixelData, stride);
 		}
 
-		private void Grid_GiveFeedback(object sender, GiveFeedbackEventArgs e)
-		{
-
-		}
-
 		private void comparebuton_Click(object sender, RoutedEventArgs e)
 		{
 			var t = original;
