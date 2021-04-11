@@ -37,14 +37,8 @@ namespace ImageDrawerUI
 		public MainWindow()
 		{
 			InitializeComponent();
-			RenderParams param = new RenderParams { };
-			//FieldInfo[] amountField = param.GetType().GetFields();
-			//foreach (var item in amountField)
-			//{
-			//	var someVar = Activator.CreateInstance(item.GetType(), item.GetValue(param));
-			//}
-			Smoothingcb.ItemsSource = Enum.GetValues(typeof(SmoothingMode)).Cast<SmoothingMode>();
-			Smoothingcb.SelectedItem = Smoothingcb.Items[3];
+			Smoothingcb.ItemsSource = (new SmoothingMode[] { SmoothingMode.None, SmoothingMode.AntiAlias }).Cast<SmoothingMode>();
+			Smoothingcb.SelectedItem = Smoothingcb.Items[0];
 			LineTypecb.ItemsSource = Enum.GetValues(typeof(RenderType)).Cast<RenderType>();
 			LineTypecb.SelectedItem = LineTypecb.Items[0];
 			Methodcb.ItemsSource = Enum.GetValues(typeof(RenderMethod)).Cast<RenderMethod>();
@@ -129,8 +123,7 @@ namespace ImageDrawerUI
 
 			if (result == true)
 			{
-				filename = dlg.FileName;
-				using (var fileStream = new FileStream(filename, FileMode.Create))
+				using (var fileStream = new FileStream(dlg.FileName, FileMode.Create))
 				{
 					BitmapEncoder encoder = new PngBitmapEncoder();
 					encoder.Frames.Add(BitmapFrame.Create(processed as BitmapSource));
