@@ -7,17 +7,30 @@ using System.Threading.Tasks;
 
 namespace ImageDrawer
 {
-	public enum RenderType
+
+	public enum SmoothingType
+	{
+		None,
+		Antialias,
+	}
+
+	public enum LineType
 	{
 		Line,
 		Dot,
 		Curve
 	}
 
-	public enum RenderMethod
+	public enum MethodType
 	{
 		Ridge,
 		Squiggle
+	}
+
+	public enum BackendType
+	{
+		GDIPlus,
+		Cairo
 	}
 
 	public struct RenderParams
@@ -26,8 +39,9 @@ namespace ImageDrawer
 		public int Width;
 		public int Factor;
 		public int ChunkSize;
-		public SmoothingMode Smoothing;
-		public RenderType LineType;
-		public RenderMethod Method;
+		public SmoothingType Smoothing;
+		public LineType LineType;
+		public MethodType Method;
+		public BackendType Backend;
 	}
 }

@@ -1,22 +1,13 @@
 ﻿using ImageDrawer;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Drawing.Drawing2D;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Reflection;
 using System.Drawing;
-using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.IO;
 
@@ -37,12 +28,14 @@ namespace ImageDrawerUI
 		public MainWindow()
 		{
 			InitializeComponent();
-			Smoothingcb.ItemsSource = (new SmoothingMode[] { SmoothingMode.None, SmoothingMode.AntiAlias }).Cast<SmoothingMode>();
+			Smoothingcb.ItemsSource = Enum.GetValues(typeof(SmoothingType)).Cast<SmoothingType>();
 			Smoothingcb.SelectedItem = Smoothingcb.Items[0];
-			LineTypecb.ItemsSource = Enum.GetValues(typeof(RenderType)).Cast<RenderType>();
+			LineTypecb.ItemsSource = Enum.GetValues(typeof(LineType)).Cast<LineType>();
 			LineTypecb.SelectedItem = LineTypecb.Items[0];
-			Methodcb.ItemsSource = Enum.GetValues(typeof(RenderMethod)).Cast<RenderMethod>();
+			Methodcb.ItemsSource = Enum.GetValues(typeof(MethodType)).Cast<MethodType>();
 			Methodcb.SelectedItem = Methodcb.Items[0];
+			Backendcb.ItemsSource = Enum.GetValues(typeof(BackendType)).Cast<BackendType>();
+			Backendcb.SelectedItem = Backendcb.Items[0];
 
 		}
 
@@ -68,9 +61,10 @@ namespace ImageDrawerUI
 				Width = Convert.ToInt32(Widthtb.Text),
 				Factor = Convert.ToInt32(Factortb.Text),
 				ChunkSize = Convert.ToInt32(ChunkSizetb.Text),
-				Smoothing = (SmoothingMode)Smoothingcb.Items[Smoothingcb.SelectedIndex],
-				LineType = (RenderType)LineTypecb.Items[LineTypecb.SelectedIndex],
-				Method = (RenderMethod)Methodcb.Items[Methodcb.SelectedIndex]
+				Smoothing = (SmoothingType)Smoothingcb.Items[Smoothingcb.SelectedIndex],
+				LineType = (LineType)LineTypecb.Items[LineTypecb.SelectedIndex],
+				Method = (MethodType)Methodcb.Items[Methodcb.SelectedIndex],
+				Backend = (BackendType)Backendcb.Items[Methodcb.SelectedIndex]
 			};
 
 			Cursor = Cursors.Wait;

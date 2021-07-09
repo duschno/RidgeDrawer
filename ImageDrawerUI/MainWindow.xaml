@@ -59,6 +59,9 @@
                       Width="83" Height="20" SelectionChanged="Smoothingcb_SelectionChanged"/>
             <Label x:Name="LineTypel" Content="LineType" VerticalAlignment="Top" Margin="29,338,0,0" HorizontalAlignment="Left"/>
             <Label x:Name="Methodl" Content="Method" VerticalAlignment="Top" Margin="29,369,0,0" HorizontalAlignment="Left"/>
+            <Label x:Name="Backend" Content="Backend" VerticalAlignment="Top" Margin="29,400,0,0" HorizontalAlignment="Left"/>
+            <ComboBox x:Name="Backendcb" HorizontalAlignment="Left" Margin="103,406,0,0" VerticalAlignment="Top" 
+                Width="83" Height="20" SelectionChanged="Smoothingcb_SelectionChanged"/>
         </Grid>
         <Grid Name="ImageGrid" SnapsToDevicePixels="True" UseLayoutRounding="True" Grid.Column="1"
           MouseWheel="image_MouseWheel"  MouseMove="image_MouseMove" 
