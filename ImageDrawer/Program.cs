@@ -36,17 +36,17 @@ namespace ImageDrawer
 		/// <param name="height">Image height</param>
 		/// <param name="param">Render params</param>
 		/// <returns>Rendered bitmap</returns>
-		private static Bitmap RenderImage(int width, int height, RenderParams param)
+		private static Bitmap RenderImage(Bitmap loadedBitmap, RenderParams param)
 		{
-			Bitmap bitmap = new Bitmap(width, height);
+			Bitmap bitmap = new Bitmap(loadedBitmap.Width, loadedBitmap.Height);
 
 			using (var graphics = Graphics.FromImage(bitmap))
 			{
 				using (SolidBrush brush = new SolidBrush(System.Drawing.Color.White))
-					graphics.FillRectangle(brush, 0, 0, width, height);
+					graphics.FillRectangle(brush, 0, 0, bitmap.Width, bitmap.Height);
 
 				IBackendDrawer drawer = GetBackendDrawer(param.Backend);
-				drawer.Draw(graphics, bitmap, param);
+				drawer.Draw(graphics, loadedBitmap, param);
 			}
 
 			return bitmap;
@@ -55,7 +55,7 @@ namespace ImageDrawer
 		public static Bitmap ProcessByFilename(string inputFileName, RenderParams param)
 		{
 			Bitmap bmp = new Bitmap(inputFileName);
-			return RenderImage(bmp.Width, bmp.Height, param);
+			return RenderImage(bmp, param);
 		}
 
 		/// <summary>
