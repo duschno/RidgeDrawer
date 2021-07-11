@@ -8,27 +8,23 @@
 #include <math.h>
 #include "PlusPlus.h"
 
-void simple_draw(HDC hdc)
+void Draw(HDC hdc, int* x, int* y, int size)
 {
 	cairo_surface_t* surface = cairo_win32_surface_create(hdc);
 	cairo_t* cr = cairo_create(surface);
 
 	cairo_set_antialias(cr, CAIRO_ANTIALIAS_NONE);
-	cairo_set_source_rgb(cr, 1, 1, 1);
-	cairo_paint(cr);
 	cairo_set_source_rgb(cr, 1, 0, 0);
-	cairo_move_to(cr, 20, 20);
-	cairo_line_to(cr, 380, 380);
-	cairo_set_line_width(cr, 5);
+	for (int i = 0; i < size - 2; i++)
+	{
+		cairo_move_to(cr, *(x + i) + 0.5, *(y + i) + 0.5);
+		cairo_line_to(cr, *(x + i + 1) + 0.5, *(y + i + 1) + 0.5);
+	}
+	cairo_set_line_width(cr, 1);
 	cairo_stroke(cr);
 
 	cairo_destroy(cr);
 	cairo_surface_destroy(surface);
-}
-
-void Draw(HDC hdc, int width, int height, int linesCount, int strokeWidth, int factor, int chunkSize)
-{
-	simple_draw(hdc);
 }
 
 void SetLineType(int smoothingType)

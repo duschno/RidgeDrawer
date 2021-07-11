@@ -47,9 +47,9 @@ namespace ImageDrawerUI
 			FillComboBox(LineType, typeof(LineType));
 			FillComboBox(Method, typeof(MethodType));
 			FillComboBox(Backend, typeof(BackendType));
-			LinesCount.Text = 120.ToString();
+			LinesCount.Text = 1.ToString();
 			Stroke.Text = 1.ToString();
-			Factor.Text = 5.ToString();
+			Factor.Text = 30.ToString();
 			ChunkSize.Text = 5.ToString();
 			Angle.Text = 0.ToString();
 

@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Linq;
 using System.Runtime.InteropServices;
 
 namespace ImageDrawer
@@ -7,18 +10,104 @@ namespace ImageDrawer
 	public class Cairo : IBackendDrawer
 	{
 		[DllImport(@"C:\Users\User\Desktop\ImageDrawer\Debug\PlusPlus.dll", CallingConvention = CallingConvention.Cdecl)]
-		private extern static void Draw(IntPtr hdc, int width, int height, int linesCount, int strokeWidth, int factor, int chunkSize);
+		private extern static void Draw(IntPtr hdc, int[] x, int[] y, int size);
 
-		public void Draw(Graphics g, int width, int height, int linesCount, int strokeWidth, int factor, int chunkSize)
+		private static void Draw(Graphics g, int[] x, int[] y)
 		{
 			IntPtr hdc = g.GetHdc();
-			Draw(hdc, width, height, linesCount, strokeWidth, factor, chunkSize);
+			Draw(hdc, x, y, x.Count());
 			g.ReleaseHdc();
 		}
 
-		public void Draw(Graphics g, Bitmap bmp, RenderParams param)
+		public void Draw(Graphics graphics, Bitmap bmp, RenderParams param)
 		{
-			throw new NotImplementedException();
+			graphics.SmoothingMode = param.Smoothing == SmoothingType.Antialias ?
+				SmoothingMode.AntiAlias : SmoothingMode.None;
+			switch (param.Method)
+			{
+				case MethodType.Ridge:
+					MethodRidge(graphics, bmp, param);
+					break;
+				case MethodType.Squiggle:
+					MethodSquiggle(graphics, bmp, param);
+					break;
+				default:
+					break;
+			}
+		}
+
+		static void MethodRidge(Graphics graphics, Bitmap bmp, RenderParams param)
+		{
+			int lineNumber = 0;
+			while (lineNumber < param.LinesCount)
+			{
+				List<Point> coords = new List<Point>();
+				int y = bmp.Height * lineNumber / param.LinesCount + bmp.Height / (param.LinesCount * 2);
+				coords.Add(new Point(0, y));
+				for (int x = 1; x < bmp.Width; x += param.ChunkSize)
+				{
+					Color pixel = bmp.GetPixel(x, y);
+					int grayscale = (pixel.R + pixel.G + pixel.B) / 3;
+					int factor = param.Factor * (grayscale - 127) / 127;
+					coords.Add(new Point(x + (int)(factor * Math.Sin(Math.PI * -param.Angle / 180.0)),
+										 y + (int)(factor * Math.Cos(Math.PI * -param.Angle / 180.0))));
+				}
+
+				RenderLine(graphics, coords, param);
+				lineNumber++;
+			}
+		}
+
+		static void MethodSquiggle(Graphics graphics, Bitmap bmp, RenderParams param)
+		{
+			int lineNumber = 0;
+			while (lineNumber < param.LinesCount)
+			{
+				List<Point> coords = new List<Point>();
+				int sign = -1;
+				int y = bmp.Height * lineNumber / param.LinesCount + bmp.Height / (param.LinesCount * 2);
+				coords.Add(new Point(0, y));
+				int accumulator = param.ChunkSize;
+				for (int x = 1; x < bmp.Width; x += accumulator)
+				{
+					Color pixel = bmp.GetPixel(x, y);
+					int grayscale = 255 - (pixel.R + pixel.G + pixel.B) / 3;
+					accumulator = (param.ChunkSize * (255 - grayscale) + 10) / 10;
+					int factor = param.Factor;
+
+					grayscale = grayscale == 0 ? 1 : grayscale;
+					coords.Add(new Point(
+						x + accumulator, y + (sign * factor * grayscale / 80)));
+					sign *= -1;
+				}
+
+				RenderLine(graphics, coords, param);
+				lineNumber++;
+			}
+		}
+
+		private static void RenderLine(Graphics graphics, List<Point> coords, RenderParams param)
+		{
+			if (coords.Count == 1)
+				return;
+			Brush brush = new SolidBrush(Color.Black);
+			Pen pen = new Pen(brush, param.Stroke);
+
+			switch (param.LineType)
+			{
+				case LineType.Line:
+					Draw(graphics, coords.Select(e => e.X).ToArray(), coords.Select(e => e.Y).ToArray());
+					break;
+				case LineType.Curve:
+					graphics.DrawCurve(pen, coords.ToArray());
+					break;
+				case LineType.Dot:
+					foreach (Point coord in coords)
+						graphics.FillRectangle(brush, coord.X, coord.Y, param.Stroke, param.Stroke);
+					break;
+				default:
+					break;
+			}
 		}
 	}
 }
