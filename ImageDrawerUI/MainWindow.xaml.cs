@@ -52,7 +52,7 @@ namespace ImageDrawerUI
 			Factor.Text = 30.ToString();
 			ChunkSize.Text = 5.ToString();
 			Angle.Text = 0.ToString();
-
+			Backend.SelectedIndex++;
 		}
 
 		private void FillComboBox(ComboBox comboBox, Type type)
