@@ -71,7 +71,7 @@ namespace ImageDrawerUI
 				Smoothing = (SmoothingType)Smoothing.Items[Smoothing.SelectedIndex],
 				LineType = (LineType)LineType.Items[LineType.SelectedIndex],
 				Method = (MethodType)Method.Items[Method.SelectedIndex],
-				Backend = (BackendType)Backend.Items[Method.SelectedIndex]
+				Backend = (BackendType)Backend.Items[Backend.SelectedIndex]
 			};
 
 			Cursor = Cursors.Wait;
