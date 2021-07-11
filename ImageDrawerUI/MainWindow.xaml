@@ -8,6 +8,29 @@
         Title="RidgeDrawer" Height="600" Width="1000" MinWidth="400" MinHeight="400" KeyDown="Window_KeyDown">
     <Window.Resources>
         <ResourceDictionary>
+            <Style TargetType="{x:Type Button}">
+                <Setter Property="Width" Value="100" />
+                <Setter Property="Height" Value="20" />
+                <Setter Property="HorizontalAlignment" Value="Center" />
+                <Setter Property="VerticalAlignment" Value="Top" />
+            </Style>
+            <Style TargetType="{x:Type TextBox}">
+                <Setter Property="Width" Value="100" />
+                <Setter Property="Height" Value="20" />
+                <Setter Property="HorizontalAlignment" Value="Left" />
+                <Setter Property="VerticalAlignment" Value="Top" />
+                <Setter Property="TextWrapping" Value="Wrap" />
+            </Style>
+            <Style TargetType="{x:Type ComboBox}">
+                <Setter Property="Width" Value="100" />
+                <Setter Property="Height" Value="20" />
+                <Setter Property="HorizontalAlignment" Value="Left" />
+                <Setter Property="VerticalAlignment" Value="Top" />
+            </Style>
+            <Style TargetType="{x:Type Label}">
+                <Setter Property="HorizontalAlignment" Value="Left" />
+                <Setter Property="VerticalAlignment" Value="Top" />
+            </Style>
             <Style TargetType="{x:Type Button}" x:Key="FullsizeButtonStyle">
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
@@ -27,49 +50,59 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid Grid.Column="0" MinWidth="200" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Panel.ZIndex="1" Background="White">
-            <TextBox x:Name="linescounttb" PreviewTextInput="NumberValidationTextBox" Height="20" TextWrapping="Wrap" Text="120" 
-                     VerticalAlignment="Top" Width="83" Margin="103,190,0,0" HorizontalAlignment="Left" KeyDown="paramchange_KeyDown"/>
-            <Label x:Name="linescountl" Content="LinesCount" VerticalAlignment="Top" Margin="29,187,0,0" HorizontalAlignment="Left"/>
 
-            <TextBox x:Name="Widthtb" Height="20" PreviewTextInput="NumberValidationTextBox" TextWrapping="Wrap" Text="1" 
-                     VerticalAlignment="Top" Width="83" Margin="103,218,0,0" HorizontalAlignment="Left" KeyDown="paramchange_KeyDown"/>
-            <Label x:Name="Widthl" Content="Width" VerticalAlignment="Top" Margin="29,215,0,0" HorizontalAlignment="Left"/>
-
-            <TextBox x:Name="Factortb" Height="20" PreviewTextInput="NumberValidationTextBox" TextWrapping="Wrap" Text="5" 
-                     VerticalAlignment="Top" Width="83" Margin="103,246,0,0" HorizontalAlignment="Left" KeyDown="paramchange_KeyDown"/>
-            <Label x:Name="Factorl" Content="Factor" VerticalAlignment="Top" Margin="29,243,0,0" HorizontalAlignment="Left"/>
-
-            <TextBox x:Name="ChunkSizetb" Height="20" PreviewTextInput="NumberValidationTextBox" TextWrapping="Wrap" Text="5" 
-                     VerticalAlignment="Top" Width="83" Margin="103,274,0,0" HorizontalAlignment="Left" KeyDown="paramchange_KeyDown"/>
-            <Label x:Name="ChunkSizel" Content="ChunkSize" VerticalAlignment="Top" Margin="29,271,0,0" HorizontalAlignment="Left"/>
+            <!--#region Buttons-->
             
-            <Button x:Name="button" Content="Open image (O)" HorizontalAlignment="Center" Margin="0,40,0,0"
-                    VerticalAlignment="Top" Width="100" Click="button_Click"/>
-            <Button x:Name="comparebuton" Content="Compare (C)" HorizontalAlignment="Center" Margin="0,80,0,0"
-                    VerticalAlignment="Top" Width="100" Click="comparebuton_Click"/>
-            <Button x:Name="savebuton" Content="Save (S)" HorizontalAlignment="Center" Margin="0,120,0,0"
-                    VerticalAlignment="Top" Width="100" Click="savebuton_Click"/>
+            <Button Content="Open image (O)" Margin="0,20,0,0" Click="Open_Click"/>
+            <Button Content="Compare (C)" Margin="0,60,0,0" Click="Compare_Click"/>
+            <Button Content="Save (S)" Margin="0,100,0,0" Click="Save_Click"/>
             
-            <Label x:Name="Smoothingl" Content="Smoothing" VerticalAlignment="Top" Margin="29,307,0,0" HorizontalAlignment="Left"/>
-            <ComboBox x:Name="Smoothingcb" HorizontalAlignment="Left" Margin="103,313,0,0" VerticalAlignment="Top" 
-                      Width="83" Height="20" SelectionChanged="Smoothingcb_SelectionChanged" />
-            <ComboBox x:Name="LineTypecb" HorizontalAlignment="Left" Margin="103,344,0,0" VerticalAlignment="Top" 
-                      Width="83" Height="20" SelectionChanged="Smoothingcb_SelectionChanged"/>
-            <ComboBox x:Name="Methodcb" HorizontalAlignment="Left" Margin="103,375,0,0" VerticalAlignment="Top" 
-                      Width="83" Height="20" SelectionChanged="Smoothingcb_SelectionChanged"/>
-            <Label x:Name="LineTypel" Content="LineType" VerticalAlignment="Top" Margin="29,338,0,0" HorizontalAlignment="Left"/>
-            <Label x:Name="Methodl" Content="Method" VerticalAlignment="Top" Margin="29,369,0,0" HorizontalAlignment="Left"/>
-            <Label x:Name="Backend" Content="Backend" VerticalAlignment="Top" Margin="29,400,0,0" HorizontalAlignment="Left"/>
-            <ComboBox x:Name="Backendcb" HorizontalAlignment="Left" Margin="103,406,0,0" VerticalAlignment="Top" 
-                Width="83" Height="20" SelectionChanged="Smoothingcb_SelectionChanged"/>
+            <!--#endregion-->
+
+            <!--#region Text boxes-->
+            
+            <Label Content="LinesCount" Margin="10,136,0,0" />
+            <TextBox x:Name="LinesCount" PreviewTextInput="NumberValidationTextBox"
+                     Margin="84,139,0,0" KeyDown="ParamChange_KeyDown"/>
+
+            <Label Content="Width" Margin="10,164,0,0"/>
+            <TextBox x:Name="Width" PreviewTextInput="NumberValidationTextBox" 
+                     Margin="84,171,0,0" KeyDown="ParamChange_KeyDown"/>
+
+            <Label Content="Factor" Margin="10,192,0,0" />
+            <TextBox x:Name="Factor" PreviewTextInput="NumberValidationTextBox"
+                     Margin="84,199,0,0" KeyDown="ParamChange_KeyDown"/>
+
+            <Label Content="ChunkSize" Margin="10,220,0,0" />
+            <TextBox x:Name="ChunkSize" PreviewTextInput="NumberValidationTextBox"
+                     Margin="84,227,0,0" KeyDown="ParamChange_KeyDown"/>
+            
+            <!--#endregion-->
+
+            <!--#region Combo boxes-->
+            
+            <Label Content="Smoothing" Margin="10,256,0,0" />
+            <ComboBox x:Name="Smoothing" Margin="84,262,0,0" SelectionChanged="ComboBox_SelectionChanged" />
+
+            <Label Content="LineType"  Margin="10,287,0,0" />
+            <ComboBox x:Name="LineType" Margin="84,293,0,0" SelectionChanged="ComboBox_SelectionChanged"/>
+
+            <Label Content="Method" Margin="10,318,0,0"/>
+            <ComboBox x:Name="Method" Margin="84,324,0,0" SelectionChanged="ComboBox_SelectionChanged"/>
+
+            <Label Content="Backend" Margin="10,349,0,0"/>
+            <ComboBox x:Name="Backend" Margin="84,355,0,0" SelectionChanged="ComboBox_SelectionChanged"/>
+            
+            <!--#endregion-->
+            
         </Grid>
         <Grid Name="ImageGrid" SnapsToDevicePixels="True" UseLayoutRounding="True" Grid.Column="1"
           MouseWheel="image_MouseWheel"  MouseMove="image_MouseMove" 
           MouseLeftButtonDown="image_MouseLeftButtonDown" MouseLeftButtonUp="image_MouseLeftButtonUp"
           Loaded="ImageGrid_Loaded" SizeChanged="ImageGrid_SizeChanged">
             <Button x:Name="FullsizeButton" Content="Fullsize (0/F)" Style="{StaticResource FullsizeButtonStyle}" 
-                    HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" 
-                    Panel.ZIndex="2" Width="70" Height="25" Click="FullsizeButton_Click"/>
+                    HorizontalAlignment="Left" Margin="5,5,0,0" VerticalAlignment="Top" 
+                    Panel.ZIndex="2" Width="70" Height="20" Click="FullsizeButton_Click"/>
             <Image x:Name="image" Stretch="None" Panel.ZIndex="1"/>
             <Rectangle Fill="Gray"/>
         </Grid>

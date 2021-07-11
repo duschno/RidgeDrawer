@@ -1,25 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Runtime.InteropServices;
 
 namespace ImageDrawer
 {
-	interface IBackendDrawer
-	{
-		void Draw(Graphics g, Bitmap bmp, RenderParams param);
-	}
-
 	public class GDIPlus : IBackendDrawer
 	{
-		SmoothingMode smoothing;
-		MethodType method;
 		public void Draw(Graphics graphics, Bitmap bmp, RenderParams param)
 		{
 			graphics.SmoothingMode = param.Smoothing == SmoothingType.Antialias ?
 				SmoothingMode.AntiAlias : SmoothingMode.None;
-			switch (method)
+			switch (param.Method)
 			{
 				case MethodType.Ridge:
 					MethodRidge(graphics, bmp, param);
@@ -103,24 +94,6 @@ namespace ImageDrawer
 				default:
 					break;
 			}
-		}
-	}
-
-	public class Cairo : IBackendDrawer
-	{
-		[DllImport(@"C:\Users\User\Desktop\ImageDrawer\Debug\PlusPlus.dll", CallingConvention = CallingConvention.Cdecl)]
-		private extern static void Draw(IntPtr hdc, int width, int height, int linesCount, int strokeWidth, int factor, int chunkSize);
-
-		public void Draw(Graphics g, int width, int height, int linesCount, int strokeWidth, int factor, int chunkSize)
-		{
-			IntPtr hdc = g.GetHdc();
-			Draw(hdc, width, height, linesCount, strokeWidth, factor, chunkSize);
-			g.ReleaseHdc();
-		}
-
-		public void Draw(Graphics g, Bitmap bmp, RenderParams param)
-		{
-			throw new NotImplementedException();
 		}
 	}
 }

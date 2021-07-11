@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
@@ -14,71 +11,12 @@ namespace ImageDrawer
 {
 	public class Program
 	{
-		#region Methods
 		/// <summary>
-		/// Rigde type of render
+		/// Gets backend drawer implementation
 		/// </summary>
-		/// <param name="graphics"></param>
-		/// <param name="bmp"></param>
-		/// <param name="param"></param>
-		//static void MethodRidge(Graphics graphics, Bitmap bmp, RenderParams param)
-		//{
-		//	int lineNumber = 0;
-		//	while (lineNumber < param.LinesCount)
-		//	{
-		//		List<System.Drawing.Point> coords = new List<System.Drawing.Point>();
-		//		int y = bmp.Height * lineNumber / param.LinesCount + bmp.Height / (param.LinesCount * 2);
-		//		coords.Add(new System.Drawing.Point(0, y));
-		//		for (int x = 1; x < bmp.Width; x += param.ChunkSize)
-		//		{
-		//			System.Drawing.Color pixel = bmp.GetPixel(x, y);
-		//			int grayscale = (pixel.R + pixel.G + pixel.B) / 3;
-		//			int factor = param.Factor * (grayscale - 127) / 127;
-		//			coords.Add(new System.Drawing.Point(x, y + factor));
-		//		}
-
-		//		RenderLine(graphics, coords, param);
-		//		lineNumber++;
-		//	}
-		//}
-
-		///// <summary>
-		///// Squiggle type of render
-		///// </summary>
-		///// <param name="graphics"></param>
-		///// <param name="bmp"></param>
-		///// <param name="param"></param>
-		//static void MethodSquiggle(Graphics graphics, Bitmap bmp, RenderParams param)
-		//{
-		//	int lineNumber = 0;
-		//	while (lineNumber < param.LinesCount)
-		//	{
-		//		List<System.Drawing.Point> coords = new List<System.Drawing.Point>();
-		//		int sign = -1;
-		//		int y = bmp.Height * lineNumber / param.LinesCount + bmp.Height / (param.LinesCount * 2);
-		//		coords.Add(new System.Drawing.Point(0, y));
-		//		int accumulator = param.ChunkSize;
-		//		for (int x = 1; x < bmp.Width; x += accumulator)
-		//		{
-		//			System.Drawing.Color pixel = bmp.GetPixel(x, y);
-		//			int grayscale = 255 - (pixel.R + pixel.G + pixel.B) / 3;
-		//			accumulator = (param.ChunkSize * (255 - grayscale) + 10) / 10;
-		//			int factor = param.Factor;
-					
-		//			grayscale = grayscale == 0 ? 1 : grayscale;
-		//			coords.Add(new System.Drawing.Point(
-		//				x + accumulator, y + (sign * factor * grayscale / 80)));
-		//			sign *= -1;
-		//		}
-
-		//		RenderLine(graphics, coords, param);
-		//		lineNumber++;
-		//	}
-		//}
-
-		#endregion
-
-		static IBackendDrawer GetBackendDrawer(BackendType type)
+		/// <param name="type">Backend to use</param>
+		/// <returns>Drawer instance</returns>
+		private static IBackendDrawer GetBackendDrawer(BackendType type)
 		{
 			switch (type)
 			{
@@ -91,14 +29,21 @@ namespace ImageDrawer
 			}
 		}
 
-		static Bitmap RenderImage(Bitmap bmp, RenderParams param)
+		/// <summary>
+		/// Renders whole image
+		/// </summary>
+		/// <param name="width">Image width</param>
+		/// <param name="height">Image height</param>
+		/// <param name="param">Render params</param>
+		/// <returns>Rendered bitmap</returns>
+		private static Bitmap RenderImage(int width, int height, RenderParams param)
 		{
-			Bitmap bitmap = new Bitmap(bmp.Width, bmp.Height);
+			Bitmap bitmap = new Bitmap(width, height);
 
 			using (var graphics = Graphics.FromImage(bitmap))
 			{
 				using (SolidBrush brush = new SolidBrush(System.Drawing.Color.White))
-					graphics.FillRectangle(brush, 0, 0, bmp.Width, bmp.Height);
+					graphics.FillRectangle(brush, 0, 0, width, height);
 
 				IBackendDrawer drawer = GetBackendDrawer(param.Backend);
 				drawer.Draw(graphics, bitmap, param);
@@ -107,67 +52,58 @@ namespace ImageDrawer
 			return bitmap;
 		}
 
-		//private static void RenderLine(Graphics graphics, List<System.Drawing.Point> coords, RenderParams param)
-		//{
-		//	if (coords.Count == 1)
-		//		return;
-		//	System.Drawing.Brush brush = new SolidBrush(System.Drawing.Color.Black);
-		//	System.Drawing.Pen pen = new System.Drawing.Pen(brush, param.Width);
-
-		//	switch (param.LineType)
-		//	{
-		//		case LineType.Line:
-		//			graphics.DrawLines(pen, coords.ToArray());
-		//			break;
-		//		case LineType.Curve:
-		//			graphics.DrawCurve(pen, coords.ToArray());
-		//			break;
-		//		case LineType.Dot:
-		//			foreach (System.Drawing.Point coord in coords)
-		//				graphics.FillRectangle(brush, coord.X, coord.Y, param.Width, param.Width);
-		//			break;
-		//		default:
-		//			break;
-		//	}
-		//}
-
-		private static void Draw(string inputFileName, string outputFileName, RenderParams param)
+		public static Bitmap ProcessByFilename(string inputFileName, RenderParams param)
 		{
 			Bitmap bmp = new Bitmap(inputFileName);
-
-			bmp = RenderImage(bmp, param);
-
-			EncoderParameters parameters = new EncoderParameters(1);
-			parameters.Param[0] = new EncoderParameter(
-				System.Drawing.Imaging.Encoder.Quality, 100L);
-			bmp.Save(outputFileName,
-				ImageCodecInfo.GetImageEncoders().FirstOrDefault(codec => codec.FormatID == ImageFormat.Png.Guid),
-				parameters);
+			return RenderImage(bmp.Width, bmp.Height, param);
 		}
 
-		public static Bitmap DrawUI(string inputFileName, RenderParams param)
+		/// <summary>
+		/// Saves BitmapSource by given filename
+		/// </summary>
+		/// <param name="bmp">Bitmap to save</param>
+		/// <param name="outputFileName">Name of the file to use</param>
+		public static void Save(BitmapSource bmp, string outputFileName)
 		{
-			Bitmap bmp = new Bitmap(inputFileName);
-			return RenderImage(bmp, param);
+			using (var fileStream = new FileStream(outputFileName, FileMode.Create))
+			{
+				BitmapEncoder encoder = new PngBitmapEncoder();
+				encoder.Frames.Add(BitmapFrame.Create(bmp));
+				encoder.Save(fileStream);
+			}
 		}
+
+		#region Helpers
 
 		[DllImport("gdi32.dll", EntryPoint = "DeleteObject")]
 		[return: MarshalAs(UnmanagedType.Bool)]
-		public static extern bool DeleteObject([In] IntPtr hObject);
+		private static extern bool DeleteObject([In] IntPtr hObject);
 
-		public static BitmapSource ImageSourceFromBitmap(Bitmap bmp)
+		/// <summary>
+		/// Converts Bitmap to BitmapSource
+		/// </summary>
+		/// <param name="bmp">Bitmap image</param>
+		/// <returns>BitmapSource image</returns>
+		public static BitmapSource BitmapToBitmapSource(Bitmap bmp)
 		{
 			var handle = bmp.GetHbitmap();
 			try
 			{
-				return Imaging.CreateBitmapSourceFromHBitmap(handle, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+				return Imaging.CreateBitmapSourceFromHBitmap(handle, 
+					IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
 			}
 			finally { DeleteObject(handle); }
 		}
 
-		#region Console app stuff
+		#endregion
 
-		static void Main(string[] args)
+		#region Console app related stuff
+
+		/// <summary>
+		/// Entry point of the console app
+		/// </summary>
+		/// <param name="args">Command line arguments</param>
+		private static void Main(string[] args)
 		{
 			RenderParams param = new RenderParams
 			{
@@ -182,10 +118,17 @@ namespace ImageDrawer
 			};
 
 			string imageName = GetImageName("Rachel-Carson.jpg", args);
-			Draw(imageName, AddPostfix(imageName), param);
+			Bitmap bmp = ProcessByFilename(imageName, param);
+			bmp.Save(AddPostfix(imageName), ImageFormat.Bmp);
 		}
 
-		public static string GetImageName(string defaultName, string[] args = null)
+		/// <summary>
+		/// Gest name of the image to process
+		/// </summary>
+		/// <param name="defaultName">Name of the default image to process</param>
+		/// <param name="args">Command line arguments</param>
+		/// <returns>Name of the image to process</returns>
+		private static string GetImageName(string defaultName, string[] args = null)
 		{
 			string imageName = defaultName;
 			if (args != null && args.Length > 0)
@@ -194,10 +137,15 @@ namespace ImageDrawer
 			return imageName;
 		}
 
-		public static string AddPostfix(string imageName)
+		/// <summary>
+		/// Adds postfix to the name of processed image
+		/// </summary>
+		/// <param name="imageName">Original image name</param>
+		/// <returns>Name with postfix</returns>
+		private static string AddPostfix(string imageName)
 		{
 			string filename = Path.GetFileNameWithoutExtension(imageName);
-			string outputExt = ImageFormat.Png.ToString().ToLower();
+			string outputExt = ImageFormat.Bmp.ToString().ToLower();
 			return filename + "_processed." + outputExt; 
 		}
 

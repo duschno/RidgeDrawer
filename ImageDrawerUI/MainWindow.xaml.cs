@@ -1,15 +1,12 @@
 ﻿using ImageDrawer;
 using System;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Drawing.Drawing2D;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Drawing;
 using System.Text.RegularExpressions;
-using System.IO;
 
 namespace ImageDrawerUI
 {
@@ -18,116 +15,14 @@ namespace ImageDrawerUI
 	/// </summary>
 	public partial class MainWindow : Window
 	{
-		string filename;
-		ImageSource original;
-		ImageSource processed;
-		double scaleFactor = 2;
-		System.Windows.Point startPos;
-		Thickness oldMargin;
+		private string filename;
+		private ImageSource original;
+		private ImageSource processed;
+		private double scaleFactor = 2;
+		private System.Windows.Point startPos;
+		private Thickness oldMargin;
 
-		public MainWindow()
-		{
-			InitializeComponent();
-			Smoothingcb.ItemsSource = Enum.GetValues(typeof(SmoothingType)).Cast<SmoothingType>();
-			Smoothingcb.SelectedItem = Smoothingcb.Items[0];
-			LineTypecb.ItemsSource = Enum.GetValues(typeof(LineType)).Cast<LineType>();
-			LineTypecb.SelectedItem = LineTypecb.Items[0];
-			Methodcb.ItemsSource = Enum.GetValues(typeof(MethodType)).Cast<MethodType>();
-			Methodcb.SelectedItem = Methodcb.Items[0];
-			Backendcb.ItemsSource = Enum.GetValues(typeof(BackendType)).Cast<BackendType>();
-			Backendcb.SelectedItem = Backendcb.Items[0];
-
-		}
-
-		private void button_Click(object sender, RoutedEventArgs e)
-		{
-			Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-			dlg.Filter = "Image files (*.jpg, *.jpeg, *.jpe, *.jfif, *.png, *.bmp) | *.jpg; *.jpeg; *.jpe; *.jfif; *.png; *.bmp";
-
-			bool? result = dlg.ShowDialog();
-
-			if (result == true)
-			{
-				filename = dlg.FileName;
-				RenderOnUI(filename);
-			}
-		}
-
-		private void RenderOnUI(string filename)
-		{
-			RenderParams param = new RenderParams
-			{
-				LinesCount = Convert.ToInt32(linescounttb.Text),
-				Width = Convert.ToInt32(Widthtb.Text),
-				Factor = Convert.ToInt32(Factortb.Text),
-				ChunkSize = Convert.ToInt32(ChunkSizetb.Text),
-				Smoothing = (SmoothingType)Smoothingcb.Items[Smoothingcb.SelectedIndex],
-				LineType = (LineType)LineTypecb.Items[LineTypecb.SelectedIndex],
-				Method = (MethodType)Methodcb.Items[Methodcb.SelectedIndex],
-				Backend = (BackendType)Backendcb.Items[Methodcb.SelectedIndex]
-			};
-
-			Cursor = Cursors.Wait;
-			original = ConvertToNativeDpi(new Bitmap(filename));
-			processed = ConvertToNativeDpi(Program.DrawUI(filename, param));
-			image.Source = processed;
-			image.MaxWidth = image.Source.Width * scaleFactor * 8;
-			image.MaxHeight = image.Source.Height * scaleFactor * 8;
-			Cursor = Cursors.Arrow;
-		}
-
-		BitmapSource ConvertToNativeDpi(Bitmap bitmap)
-		{
-			BitmapSource bitmapSource = Program.ImageSourceFromBitmap(bitmap);
-			DpiScale dpiScale = VisualTreeHelper.GetDpi(this);
-			int width = bitmapSource.PixelWidth;
-			int height = bitmapSource.PixelHeight;
-
-			int stride = width * bitmapSource.Format.BitsPerPixel;
-			byte[] pixelData = new byte[stride * height];
-			bitmapSource.CopyPixels(pixelData, stride, 0);
-
-			return BitmapSource.Create(width, height,
-				dpiScale.PixelsPerInchX, dpiScale.PixelsPerInchY,
-				bitmapSource.Format, bitmapSource.Palette,
-				pixelData, stride);
-		}
-
-		private void comparebuton_Click(object sender, RoutedEventArgs e)
-		{
-			var t = original;
-			original = image.Source;
-			image.Source = t;
-		}
-
-		private void savebuton_Click(object sender, RoutedEventArgs e)
-		{
-			if (processed == null)
-				return;
-
-			Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
-			dlg.Filter = "Image files (*.bmp) | *.bmp";
-
-			bool? result = dlg.ShowDialog();
-
-			if (result == true)
-			{
-				using (var fileStream = new FileStream(dlg.FileName, FileMode.Create))
-				{
-					BitmapEncoder encoder = new PngBitmapEncoder();
-					encoder.Frames.Add(BitmapFrame.Create(processed as BitmapSource));
-					encoder.Save(fileStream);
-				}
-			}
-		}
-
-		private void Smoothingcb_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			if (filename != null)
-				RenderOnUI(filename);
-		}
-
-		bool IsFitsGrid
+		private bool IsFitsGrid
 		{
 			get
 			{
@@ -142,6 +37,67 @@ namespace ImageDrawerUI
 			{
 				return double.IsNaN(image.Width) || image.Source.Width == image.Width;
 			}
+		}
+
+		public MainWindow()
+		{
+			InitializeComponent();
+
+			FillComboBox(Smoothing, typeof(SmoothingType));
+			FillComboBox(LineType, typeof(LineType));
+			FillComboBox(Method, typeof(MethodType));
+			FillComboBox(Backend, typeof(BackendType));
+			LinesCount.Text = 120.ToString();
+			Width.Text = 1.ToString();
+			Factor.Text = 5.ToString();
+			ChunkSize.Text = 5.ToString();
+
+		}
+
+		private void FillComboBox(ComboBox comboBox, Type type)
+		{
+			comboBox.ItemsSource = Enum.GetValues(type);
+			comboBox.SelectedItem = comboBox.Items[0];
+		}
+
+		private void Render(string filename)
+		{
+			RenderParams param = new RenderParams
+			{
+				LinesCount = Convert.ToInt32(LinesCount.Text),
+				Width = Convert.ToInt32(Width.Text),
+				Factor = Convert.ToInt32(Factor.Text),
+				ChunkSize = Convert.ToInt32(ChunkSize.Text),
+				Smoothing = (SmoothingType)Smoothing.Items[Smoothing.SelectedIndex],
+				LineType = (LineType)LineType.Items[LineType.SelectedIndex],
+				Method = (MethodType)Method.Items[Method.SelectedIndex],
+				Backend = (BackendType)Backend.Items[Method.SelectedIndex]
+			};
+
+			Cursor = Cursors.Wait;
+			original = ConvertToNativeDpi(new Bitmap(filename));
+			processed = ConvertToNativeDpi(Program.ProcessByFilename(filename, param));
+			image.Source = processed;
+			image.MaxWidth = image.Source.Width * scaleFactor * 8;
+			image.MaxHeight = image.Source.Height * scaleFactor * 8;
+			Cursor = Cursors.Arrow;
+		}
+
+		private BitmapSource ConvertToNativeDpi(Bitmap bitmap)
+		{
+			BitmapSource bitmapSource = Program.BitmapToBitmapSource(bitmap);
+			DpiScale dpiScale = VisualTreeHelper.GetDpi(this);
+			int width = bitmapSource.PixelWidth;
+			int height = bitmapSource.PixelHeight;
+
+			int stride = width * bitmapSource.Format.BitsPerPixel;
+			byte[] pixelData = new byte[stride * height];
+			bitmapSource.CopyPixels(pixelData, stride, 0);
+
+			return BitmapSource.Create(width, height,
+				dpiScale.PixelsPerInchX, dpiScale.PixelsPerInchY,
+				bitmapSource.Format, bitmapSource.Palette,
+				pixelData, stride);
 		}
 
 		private void SetNonScaled()
@@ -225,11 +181,6 @@ namespace ImageDrawerUI
 			}
 		}
 
-		private void image_MouseWheel(object sender, MouseWheelEventArgs e)
-		{
-			ChangeZoom(e.Delta > 0);
-		}
-
 		private Thickness CheckBoundaries(Thickness margin)
 		{
 			double widthOver = ImageGrid.ActualWidth - image.Width;
@@ -245,6 +196,55 @@ namespace ImageDrawerUI
 				margin.Top = heightOver;
 
 			return margin;
+		}
+
+		private void SetFullsize()
+		{
+			if (image.Source == null)
+				return;
+
+			image.Width = image.Source.Width;
+			image.Height = image.Source.Height;
+			ChangeUIProps();
+		}
+
+		private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
+		{
+			Regex regex = new Regex("[^0-9]+");
+			e.Handled = regex.IsMatch(e.Text);
+		}
+
+		#region Event handlers
+
+		private void Compare_Click(object sender, RoutedEventArgs e)
+		{
+			ImageSource temp = original;
+			original = image.Source;
+			image.Source = temp;
+		}
+
+		private void Save_Click(object sender, RoutedEventArgs e)
+		{
+			if (processed == null)
+				return;
+
+			Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
+			dlg.Filter = "Image files (*.bmp) | *.bmp";
+
+			bool? result = dlg.ShowDialog();
+			if (result == true)
+				Program.Save(processed as BitmapSource, dlg.FileName);
+		}
+
+		private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			if (filename != null)
+				Render(filename);
+		}
+
+		private void image_MouseWheel(object sender, MouseWheelEventArgs e)
+		{
+			ChangeZoom(e.Delta > 0);
 		}
 
 		private void image_MouseMove(object sender, MouseEventArgs e)
@@ -270,6 +270,7 @@ namespace ImageDrawerUI
 
 		private void image_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
+			Keyboard.ClearFocus();
 			startPos = Mouse.GetPosition(Window);
 			Mouse.Capture(image);
 		}
@@ -282,12 +283,16 @@ namespace ImageDrawerUI
 
 		private void Window_KeyDown(object sender, KeyEventArgs e)
 		{
+			if (e.OriginalSource is TextBox &&
+				(e.Key == Key.D0 || e.Key == Key.NumPad0))
+				return;
+
 			if (e.Key == Key.O)
-				button_Click(null, null);
+				Open_Click(null, null);
 			if (e.Key == Key.C)
-				comparebuton_Click(null, null);
+				Compare_Click(null, null);
 			if (e.Key == Key.S)
-				savebuton_Click(null, null);
+				Save_Click(null, null);
 			if (e.Key == Key.D0 || e.Key == Key.NumPad0 || e.Key == Key.F)
 				SetFullsize();
 			if (e.Key == Key.Add || e.Key == Key.OemPlus)
@@ -316,28 +321,30 @@ namespace ImageDrawerUI
 			SetFullsize();
 		}
 
-		private void SetFullsize()
+		private void ParamChange_KeyDown(object sender, KeyEventArgs e)
 		{
-			image.Width = image.Source.Width;
-			image.Height = image.Source.Height;
-			ChangeUIProps();
-		}
-
-		private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
-		{
-			Regex regex = new Regex("[^0-9]+");
-			e.Handled = regex.IsMatch(e.Text);
-		}
-
-		private void paramchange_KeyDown(object sender, KeyEventArgs e)
-		{
-			int t;
 			if (e.Key != Key.Enter)
 				return;
-			if (string.IsNullOrWhiteSpace(((TextBox)e.Source).Text) || !int.TryParse(((TextBox)e.Source).Text, out t))
+			if (string.IsNullOrWhiteSpace(((TextBox)e.Source).Text) ||
+				!int.TryParse(((TextBox)e.Source).Text, out _))
 				return;
 			if (filename != null)
-				RenderOnUI(filename);
+				Render(filename);
 		}
+		private void Open_Click(object sender, RoutedEventArgs e)
+		{
+			Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+			dlg.Filter = "Image files (*.jpg, *.jpeg, *.jpe, *.jfif, *.png, *.bmp) | *.jpg; *.jpeg; *.jpe; *.jfif; *.png; *.bmp";
+
+			bool? result = dlg.ShowDialog();
+
+			if (result == true)
+			{
+				filename = dlg.FileName;
+				Render(filename);
+			}
+		}
+
+		#endregion
 	}
 }
