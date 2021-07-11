@@ -108,7 +108,7 @@ namespace ImageDrawer
 			RenderParams param = new RenderParams
 			{
 				LinesCount = 120,
-				Width = 1,
+				Stroke = 1,
 				Factor = 5,
 				ChunkSize = 5,
 				Smoothing = SmoothingType.Antialias,

@@ -52,49 +52,53 @@
         <Grid Grid.Column="0" MinWidth="200" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Panel.ZIndex="1" Background="White">
 
             <!--#region Buttons-->
-            
+
             <Button Content="Open image (O)" Margin="0,20,0,0" Click="Open_Click"/>
             <Button Content="Compare (C)" Margin="0,60,0,0" Click="Compare_Click"/>
             <Button Content="Save (S)" Margin="0,100,0,0" Click="Save_Click"/>
-            
+
             <!--#endregion-->
 
             <!--#region Text boxes-->
-            
+
             <Label Content="LinesCount" Margin="10,136,0,0" />
-            <TextBox x:Name="LinesCount" PreviewTextInput="NumberValidationTextBox"
-                     Margin="84,139,0,0" KeyDown="ParamChange_KeyDown"/>
+            <TextBox x:Name="LinesCount" PreviewTextInput="PositiveNumberValidation"
+                     Margin="84,140,0,0" KeyDown="ParamChange_KeyDown"/>
 
-            <Label Content="Width" Margin="10,164,0,0"/>
-            <TextBox x:Name="Width" PreviewTextInput="NumberValidationTextBox" 
-                     Margin="84,171,0,0" KeyDown="ParamChange_KeyDown"/>
+            <Label Content="Stroke" Margin="10,166,0,0"/>
+            <TextBox x:Name="Stroke" PreviewTextInput="PositiveNumberValidation" 
+                     Margin="84,170,0,0" KeyDown="ParamChange_KeyDown"/>
 
-            <Label Content="Factor" Margin="10,192,0,0" />
-            <TextBox x:Name="Factor" PreviewTextInput="NumberValidationTextBox"
-                     Margin="84,199,0,0" KeyDown="ParamChange_KeyDown"/>
+            <Label Content="Factor" Margin="10,196,0,0" />
+            <TextBox x:Name="Factor" PreviewTextInput="PositiveNumberValidation"
+                     Margin="84,200,0,0" KeyDown="ParamChange_KeyDown"/>
 
-            <Label Content="ChunkSize" Margin="10,220,0,0" />
-            <TextBox x:Name="ChunkSize" PreviewTextInput="NumberValidationTextBox"
-                     Margin="84,227,0,0" KeyDown="ParamChange_KeyDown"/>
-            
+            <Label Content="ChunkSize" Margin="10,226,0,0" />
+            <TextBox x:Name="ChunkSize" PreviewTextInput="PositiveNumberValidation"
+                     Margin="84,230,0,0" KeyDown="ParamChange_KeyDown"/>
+
+            <Label Content="Angle" Margin="10,256,0,0" />
+            <TextBox x:Name="Angle" PreviewTextInput="AngleValidation"
+                     Margin="84,260,0,0" KeyDown="ParamChange_KeyDown"/>
+
             <!--#endregion-->
 
             <!--#region Combo boxes-->
-            
-            <Label Content="Smoothing" Margin="10,256,0,0" />
-            <ComboBox x:Name="Smoothing" Margin="84,262,0,0" SelectionChanged="ComboBox_SelectionChanged" />
 
-            <Label Content="LineType"  Margin="10,287,0,0" />
-            <ComboBox x:Name="LineType" Margin="84,293,0,0" SelectionChanged="ComboBox_SelectionChanged"/>
+            <Label Content="Smoothing" Margin="10,306,0,0" />
+            <ComboBox x:Name="Smoothing" Margin="84,310,0,0" SelectionChanged="ComboBox_SelectionChanged" />
 
-            <Label Content="Method" Margin="10,318,0,0"/>
-            <ComboBox x:Name="Method" Margin="84,324,0,0" SelectionChanged="ComboBox_SelectionChanged"/>
+            <Label Content="LineType"  Margin="10,336,0,0" />
+            <ComboBox x:Name="LineType" Margin="84,340,0,0" SelectionChanged="ComboBox_SelectionChanged"/>
 
-            <Label Content="Backend" Margin="10,349,0,0"/>
-            <ComboBox x:Name="Backend" Margin="84,355,0,0" SelectionChanged="ComboBox_SelectionChanged"/>
-            
+            <Label Content="Method" Margin="10,366,0,0"/>
+            <ComboBox x:Name="Method" Margin="84,370,0,0" SelectionChanged="ComboBox_SelectionChanged"/>
+
+            <Label Content="Backend" Margin="10,396,0,0"/>
+            <ComboBox x:Name="Backend" Margin="84,400,0,0" SelectionChanged="ComboBox_SelectionChanged"/>
+
             <!--#endregion-->
-            
+
         </Grid>
         <Grid Name="ImageGrid" SnapsToDevicePixels="True" UseLayoutRounding="True" Grid.Column="1"
           MouseWheel="image_MouseWheel"  MouseMove="image_MouseMove" 

@@ -29,12 +29,13 @@
 	public struct RenderParams
 	{
 		public int LinesCount;
-		public int Width;
+		public int Stroke; // в конце прямо перед отрисовкой
 		public int Factor;
 		public int ChunkSize;
-		public SmoothingType Smoothing;
-		public LineType LineType;
-		public MethodType Method;
+		public int Angle;
+		public SmoothingType Smoothing; // в начале
+		public LineType LineType; // в конце
+		public MethodType Method; // в начале
 		public BackendType Backend;
 	}
 }

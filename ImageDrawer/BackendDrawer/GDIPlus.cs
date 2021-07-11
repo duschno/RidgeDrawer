@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 
@@ -28,15 +29,16 @@ namespace ImageDrawer
 			int lineNumber = 0;
 			while (lineNumber < param.LinesCount)
 			{
-				List<System.Drawing.Point> coords = new List<System.Drawing.Point>();
+				List<Point> coords = new List<Point>();
 				int y = bmp.Height * lineNumber / param.LinesCount + bmp.Height / (param.LinesCount * 2);
-				coords.Add(new System.Drawing.Point(0, y));
+				coords.Add(new Point(0, y));
 				for (int x = 1; x < bmp.Width; x += param.ChunkSize)
 				{
-					System.Drawing.Color pixel = bmp.GetPixel(x, y);
+					Color pixel = bmp.GetPixel(x, y);
 					int grayscale = (pixel.R + pixel.G + pixel.B) / 3;
 					int factor = param.Factor * (grayscale - 127) / 127;
-					coords.Add(new System.Drawing.Point(x, y + factor));
+					coords.Add(new Point(x + (int)(factor * Math.Sin(Math.PI * -param.Angle / 180.0)),
+										 y + (int)(factor * Math.Cos(Math.PI * -param.Angle / 180.0))));
 				}
 
 				RenderLine(graphics, coords, param);
@@ -49,20 +51,20 @@ namespace ImageDrawer
 			int lineNumber = 0;
 			while (lineNumber < param.LinesCount)
 			{
-				List<System.Drawing.Point> coords = new List<System.Drawing.Point>();
+				List<Point> coords = new List<Point>();
 				int sign = -1;
 				int y = bmp.Height * lineNumber / param.LinesCount + bmp.Height / (param.LinesCount * 2);
-				coords.Add(new System.Drawing.Point(0, y));
+				coords.Add(new Point(0, y));
 				int accumulator = param.ChunkSize;
 				for (int x = 1; x < bmp.Width; x += accumulator)
 				{
-					System.Drawing.Color pixel = bmp.GetPixel(x, y);
+					Color pixel = bmp.GetPixel(x, y);
 					int grayscale = 255 - (pixel.R + pixel.G + pixel.B) / 3;
 					accumulator = (param.ChunkSize * (255 - grayscale) + 10) / 10;
 					int factor = param.Factor;
 
 					grayscale = grayscale == 0 ? 1 : grayscale;
-					coords.Add(new System.Drawing.Point(
+					coords.Add(new Point(
 						x + accumulator, y + (sign * factor * grayscale / 80)));
 					sign *= -1;
 				}
@@ -72,12 +74,12 @@ namespace ImageDrawer
 			}
 		}
 
-		private static void RenderLine(Graphics graphics, List<System.Drawing.Point> coords, RenderParams param)
+		private static void RenderLine(Graphics graphics, List<Point> coords, RenderParams param)
 		{
 			if (coords.Count == 1)
 				return;
-			System.Drawing.Brush brush = new SolidBrush(System.Drawing.Color.Black);
-			System.Drawing.Pen pen = new System.Drawing.Pen(brush, param.Width);
+			Brush brush = new SolidBrush(Color.Black);
+			Pen pen = new Pen(brush, param.Stroke);
 
 			switch (param.LineType)
 			{
@@ -88,8 +90,8 @@ namespace ImageDrawer
 					graphics.DrawCurve(pen, coords.ToArray());
 					break;
 				case LineType.Dot:
-					foreach (System.Drawing.Point coord in coords)
-						graphics.FillRectangle(brush, coord.X, coord.Y, param.Width, param.Width);
+					foreach (Point coord in coords)
+						graphics.FillRectangle(brush, coord.X, coord.Y, param.Stroke, param.Stroke);
 					break;
 				default:
 					break;

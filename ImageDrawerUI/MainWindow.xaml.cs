@@ -48,9 +48,10 @@ namespace ImageDrawerUI
 			FillComboBox(Method, typeof(MethodType));
 			FillComboBox(Backend, typeof(BackendType));
 			LinesCount.Text = 120.ToString();
-			Width.Text = 1.ToString();
+			Stroke.Text = 1.ToString();
 			Factor.Text = 5.ToString();
 			ChunkSize.Text = 5.ToString();
+			Angle.Text = 0.ToString();
 
 		}
 
@@ -65,9 +66,10 @@ namespace ImageDrawerUI
 			RenderParams param = new RenderParams
 			{
 				LinesCount = Convert.ToInt32(LinesCount.Text),
-				Width = Convert.ToInt32(Width.Text),
+				Stroke = Convert.ToInt32(Stroke.Text),
 				Factor = Convert.ToInt32(Factor.Text),
 				ChunkSize = Convert.ToInt32(ChunkSize.Text),
+				Angle = Convert.ToInt32(Angle.Text),
 				Smoothing = (SmoothingType)Smoothing.Items[Smoothing.SelectedIndex],
 				LineType = (LineType)LineType.Items[LineType.SelectedIndex],
 				Method = (MethodType)Method.Items[Method.SelectedIndex],
@@ -208,10 +210,16 @@ namespace ImageDrawerUI
 			ChangeUIProps();
 		}
 
-		private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
+		private void PositiveNumberValidation(object sender, TextCompositionEventArgs e)
 		{
 			Regex regex = new Regex("[^0-9]+");
 			e.Handled = regex.IsMatch(e.Text);
+		}
+
+		private void AngleValidation(object sender, TextCompositionEventArgs e)
+		{
+			Regex regex = new Regex("[\\-0-9]+");
+			e.Handled = !regex.IsMatch(e.Text);
 		}
 
 		#region Event handlers
@@ -284,7 +292,7 @@ namespace ImageDrawerUI
 		private void Window_KeyDown(object sender, KeyEventArgs e)
 		{
 			if (e.OriginalSource is TextBox &&
-				(e.Key == Key.D0 || e.Key == Key.NumPad0))
+				!(e.Key == Key.O || e.Key == Key.C || e.Key == Key.S))
 				return;
 
 			if (e.Key == Key.O)
