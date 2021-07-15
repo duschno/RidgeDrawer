@@ -23,7 +23,8 @@
 	public enum BackendType
 	{
 		GDIPlus,
-		Cairo
+		Cairo,
+		Sandbox
 	}
 
 	public struct RenderParams
