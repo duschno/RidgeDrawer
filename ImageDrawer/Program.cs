@@ -24,8 +24,6 @@ namespace ImageDrawer
 					return new GDIPlus();
 				case BackendType.Cairo:
 					return new Cairo();
-				case BackendType.Sandbox:
-					return new Sandbox();
 				default:
 					throw new Exception("Given backend is not supported");
 			}

@@ -10,6 +10,7 @@
 	public enum LineType
 	{
 		Line,
+		VariableLine,
 		Dot,
 		Curve
 	}
@@ -24,7 +25,7 @@
 	{
 		GDIPlus,
 		Cairo,
-		Sandbox
+		//Sandbox
 	}
 
 	public struct RenderParams
