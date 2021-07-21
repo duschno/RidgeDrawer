@@ -18,14 +18,15 @@ namespace ImageDrawer
 		/// <returns>Drawer instance</returns>
 		private static IBackendDrawer GetBackendDrawer(BackendType type)
 		{
-			switch (type)
+			try
 			{
-				case BackendType.GDIPlus:
-					return new GDIPlus();
-				case BackendType.Cairo:
-					return new Cairo();
-				default:
-					throw new Exception("Given backend is not supported");
+				Type t = typeof(IBackendDrawer);
+				t = Type.GetType($"{t.Namespace}.{type}");
+				return (IBackendDrawer)Activator.CreateInstance(t);
+			}
+			catch (Exception e)
+			{
+				throw new Exception($"{type} backend is not supported", e);
 			}
 		}
 
