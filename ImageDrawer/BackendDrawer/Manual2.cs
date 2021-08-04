@@ -5,7 +5,7 @@ using System.Drawing.Drawing2D;
 
 namespace ImageDrawer
 {
-	public class Manual : IBackendDrawer
+	public class Manual2 : IBackendDrawer
 	{
 		private Graphics graphics;
 		public void Draw(Bitmap newBitmap, Bitmap origBitmap, RenderParams param)

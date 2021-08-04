@@ -26,7 +26,8 @@
 		GDIPlus,
 		Cairo,
 		Sandbox,
-		Manual
+		Manual,
+		Manual2
 	}
 
 	public struct RenderParams
