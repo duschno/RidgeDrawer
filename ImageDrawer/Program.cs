@@ -33,24 +33,23 @@ namespace ImageDrawer
 		/// <summary>
 		/// Renders whole image
 		/// </summary>
-		/// <param name="width">Image width</param>
-		/// <param name="height">Image height</param>
+		/// <param name="origBitmap">Original bitmap</param>
 		/// <param name="param">Render params</param>
 		/// <returns>Rendered bitmap</returns>
-		private static Bitmap RenderImage(Bitmap loadedBitmap, RenderParams param)
+		private static Bitmap RenderImage(Bitmap origBitmap, RenderParams param)
 		{
-			Bitmap bitmap = new Bitmap(loadedBitmap.Width, loadedBitmap.Height);
+			Bitmap newBitmap = new Bitmap(origBitmap.Width, origBitmap.Height);
 
-			using (var graphics = Graphics.FromImage(bitmap))
+			using (var graphics = Graphics.FromImage(newBitmap))
 			{
 				using (SolidBrush brush = new SolidBrush(System.Drawing.Color.White))
-					graphics.FillRectangle(brush, 0, 0, bitmap.Width, bitmap.Height);
+					graphics.FillRectangle(brush, 0, 0, newBitmap.Width, newBitmap.Height);
 
 				IBackendDrawer drawer = GetBackendDrawer(param.Backend);
-				drawer.Draw(graphics, loadedBitmap, param);
+				drawer.Draw(newBitmap, origBitmap, param);
 			}
 
-			return bitmap;
+			return newBitmap;
 		}
 
 		public static Bitmap ProcessByFilename(string inputFileName, RenderParams param)

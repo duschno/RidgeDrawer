@@ -111,6 +111,9 @@
             <Button x:Name="FullsizeButton" Content="Fullsize (0/F)" Style="{StaticResource FullsizeButtonStyle}" 
                     HorizontalAlignment="Left" Margin="5,5,0,0" VerticalAlignment="Top" 
                     Panel.ZIndex="2" Width="70" Height="20" Click="FullsizeButton_Click"/>
+            <Label x:Name="NotImplementedLabel" Content="Not implemented" Panel.ZIndex="3"
+                   VerticalAlignment="Center" HorizontalAlignment="Center"
+                   Foreground="Red" FontSize="18" Visibility="Hidden"/>
             <Image x:Name="image" Stretch="None" Panel.ZIndex="1"/>
             <Rectangle Fill="Gray"/>
         </Grid>

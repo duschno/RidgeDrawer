@@ -63,6 +63,7 @@ namespace ImageDrawerUI
 
 		private void Render(string filename)
 		{
+			NotImplementedLabel.Visibility = Visibility.Collapsed;
 			RenderParams param = new RenderParams
 			{
 				LinesCount = Convert.ToInt32(LinesCount.Text),
@@ -78,7 +79,15 @@ namespace ImageDrawerUI
 
 			Cursor = Cursors.Wait;
 			original = ConvertToNativeDpi(new Bitmap(filename));
-			processed = ConvertToNativeDpi(Program.ProcessByFilename(filename, param));
+			try
+			{
+				processed = ConvertToNativeDpi(Program.ProcessByFilename(filename, param));
+			}
+			catch (NotImplementedException)
+			{
+				NotImplementedLabel.Visibility = Visibility.Visible;
+			}
+
 			image.Source = processed;
 			image.MaxWidth = image.Source.Width * scaleFactor * 8;
 			image.MaxHeight = image.Source.Height * scaleFactor * 8;

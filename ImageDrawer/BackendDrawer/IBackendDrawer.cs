@@ -4,6 +4,6 @@ namespace ImageDrawer
 {
 	interface IBackendDrawer
 	{
-		void Draw(Graphics g, Bitmap bmp, RenderParams param);
+		void Draw(Bitmap newBitmap, Bitmap origBitmap, RenderParams param);
 	}
 }

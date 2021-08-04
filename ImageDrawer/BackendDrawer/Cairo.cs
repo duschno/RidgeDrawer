@@ -19,34 +19,37 @@ namespace ImageDrawer
 			g.ReleaseHdc();
 		}
 
-		public void Draw(Graphics graphics, Bitmap bmp, RenderParams param)
+		public void Draw(Bitmap newBitmap, Bitmap origBitmap, RenderParams param)
 		{
-			graphics.SmoothingMode = param.Smoothing == SmoothingType.Antialias ?
-				SmoothingMode.AntiAlias : SmoothingMode.None;
-			switch (param.Method)
+			using (Graphics graphics = Graphics.FromImage(newBitmap))
 			{
-				case MethodType.Ridge:
-					MethodRidge(graphics, bmp, param);
-					break;
-				case MethodType.Squiggle:
-					MethodSquiggle(graphics, bmp, param);
-					break;
-				default:
-					break;
+				graphics.SmoothingMode = param.Smoothing == SmoothingType.Antialias ?
+				SmoothingMode.AntiAlias : SmoothingMode.None;
+				switch (param.Method)
+				{
+					case MethodType.Ridge:
+						MethodRidge(graphics, origBitmap, param);
+						break;
+					case MethodType.Squiggle:
+						MethodSquiggle(graphics, origBitmap, param);
+						break;
+					default:
+						break;
+				}
 			}
 		}
 
-		static void MethodRidge(Graphics graphics, Bitmap bmp, RenderParams param)
+		static void MethodRidge(Graphics graphics, Bitmap origBitmap, RenderParams param)
 		{
 			int lineNumber = 0;
 			while (lineNumber < param.LinesCount)
 			{
 				List<Point> coords = new List<Point>();
-				int y = bmp.Height * lineNumber / param.LinesCount + bmp.Height / (param.LinesCount * 2);
+				int y = origBitmap.Height * lineNumber / param.LinesCount + origBitmap.Height / (param.LinesCount * 2);
 				coords.Add(new Point(0, y));
-				for (int x = 1; x < bmp.Width; x += param.ChunkSize)
+				for (int x = 1; x < origBitmap.Width; x += param.ChunkSize)
 				{
-					Color pixel = bmp.GetPixel(x, y);
+					Color pixel = origBitmap.GetPixel(x, y);
 					int grayscale = (pixel.R + pixel.G + pixel.B) / 3;
 					int factor = param.Factor * (grayscale - 127) / 127;
 					coords.Add(new Point(x + (int)(factor * Math.Sin(Math.PI * -param.Angle / 180.0)),
@@ -58,19 +61,19 @@ namespace ImageDrawer
 			}
 		}
 
-		static void MethodSquiggle(Graphics graphics, Bitmap bmp, RenderParams param)
+		static void MethodSquiggle(Graphics graphics, Bitmap origBitmap, RenderParams param)
 		{
 			int lineNumber = 0;
 			while (lineNumber < param.LinesCount)
 			{
 				List<Point> coords = new List<Point>();
 				int sign = -1;
-				int y = bmp.Height * lineNumber / param.LinesCount + bmp.Height / (param.LinesCount * 2);
+				int y = origBitmap.Height * lineNumber / param.LinesCount + origBitmap.Height / (param.LinesCount * 2);
 				coords.Add(new Point(0, y));
 				int accumulator = param.ChunkSize;
-				for (int x = 1; x < bmp.Width; x += accumulator)
+				for (int x = 1; x < origBitmap.Width; x += accumulator)
 				{
-					Color pixel = bmp.GetPixel(x, y);
+					Color pixel = origBitmap.GetPixel(x, y);
 					int grayscale = 255 - (pixel.R + pixel.G + pixel.B) / 3;
 					accumulator = (param.ChunkSize * (255 - grayscale) + 10) / 10;
 					int factor = param.Factor;

@@ -5,7 +5,7 @@ using System.Drawing.Drawing2D;
 
 namespace ImageDrawer
 {
-	public class GDIPlus : IBackendDrawer
+	public class Manual : IBackendDrawer
 	{
 		public void Draw(Bitmap newBitmap, Bitmap origBitmap, RenderParams param)
 		{
@@ -51,30 +51,7 @@ namespace ImageDrawer
 
 		static void MethodSquiggle(Graphics graphics, Bitmap origBitmap, RenderParams param)
 		{
-			int lineNumber = 0;
-			while (lineNumber < param.LinesCount)
-			{
-				List<Point> coords = new List<Point>();
-				int sign = -1;
-				int y = origBitmap.Height * lineNumber / param.LinesCount + origBitmap.Height / (param.LinesCount * 2);
-				coords.Add(new Point(0, y));
-				int accumulator = param.ChunkSize;
-				for (int x = 1; x < origBitmap.Width; x += accumulator)
-				{
-					Color pixel = origBitmap.GetPixel(x, y);
-					int grayscale = 255 - (pixel.R + pixel.G + pixel.B) / 3;
-					accumulator = (param.ChunkSize * (255 - grayscale) + 10) / 10;
-					int factor = param.Factor;
-
-					grayscale = grayscale == 0 ? 1 : grayscale;
-					coords.Add(new Point(
-						x + accumulator, y + (sign * factor * grayscale / 80)));
-					sign *= -1;
-				}
-
-				RenderLine(graphics, coords, param, y);
-				lineNumber++;
-			}
+			throw new NotImplementedException();
 		}
 
 		private static void RenderLine(Graphics graphics, List<Point> coords, RenderParams param, int y)

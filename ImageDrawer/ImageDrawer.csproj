@@ -49,10 +49,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BackendDrawer\Manual.cs" />
     <Compile Include="BackendDrawer\GDIPlus.cs" />
     <Compile Include="BackendDrawer\Cairo.cs" />
     <Compile Include="BackendDrawer\IBackendDrawer.cs" />
     <Compile Include="BackendDrawer\Sandbox.cs" />
+    <Compile Include="GraphicsExtension.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RenderParams.cs" />
