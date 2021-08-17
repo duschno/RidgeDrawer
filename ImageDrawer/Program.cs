@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
@@ -9,25 +11,30 @@ using System.Windows.Media.Imaging;
 
 namespace ImageDrawer
 {
-	public class Program
+	public class Logic
 	{
 		/// <summary>
 		/// Gets backend drawer implementation
 		/// </summary>
 		/// <param name="type">Backend to use</param>
 		/// <returns>Drawer instance</returns>
-		private static IBackendDrawer GetBackendDrawer(BackendType type)
+		private static IBackendDrawer GetBackendDrawer(Type type)
 		{
 			try
 			{
-				Type t = typeof(IBackendDrawer);
-				t = Type.GetType($"{t.Namespace}.{type}");
-				return (IBackendDrawer)Activator.CreateInstance(t);
+				return (IBackendDrawer)Activator.CreateInstance(type);
 			}
 			catch (Exception e)
 			{
-				throw new Exception($"{type} backend is not supported", e);
+				throw new Exception($"{type.Name} backend is not supported", e);
 			}
+		}
+
+		public static IEnumerable<Type> GetImplementations(Type interfaceType)
+		{
+			return AppDomain.CurrentDomain.GetAssemblies()
+				.SelectMany(a => a.GetTypes())
+				.Where(t => interfaceType.IsAssignableFrom(t) && !t.IsAbstract);
 		}
 
 		/// <summary>
@@ -114,7 +121,7 @@ namespace ImageDrawer
 				Smoothing = SmoothingType.Antialias,
 				LineType = LineType.Curve,
 				Method = MethodType.Squiggle,
-				Backend = BackendType.GDIPlus
+				Backend = typeof(GDIPlus)
 			};
 
 			string imageName = GetImageName("Rachel-Carson.jpg", args);

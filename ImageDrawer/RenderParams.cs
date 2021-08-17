@@ -1,4 +1,6 @@
-﻿namespace ImageDrawer
+﻿using System;
+
+namespace ImageDrawer
 {
 
 	public enum SmoothingType
@@ -21,15 +23,6 @@
 		Squiggle
 	}
 
-	public enum BackendType
-	{
-		GDIPlus,
-		Cairo,
-		Sandbox,
-		Manual,
-		Manual2
-	}
-
 	public struct RenderParams
 	{
 		public int LinesCount;
@@ -40,6 +33,6 @@
 		public SmoothingType Smoothing; // в начале
 		public LineType LineType; // в конце
 		public MethodType Method; // в начале
-		public BackendType Backend;
+		public Type Backend;
 	}
 }

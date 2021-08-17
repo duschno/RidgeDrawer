@@ -2,7 +2,7 @@
 
 namespace ImageDrawer
 {
-	interface IBackendDrawer
+	public interface IBackendDrawer
 	{
 		void Draw(Bitmap newBitmap, Bitmap origBitmap, RenderParams param);
 	}

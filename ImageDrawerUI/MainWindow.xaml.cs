@@ -46,18 +46,21 @@ namespace ImageDrawerUI
 			FillComboBox(Smoothing, typeof(SmoothingType));
 			FillComboBox(LineType, typeof(LineType));
 			FillComboBox(Method, typeof(MethodType));
-			FillComboBox(Backend, typeof(BackendType));
+			FillComboBox(Backend, typeof(IBackendDrawer));
 			LinesCount.Text = 1.ToString();
 			Stroke.Text = 1.ToString();
 			Factor.Text = 30.ToString();
 			ChunkSize.Text = 5.ToString();
 			Angle.Text = 0.ToString();
-			Backend.SelectedIndex += 1;
+			Backend.SelectedItem = typeof(Cairo);
 		}
 
 		private void FillComboBox(ComboBox comboBox, Type type)
 		{
-			comboBox.ItemsSource = Enum.GetValues(type);
+			if (type.IsEnum)
+				comboBox.ItemsSource = Enum.GetValues(type);
+			if (type.IsInterface)
+				comboBox.ItemsSource = Logic.GetImplementations(type);
 			comboBox.SelectedItem = comboBox.Items[0];
 		}
 
@@ -74,14 +77,14 @@ namespace ImageDrawerUI
 				Smoothing = (SmoothingType)Smoothing.Items[Smoothing.SelectedIndex],
 				LineType = (LineType)LineType.Items[LineType.SelectedIndex],
 				Method = (MethodType)Method.Items[Method.SelectedIndex],
-				Backend = (BackendType)Backend.Items[Backend.SelectedIndex]
+				Backend = (Type)Backend.Items[Backend.SelectedIndex]
 			};
 
 			Cursor = Cursors.Wait;
 			original = ConvertToNativeDpi(new Bitmap(filename));
 			try
 			{
-				processed = ConvertToNativeDpi(Program.ProcessByFilename(filename, param));
+				processed = ConvertToNativeDpi(Logic.ProcessByFilename(filename, param));
 			}
 			catch (NotImplementedException)
 			{
@@ -96,7 +99,7 @@ namespace ImageDrawerUI
 
 		private BitmapSource ConvertToNativeDpi(Bitmap bitmap)
 		{
-			BitmapSource bitmapSource = Program.BitmapToBitmapSource(bitmap);
+			BitmapSource bitmapSource = Logic.BitmapToBitmapSource(bitmap);
 			DpiScale dpiScale = VisualTreeHelper.GetDpi(this);
 			int width = bitmapSource.PixelWidth;
 			int height = bitmapSource.PixelHeight;
@@ -250,7 +253,7 @@ namespace ImageDrawerUI
 
 			bool? result = dlg.ShowDialog();
 			if (result == true)
-				Program.Save(processed as BitmapSource, dlg.FileName);
+				Logic.Save(processed as BitmapSource, dlg.FileName);
 		}
 
 		private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

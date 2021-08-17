@@ -98,7 +98,7 @@
                       TabIndex="7" SelectionChanged="ComboBox_SelectionChanged"/>
 
             <Label Content="Backend" Margin="10,396,0,0"/>
-            <ComboBox x:Name="Backend" Margin="84,400,0,0"
+            <ComboBox x:Name="Backend" Margin="84,400,0,0" DisplayMemberPath="Name"
                       TabIndex="8" SelectionChanged="ComboBox_SelectionChanged"/>
 
             <!--#endregion-->
