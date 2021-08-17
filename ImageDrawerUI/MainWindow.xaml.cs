@@ -18,7 +18,7 @@ namespace ImageDrawerUI
 		private string filename;
 		private ImageSource original;
 		private ImageSource processed;
-		private double scaleFactor = 2;
+		private readonly double scaleFactor = 2;
 		private System.Windows.Point startPos;
 		private Thickness oldMargin;
 
@@ -248,8 +248,10 @@ namespace ImageDrawerUI
 			if (processed == null)
 				return;
 
-			Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
-			dlg.Filter = "Image files (*.bmp) | *.bmp";
+			Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog
+			{
+				Filter = "Image files (*.bmp) | *.bmp"
+			};
 
 			bool? result = dlg.ShowDialog();
 			if (result == true)
@@ -262,12 +264,12 @@ namespace ImageDrawerUI
 				Render(filename);
 		}
 
-		private void image_MouseWheel(object sender, MouseWheelEventArgs e)
+		private void Image_MouseWheel(object sender, MouseWheelEventArgs e)
 		{
 			ChangeZoom(e.Delta > 0);
 		}
 
-		private void image_MouseMove(object sender, MouseEventArgs e)
+		private void Image_MouseMove(object sender, MouseEventArgs e)
 		{
 			if ((e.LeftButton == MouseButtonState.Pressed || e.MiddleButton == MouseButtonState.Pressed) && !IsNonScaled)
 			{
@@ -288,14 +290,14 @@ namespace ImageDrawerUI
 			}
 		}
 
-		private void image_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		private void Image_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
 			Keyboard.ClearFocus();
 			startPos = Mouse.GetPosition(Window);
 			Mouse.Capture(image);
 		}
 
-		private void image_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+		private void Image_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
 		{
 			oldMargin = image.Margin;
 			Mouse.Capture(null);
@@ -353,8 +355,10 @@ namespace ImageDrawerUI
 		}
 		private void Open_Click(object sender, RoutedEventArgs e)
 		{
-			Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-			dlg.Filter = "Image files (*.jpg, *.jpeg, *.jpe, *.jfif, *.png, *.bmp) | *.jpg; *.jpeg; *.jpe; *.jfif; *.png; *.bmp";
+			Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog
+			{
+				Filter = "Image files (*.jpg, *.jpeg, *.jpe, *.jfif, *.png, *.bmp) | *.jpg; *.jpeg; *.jpe; *.jfif; *.png; *.bmp"
+			};
 
 			bool? result = dlg.ShowDialog();
 

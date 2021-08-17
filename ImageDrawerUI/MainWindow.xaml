@@ -105,8 +105,8 @@
 
         </Grid>
         <Grid Name="ImageGrid" SnapsToDevicePixels="True" UseLayoutRounding="True" Grid.Column="1"
-          MouseWheel="image_MouseWheel"  MouseMove="image_MouseMove" 
-          MouseLeftButtonDown="image_MouseLeftButtonDown" MouseLeftButtonUp="image_MouseLeftButtonUp"
+          MouseWheel="Image_MouseWheel"  MouseMove="Image_MouseMove" 
+          MouseLeftButtonDown="Image_MouseLeftButtonDown" MouseLeftButtonUp="Image_MouseLeftButtonUp"
           Loaded="ImageGrid_Loaded" SizeChanged="ImageGrid_SizeChanged">
             <Button x:Name="FullsizeButton" Content="Fullsize (0/F)" Style="{StaticResource FullsizeButtonStyle}" 
                     HorizontalAlignment="Left" Margin="5,5,0,0" VerticalAlignment="Top" 
