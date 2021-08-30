@@ -5,10 +5,10 @@ using System.Drawing.Drawing2D;
 
 namespace ImageDrawer
 {
-	public class Manual2 : IBackendDrawer
+	public class Manual2 : BackendDrawerBase
 	{
 		private Graphics graphics;
-		public void Draw(Bitmap newBitmap, Bitmap origBitmap, RenderParams param)
+		public override void Draw(Bitmap newBitmap, Bitmap origBitmap, RenderParams param)
 		{
 			graphics = Graphics.FromImage(newBitmap);
 			graphics.SmoothingMode = param.Smoothing == SmoothingType.Antialias ?
@@ -90,7 +90,8 @@ namespace ImageDrawer
 				diry = -1;
 			for (int x = a.X; x <= b.X; x++)
 			{
-				newBitmap.SetPixel(x, y, color);
+				if (x > 0 && x < newBitmap.Width && y > 0 && y < newBitmap.Height)
+					newBitmap.SetPixel(x, y, color);
 				error += deltay;
 				if (error >= deltax)
 				{

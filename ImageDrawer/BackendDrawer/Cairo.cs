@@ -7,19 +7,19 @@ using System.Runtime.InteropServices;
 
 namespace ImageDrawer
 {
-	public class Cairo : IBackendDrawer
+	public class Cairo : BackendDrawerBase
 	{
 		[DllImport(@"C:\Users\User\Desktop\ImageDrawer\Debug\PlusPlus.dll", CallingConvention = CallingConvention.Cdecl)]
 		private extern static void Draw(IntPtr hdc, int[] x, int[] y, int size);
 
-		private static void Draw(Graphics g, int[] x, int[] y)
+		private static void DrawLine(Graphics g, int[] x, int[] y)
 		{
 			IntPtr hdc = g.GetHdc();
 			Draw(hdc, x, y, x.Count());
 			g.ReleaseHdc();
 		}
 
-		public void Draw(Bitmap newBitmap, Bitmap origBitmap, RenderParams param)
+		public override void Draw(Bitmap newBitmap, Bitmap origBitmap, RenderParams param)
 		{
 			using (Graphics graphics = Graphics.FromImage(newBitmap))
 			{
@@ -99,7 +99,7 @@ namespace ImageDrawer
 			switch (param.LineType)
 			{
 				case LineType.Line:
-					Draw(graphics, coords.Select(e => e.X).ToArray(), coords.Select(e => e.Y).ToArray());
+					DrawLine(graphics, coords.Select(e => e.X).ToArray(), coords.Select(e => e.Y).ToArray());
 					break;
 				case LineType.Curve:
 					graphics.DrawCurve(pen, coords.ToArray());

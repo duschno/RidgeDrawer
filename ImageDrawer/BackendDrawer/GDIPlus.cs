@@ -5,9 +5,9 @@ using System.Drawing.Drawing2D;
 
 namespace ImageDrawer
 {
-	public class GDIPlus : IBackendDrawer
+	public class GDIPlus : BackendDrawerBase
 	{
-		public void Draw(Bitmap newBitmap, Bitmap origBitmap, RenderParams param)
+		public override void Draw(Bitmap newBitmap, Bitmap origBitmap, RenderParams param)
 		{
 			using (Graphics graphics = Graphics.FromImage(newBitmap))
 			{

@@ -5,10 +5,10 @@ using System.Drawing.Drawing2D;
 
 namespace ImageDrawer
 {
-	public class Manual : IBackendDrawer
+	public class Manual : BackendDrawerBase
 	{
 		private Graphics graphics;
-		public void Draw(Bitmap newBitmap, Bitmap origBitmap, RenderParams param)
+		public override void Draw(Bitmap newBitmap, Bitmap origBitmap, RenderParams param)
 		{
 			graphics = Graphics.FromImage(newBitmap);
 			graphics.SmoothingMode = param.Smoothing == SmoothingType.Antialias ?
@@ -79,9 +79,10 @@ namespace ImageDrawer
 
 		private void DrawLine(Bitmap newBitmap, Color color, Point a, Point b)
 		{
-			int deltax = Math.Abs(b.X - a.X) + 1;
-			int deltay = Math.Abs(b.Y - b.Y) + 1;
+			int deltax = Math.Abs(b.X - a.X);
+			int deltay = Math.Abs(b.Y - a.Y);
 			int error = 0;
+			int deltaerr = (deltay + 1);
 			int y = a.Y;
 			int diry = b.Y - a.Y;
 			if (diry > 0)
@@ -90,12 +91,13 @@ namespace ImageDrawer
 				diry = -1;
 			for (int x = a.X; x <= b.X; x++)
 			{
-				newBitmap.SetPixel(x, y, color);
-				error += deltay;
-				if (error >= deltax)
+				if (x > 0 && y > 0 && x < newBitmap.Width && y < newBitmap.Height)
+					newBitmap.SetPixel(x, y, color);
+				error += deltaerr;
+				if (error >= (deltax + 1))
 				{
 					y += diry;
-					error -= deltax;
+					error -= (deltax + 1);
 				}
 			}
 		}

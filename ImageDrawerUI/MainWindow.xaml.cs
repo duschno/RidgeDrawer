@@ -46,7 +46,7 @@ namespace ImageDrawerUI
 			FillComboBox(Smoothing, typeof(SmoothingType));
 			FillComboBox(LineType, typeof(LineType));
 			FillComboBox(Method, typeof(MethodType));
-			FillComboBox(Backend, typeof(IBackendDrawer));
+			FillComboBox(Backend, typeof(BackendDrawerBase));
 			LinesCount.Text = 1.ToString();
 			Stroke.Text = 1.ToString();
 			Factor.Text = 30.ToString();
@@ -60,7 +60,7 @@ namespace ImageDrawerUI
 		{
 			if (type.IsEnum)
 				comboBox.ItemsSource = Enum.GetValues(type);
-			if (type.IsInterface)
+			if (type.IsAbstract)
 				comboBox.ItemsSource = Logic.GetImplementations(type);
 			comboBox.SelectedItem = comboBox.Items[0];
 		}

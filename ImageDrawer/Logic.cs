@@ -18,11 +18,11 @@ namespace ImageDrawer
 		/// </summary>
 		/// <param name="type">Backend to use</param>
 		/// <returns>Drawer instance</returns>
-		private static IBackendDrawer GetBackendDrawer(Type type)
+		private static BackendDrawerBase GetBackendDrawer(Type type)
 		{
 			try
 			{
-				return (IBackendDrawer)Activator.CreateInstance(type);
+				return (BackendDrawerBase)Activator.CreateInstance(type);
 			}
 			catch (Exception e)
 			{
@@ -49,10 +49,10 @@ namespace ImageDrawer
 
 			using (var graphics = Graphics.FromImage(newBitmap))
 			{
-				using (SolidBrush brush = new SolidBrush(System.Drawing.Color.White))
+				using (SolidBrush brush = new SolidBrush(Color.White))
 					graphics.FillRectangle(brush, 0, 0, newBitmap.Width, newBitmap.Height);
 
-				IBackendDrawer drawer = GetBackendDrawer(param.Backend);
+				BackendDrawerBase drawer = GetBackendDrawer(param.Backend);
 				drawer.Draw(newBitmap, origBitmap, param);
 			}
 

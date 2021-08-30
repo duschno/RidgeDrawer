@@ -35,10 +35,10 @@ namespace ImageDrawer
 	//	}
 	//}
 
-	public class Sandbox : IBackendDrawer
+	public class Sandbox : BackendDrawerBase
 	{
 
-		public void Draw(Bitmap newBitmap, Bitmap origBitmap, RenderParams param)
+		public override void Draw(Bitmap newBitmap, Bitmap origBitmap, RenderParams param)
 		{
 			using (Graphics graphics = Graphics.FromImage(newBitmap))
 			{
