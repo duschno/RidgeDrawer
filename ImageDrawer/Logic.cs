@@ -121,6 +121,7 @@ namespace ImageDrawer
 				Smoothing = SmoothingType.Antialias,
 				LineType = LineType.Curve,
 				Method = MethodType.Squiggle,
+				DrawOnSides = true,
 				Backend = typeof(GDIPlus)
 			};
 

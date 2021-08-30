@@ -33,6 +33,7 @@ namespace ImageDrawer
 		public SmoothingType Smoothing; // в начале
 		public LineType LineType; // в конце
 		public MethodType Method; // в начале
+		public bool DrawOnSides;
 		public Type Backend;
 	}
 }

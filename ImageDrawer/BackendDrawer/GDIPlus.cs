@@ -34,9 +34,13 @@ namespace ImageDrawer
 			{
 				List<Point> coords = new List<Point>();
 				int y = origBitmap.Height * lineNumber / param.LinesCount + origBitmap.Height / (param.LinesCount * 2);
-				coords.Add(new Point(0, y));
-				for (int x = 1; x < origBitmap.Width; x += param.ChunkSize)
+
+				if (param.DrawOnSides)
+					coords.Add(CalculatePoint(origBitmap, 0, y, param));
+				for (int x = (origBitmap.Width / 2) % param.ChunkSize; x < origBitmap.Width; x += param.ChunkSize)
 					coords.Add(CalculatePoint(origBitmap, x, y, param));
+				if (param.DrawOnSides)
+					coords.Add(CalculatePoint(origBitmap, origBitmap.Width - 1, y, param));
 
 				RenderLine(graphics, coords, param, y);
 				lineNumber++;

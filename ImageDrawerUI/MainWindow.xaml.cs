@@ -52,6 +52,7 @@ namespace ImageDrawerUI
 			Factor.Text = 30.ToString();
 			ChunkSize.Text = 5.ToString();
 			Angle.Text = 0.ToString();
+			DrawOnSides.IsChecked = true;
 			Backend.SelectedItem = typeof(Cairo);
 		}
 
@@ -77,6 +78,7 @@ namespace ImageDrawerUI
 				Smoothing = (SmoothingType)Smoothing.Items[Smoothing.SelectedIndex],
 				LineType = (LineType)LineType.Items[LineType.SelectedIndex],
 				Method = (MethodType)Method.Items[Method.SelectedIndex],
+				DrawOnSides = DrawOnSides.IsChecked ?? false,
 				Backend = (Type)Backend.Items[Backend.SelectedIndex]
 			};
 
@@ -370,5 +372,10 @@ namespace ImageDrawerUI
 		}
 
 		#endregion
+
+		private void DrawOnSides_Checked(object sender, RoutedEventArgs e)
+		{
+			ComboBox_SelectionChanged(null, null);
+		}
 	}
 }
