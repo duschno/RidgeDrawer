@@ -36,17 +36,20 @@ namespace ImageDrawer
 				int y = origBitmap.Height * lineNumber / param.LinesCount + origBitmap.Height / (param.LinesCount * 2);
 				coords.Add(new Point(0, y));
 				for (int x = 1; x < origBitmap.Width; x += param.ChunkSize)
-				{
-					Color pixel = origBitmap.GetPixel(x, y);
-					int grayscale = (pixel.R + pixel.G + pixel.B) / 3;
-					int factor = param.Factor * (grayscale - 127) / 127;
-					coords.Add(new Point(x + (int)(factor * Math.Sin(Math.PI * -param.Angle / 180.0)),
-										 y + (int)(factor * Math.Cos(Math.PI * -param.Angle / 180.0))));
-				}
+					coords.Add(CalculatePoint(origBitmap, x, y, param));
 
 				RenderLine(graphics, coords, param, y);
 				lineNumber++;
 			}
+		}
+
+		static Point CalculatePoint(Bitmap origBitmap, int x, int y, RenderParams param)
+		{
+			Color pixel = origBitmap.GetPixel(x, y);
+			int grayscale = (pixel.R + pixel.G + pixel.B) / 3;
+			int factor = param.Factor * (grayscale - 127) / 127;
+			return new Point(x + (int)(factor * Math.Sin(Math.PI * -param.Angle / 180.0)),
+							 y + (int)(factor * Math.Cos(Math.PI * -param.Angle / 180.0)));
 		}
 
 		static void MethodSquiggle(Graphics graphics, Bitmap origBitmap, RenderParams param)
