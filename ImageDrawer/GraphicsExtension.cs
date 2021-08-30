@@ -1,38 +1,40 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ImageDrawer
 {
 	public static class GraphicsExtension
 	{
-		public static Graphics FillVariableLine(this Graphics g, Brush b, int x1, int y1, int x2, int y2, int w1, int w2)
+		public static Graphics FillVariableLine(this Graphics g, SolidBrush b, int x1, int y1, int x2, int y2, int w1, int w2)
 		{
-			int X = Math.Abs(x1 - x2);
-			int Y = Math.Abs(y1 - y2);
-			float gyp = (float)Math.Sqrt(X * X + Y * Y);
-			float sinA = X / gyp;
-			float cosA = (float)Math.Sqrt(1 - sinA * sinA);
-			float half1 = w1 / 2;
-			float half2 = w2 / 2;
-			if (x1 > x2 && y1 > y2 || x1 < x2 && y1 < y2)
-			{
-				sinA = -0.70710678118f; // sqrt(2)/2
-				cosA = (float)Math.Sqrt(1 - sinA * sinA);
-			}
+			var c1 = new { r = (float)w1 / 2, x = x1, y = y1 };
+			var c2 = new { r = (float)w2 / 2, x = x2, y = y2 };
+
+			var x = Math.Abs(c1.x - c2.x);
+			var y = Math.Abs(c1.y - c2.y);
+			var l = (float)Math.Sqrt((x * x) + (y * y));
+
+			var v = new { x = c2.x - c1.x, y = c2.y - c1.y};
+			var uv = new { x = v.x / l, y = v.y / l };
+
+			var ca = (c2.r - c1.r) / l;
+			var sa = (float)Math.Sqrt(1 - (ca * ca));
+
+			PointF[] points = new PointF[] {
+				new PointF(c1.x - (ca * c1.r * uv.x) - (sa * c1.r * uv.y),
+						   c1.y + (sa * c1.r * uv.x) - (ca * c1.r * uv.y)),
+				new PointF(c1.x - (ca * c1.r * uv.x) + (sa * c1.r * uv.y),
+						   c1.y - (sa * c1.r * uv.x) - (ca * c1.r * uv.y)),
+
+				new PointF(c2.x - (ca * c2.r * uv.x) + (sa * c2.r * uv.y),
+						   c2.y - (sa * c2.r * uv.x) - (ca * c2.r * uv.y)),
+				new PointF(c2.x - (ca * c2.r * uv.x) - (sa * c2.r * uv.y),
+						   c2.y + (sa * c2.r * uv.x) - (ca * c2.r * uv.y)),
+			};
+
 			g.FillEllipse(b, new Rectangle(x1 - w1 / 2, y1 - w1 / 2, w1, w1));
 			g.FillEllipse(b, new Rectangle(x2 - w2 / 2, y2 - w2 / 2, w2, w2));
-			PointF p1 = new PointF(x1 - w1 / 2 + w1 * cosA / 2 + half1, y1 - w1 / 2 + w1 * sinA / 2 + half1);
-			PointF p2 = new PointF(x1 - w1 / 2 - w1 * cosA / 2 + half1, y1 - w1 / 2 - w1 * sinA / 2 + half1);
-			PointF p3 = new PointF(x2 - w2 / 2 - w2 * cosA / 2 + half2, y2 - w2 / 2 - w2 * sinA / 2 + half2);
-			PointF p4 = new PointF(x2 - w2 / 2 + w2 * cosA / 2 + half2, y2 - w2 / 2 + w2 * sinA / 2 + half2);
-			PointF[] points = new PointF[] { p1, p2, p3, p4 };
 			g.FillPolygon(b, points);
-			//g.DrawLine(new Pen(new SolidBrush(Color.Black)), x1, y1, x2, y2);
-
 			return g;
 		}
 	}

@@ -81,7 +81,7 @@ namespace ImageDrawer
 		{
 			if (coords.Count == 1)
 				return;
-			Brush brush = new SolidBrush(Color.Black);
+			SolidBrush brush = new SolidBrush(Color.Black);
 			Pen pen = new Pen(brush, param.Stroke);
 
 			switch (param.LineType)
@@ -94,7 +94,7 @@ namespace ImageDrawer
 					{
 						var coord1 = coords[i];
 						var coord2 = coords[i + 1];
-						graphics.FillVariableLine(brush, coord1.X, coord1.Y, coord2.X, coord2.Y, 1/*Math.Abs(y - coord1.Y) / 2*/, Math.Abs(y - coord2.Y));
+						graphics.FillVariableLine(brush, coord1.X, coord1.Y, coord2.X, coord2.Y, Math.Abs(y - coord1.Y) , Math.Abs(y - coord2.Y));
 					}
 					break;
 				case LineType.Curve:

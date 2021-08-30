@@ -250,7 +250,7 @@ namespace ImageDrawerUI
 
 			Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog
 			{
-				Filter = "Image files (*.bmp) | *.bmp"
+				Filter = "Image files (*.png) | *.png"
 			};
 
 			bool? result = dlg.ShowDialog();
