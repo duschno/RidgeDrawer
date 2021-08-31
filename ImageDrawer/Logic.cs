@@ -26,7 +26,7 @@ namespace ImageDrawer
 			}
 			catch (Exception e)
 			{
-				throw new Exception($"{type.Name} backend is not supported", e);
+				throw new NotImplementedException($"{type.Name} backend is not supported", e);
 			}
 		}
 
@@ -53,7 +53,8 @@ namespace ImageDrawer
 					graphics.FillRectangle(brush, 0, 0, newBitmap.Width, newBitmap.Height);
 
 				BackendDrawerBase drawer = GetBackendDrawer(param.Backend);
-				drawer.Draw(newBitmap, origBitmap, param);
+				drawer.Construct(newBitmap, origBitmap, param);
+				drawer.Draw();
 			}
 
 			return newBitmap;

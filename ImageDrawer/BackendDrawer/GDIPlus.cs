@@ -7,113 +7,79 @@ namespace ImageDrawer
 {
 	public class GDIPlus : BackendDrawerBase
 	{
-		public override void Draw(Bitmap newBitmap, Bitmap origBitmap, RenderParams param)
+		private Graphics graphics;
+		private Pen pen;
+		private Brush brush;
+		public override void Construct(Bitmap newBitmap, Bitmap origBitmap, RenderParams param)
 		{
-			using (Graphics graphics = Graphics.FromImage(newBitmap))
-			{
-				graphics.SmoothingMode = param.Smoothing == SmoothingType.Antialias ?
+			base.Construct(newBitmap, origBitmap, param);
+			graphics = Graphics.FromImage(newBitmap);
+			brush = new SolidBrush(Color.Black);
+			pen = new Pen(brush, param.Stroke);
+			graphics.SmoothingMode = param.Smoothing == SmoothingType.Antialias ?
 				SmoothingMode.AntiAlias : SmoothingMode.None;
-				switch (param.Method)
-				{
-					case MethodType.Ridge:
-						MethodRidge(graphics, origBitmap, param);
-						break;
-					case MethodType.Squiggle:
-						MethodSquiggle(graphics, origBitmap, param);
-						break;
-					default:
-						break;
-				}
-			}
 		}
 
-		static void MethodRidge(Graphics graphics, Bitmap origBitmap, RenderParams param)
+		protected override void DrawCurve(Point[] coords)
 		{
-			int lineNumber = 0;
-			while (lineNumber < param.LinesCount)
+			graphics.DrawCurve(pen, coords);
+		}
+
+		protected override void DrawDots(Point[] coords)
+		{
+			foreach (Point coord in coords)
+				graphics.FillRectangle(brush, coord.X, coord.Y, param.Stroke, param.Stroke);
+		}
+
+		protected override void DrawLines(Point[] coords)
+		{
+			graphics.DrawLines(pen, coords);
+		}
+
+		protected override void DrawVariableLines(Point[] coords, int y)
+		{
+			for (int i = 0; i < coords.Length - 1; i++)
 			{
-				List<Point> coords = new List<Point>();
-				int y = origBitmap.Height * lineNumber / param.LinesCount + origBitmap.Height / (param.LinesCount * 2);
-
-				if (param.DrawOnSides)
-					coords.Add(CalculatePoint(origBitmap, 0, y, param));
-				for (int x = (origBitmap.Width / 2) % param.ChunkSize; x < origBitmap.Width; x += param.ChunkSize)
-					coords.Add(CalculatePoint(origBitmap, x, y, param));
-				if (param.DrawOnSides)
-					coords.Add(CalculatePoint(origBitmap, origBitmap.Width - 1, y, param));
-
-				RenderLine(graphics, coords, param, y);
-				lineNumber++;
+				var coord1 = coords[i];
+				var coord2 = coords[i + 1];
+				graphics.FillVariableLine(brush, coord1.X, coord1.Y, coord2.X, coord2.Y, Math.Abs(y - coord1.Y), Math.Abs(y - coord2.Y));
 			}
 		}
+	}
 
-		static Point CalculatePoint(Bitmap origBitmap, int x, int y, RenderParams param)
+	public static class GraphicsExtension
+	{
+		public static Graphics FillVariableLine(this Graphics g, Brush b, int x1, int y1, int x2, int y2, int w1, int w2)
 		{
-			Color pixel = origBitmap.GetPixel(x, y);
-			int grayscale = (pixel.R + pixel.G + pixel.B) / 3;
-			int factor = param.Factor * (grayscale - 127) / 127;
-			return new Point(x + (int)(factor * Math.Sin(Math.PI * -param.Angle / 180.0)),
-							 y + (int)(factor * Math.Cos(Math.PI * -param.Angle / 180.0)));
-		}
+			var c1 = new { r = (float)w1 / 2, x = x1, y = y1 };
+			var c2 = new { r = (float)w2 / 2, x = x2, y = y2 };
 
-		static void MethodSquiggle(Graphics graphics, Bitmap origBitmap, RenderParams param)
-		{
-			int lineNumber = 0;
-			while (lineNumber < param.LinesCount)
-			{
-				List<Point> coords = new List<Point>();
-				int sign = -1;
-				int y = origBitmap.Height * lineNumber / param.LinesCount + origBitmap.Height / (param.LinesCount * 2);
-				coords.Add(new Point(0, y));
-				int accumulator = param.ChunkSize;
-				for (int x = 1; x < origBitmap.Width; x += accumulator)
-				{
-					Color pixel = origBitmap.GetPixel(x, y);
-					int grayscale = 255 - (pixel.R + pixel.G + pixel.B) / 3;
-					accumulator = (param.ChunkSize * (255 - grayscale) + 10) / 10;
-					int factor = param.Factor;
+			var x = Math.Abs(c1.x - c2.x);
+			var y = Math.Abs(c1.y - c2.y);
+			var l = (float)Math.Sqrt((x * x) + (y * y));
 
-					grayscale = grayscale == 0 ? 1 : grayscale;
-					coords.Add(new Point(
-						x + accumulator, y + (sign * factor * grayscale / 80)));
-					sign *= -1;
-				}
+			var v = new { x = c2.x - c1.x, y = c2.y - c1.y };
+			var uv = new { x = v.x / l, y = v.y / l };
 
-				RenderLine(graphics, coords, param, y);
-				lineNumber++;
-			}
-		}
+			var ca = (c2.r - c1.r) / l;
+			var sa = (float)Math.Sqrt(1 - (ca * ca));
 
-		private static void RenderLine(Graphics graphics, List<Point> coords, RenderParams param, int y)
-		{
-			if (coords.Count == 1)
-				return;
-			SolidBrush brush = new SolidBrush(Color.Black);
-			Pen pen = new Pen(brush, param.Stroke);
+			PointF[] points = new PointF[] {
+				new PointF(c1.x - (ca * c1.r * uv.x) - (sa * c1.r * uv.y),
+						   c1.y + (sa * c1.r * uv.x) - (ca * c1.r * uv.y)),
+				new PointF(c1.x - (ca * c1.r * uv.x) + (sa * c1.r * uv.y),
+						   c1.y - (sa * c1.r * uv.x) - (ca * c1.r * uv.y)),
 
-			switch (param.LineType)
-			{
-				case LineType.Line:
-					graphics.DrawLines(pen, coords.ToArray());
-					break;
-				case LineType.VariableLine:
-					for (int i = 0; i < coords.Count - 1; i++)
-					{
-						var coord1 = coords[i];
-						var coord2 = coords[i + 1];
-						graphics.FillVariableLine(brush, coord1.X, coord1.Y, coord2.X, coord2.Y, Math.Abs(y - coord1.Y) , Math.Abs(y - coord2.Y));
-					}
-					break;
-				case LineType.Curve:
-					graphics.DrawCurve(pen, coords.ToArray());
-					break;
-				case LineType.Dot:
-					foreach (Point coord in coords)
-						graphics.FillRectangle(brush, coord.X, coord.Y, param.Stroke, param.Stroke);
-					break;
-				default:
-					break;
-			}
+				new PointF(c2.x - (ca * c2.r * uv.x) + (sa * c2.r * uv.y),
+						   c2.y - (sa * c2.r * uv.x) - (ca * c2.r * uv.y)),
+				new PointF(c2.x - (ca * c2.r * uv.x) - (sa * c2.r * uv.y),
+						   c2.y + (sa * c2.r * uv.x) - (ca * c2.r * uv.y)),
+			};
+
+			g.FillEllipse(b, new Rectangle(x1 - w1 / 2, y1 - w1 / 2, w1, w1));
+			g.FillEllipse(b, new Rectangle(x2 - w2 / 2, y2 - w2 / 2, w2, w2));
+			g.FillPolygon(b, points);
+			return g;
 		}
 	}
 }
