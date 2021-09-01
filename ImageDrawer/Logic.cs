@@ -119,6 +119,7 @@ namespace ImageDrawer
 				Stroke = 1,
 				Factor = 5,
 				ChunkSize = 5,
+				GreyLevel = 127,
 				Smoothing = SmoothingType.Antialias,
 				LineType = LineType.Curve,
 				Method = MethodType.Squiggle,

@@ -29,6 +29,7 @@ namespace ImageDrawer
 		public int Stroke; // в конце прямо перед отрисовкой
 		public int Factor;
 		public int ChunkSize;
+		public int GreyLevel;
 		public int Angle;
 		public SmoothingType Smoothing; // в начале
 		public LineType LineType; // в конце

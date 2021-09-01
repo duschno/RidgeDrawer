@@ -67,7 +67,7 @@ namespace ImageDrawer
 		{
 			Color pixel = origBitmap.GetPixel(x, y);
 			int grayscale = (pixel.R + pixel.G + pixel.B) / 3;
-			int factor = param.Factor * (grayscale - 127) / 127;
+			int factor = param.Factor * grayscale / (param.GreyLevel == 0 ? 1 : param.GreyLevel);
 			return new Point(x + (int)(factor * Math.Sin(Math.PI * -param.Angle / 180.0)),
 							 y + (int)(factor * Math.Cos(Math.PI * -param.Angle / 180.0)));
 		}

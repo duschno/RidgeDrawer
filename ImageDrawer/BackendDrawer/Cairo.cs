@@ -9,7 +9,7 @@ namespace ImageDrawer
 {
 	public class Cairo : BackendDrawerBase
 	{
-		[DllImport(@"C:\Users\User\Desktop\ImageDrawer\Debug\PlusPlus.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport(@"PlusPlus.dll", CallingConvention = CallingConvention.Cdecl)]
 		private extern static void Draw(IntPtr hdc, int[] x, int[] y, int size);
 
 		protected override void DrawCurve(Point[] coords)

@@ -81,27 +81,31 @@
             <TextBox x:Name="Angle" PreviewTextInput="AngleValidation"
                      TabIndex="4" Margin="84,260,0,0" KeyDown="ParamChange_KeyDown"/>
 
+            <Label Content="Grey level" Margin="10,286,0,0" />
+            <TextBox x:Name="GreyLevel" PreviewTextInput="ColorRangeValidation"
+                     TabIndex="5" Margin="84,290,0,0" KeyDown="ParamChange_KeyDown"/>
+
             <!--#endregion-->
 
             <!--#region Combo boxes-->
 
-            <Label Content="Smoothing" Margin="10,306,0,0" />
-            <ComboBox x:Name="Smoothing" Margin="84,310,0,0"
-                      TabIndex="5" SelectionChanged="ComboBox_SelectionChanged" />
+            <Label Content="Smoothing" Margin="10,336,0,0" />
+            <ComboBox x:Name="Smoothing" Margin="84,340,0,0"
+                      TabIndex="6" SelectionChanged="ComboBox_SelectionChanged" />
 
-            <Label Content="LineType"  Margin="10,336,0,0" />
-            <ComboBox x:Name="LineType" Margin="84,340,0,0"
-                      TabIndex="6" SelectionChanged="ComboBox_SelectionChanged"/>
-
-            <Label Content="Method" Margin="10,366,0,0"/>
-            <ComboBox x:Name="Method" Margin="84,370,0,0"
+            <Label Content="LineType"  Margin="10,366,0,0" />
+            <ComboBox x:Name="LineType" Margin="84,370,0,0"
                       TabIndex="7" SelectionChanged="ComboBox_SelectionChanged"/>
 
-            <Label Content="Backend" Margin="10,396,0,0"/>
-            <ComboBox x:Name="Backend" Margin="84,400,0,0" DisplayMemberPath="Name"
+            <Label Content="Method" Margin="10,396,0,0"/>
+            <ComboBox x:Name="Method" Margin="84,400,0,0"
                       TabIndex="8" SelectionChanged="ComboBox_SelectionChanged"/>
+
+            <Label Content="Backend" Margin="10,426,0,0"/>
+            <ComboBox x:Name="Backend" Margin="84,430,0,0" DisplayMemberPath="Name"
+                      TabIndex="9" SelectionChanged="ComboBox_SelectionChanged"/>
             <CheckBox x:Name="DrawOnSides" Content="Draw on sides" HorizontalAlignment="Left"
-                      Margin="15,450,0,0" VerticalAlignment="Top"
+                      Margin="15,480,0,0" VerticalAlignment="Top" TabIndex="10"
                       Checked="DrawOnSides_Checked" Unchecked="DrawOnSides_Checked"/>
 
             <!--#endregion-->

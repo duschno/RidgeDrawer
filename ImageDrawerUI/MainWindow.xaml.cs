@@ -51,6 +51,7 @@ namespace ImageDrawerUI
 			Stroke.Text = 1.ToString();
 			Factor.Text = 30.ToString();
 			ChunkSize.Text = 5.ToString();
+			GreyLevel.Text = 127.ToString();
 			Angle.Text = 0.ToString();
 			DrawOnSides.IsChecked = true;
 			Backend.SelectedItem = typeof(Cairo);
@@ -74,6 +75,7 @@ namespace ImageDrawerUI
 				Stroke = Convert.ToInt32(Stroke.Text),
 				Factor = Convert.ToInt32(Factor.Text),
 				ChunkSize = Convert.ToInt32(ChunkSize.Text),
+				GreyLevel = Convert.ToInt32(GreyLevel.Text),
 				Angle = Convert.ToInt32(Angle.Text),
 				Smoothing = (SmoothingType)Smoothing.Items[Smoothing.SelectedIndex],
 				LineType = (LineType)LineType.Items[LineType.SelectedIndex],
@@ -234,6 +236,12 @@ namespace ImageDrawerUI
 		{
 			Regex regex = new Regex("[\\-0-9]+");
 			e.Handled = !regex.IsMatch(e.Text);
+		}
+
+		private void ColorRangeValidation(object sender, TextCompositionEventArgs e)
+		{
+			int value;
+			e.Handled = !int.TryParse(e.Text, out value) && value > 0 && value < 256;
 		}
 
 		#region Event handlers
