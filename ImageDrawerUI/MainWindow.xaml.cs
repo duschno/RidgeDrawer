@@ -47,14 +47,18 @@ namespace ImageDrawerUI
 			FillComboBox(LineType, typeof(LineType));
 			FillComboBox(Method, typeof(MethodType));
 			FillComboBox(Backend, typeof(BackendDrawerBase));
-			LinesCount.Text = 1.ToString();
+			LinesCount.Text = 50.ToString();
 			Stroke.Text = 1.ToString();
 			Factor.Text = 30.ToString();
 			ChunkSize.Text = 5.ToString();
 			GreyLevel.Text = 127.ToString();
 			Angle.Text = 0.ToString();
 			DrawOnSides.IsChecked = true;
-			Backend.SelectedItem = typeof(Cairo);
+			Backend.SelectedItem = typeof(GDIPlus);
+
+			filename = @"D:\Fraps Pictures\iw3mp 2020-05-06 01-39-35-97 — копия.bmp";
+			if (!string.IsNullOrEmpty(filename))
+				Render(filename);
 		}
 
 		private void FillComboBox(ComboBox comboBox, Type type)

@@ -36,5 +36,6 @@ namespace ImageDrawer
 		public MethodType Method; // в начале
 		public bool DrawOnSides;
 		public Type Backend;
+		//TODO рендерится не все сразу, а можно отрендерить лишь одну вертиальную линию например, чтобы можно было это анимировать
 	}
 }
