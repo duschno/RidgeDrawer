@@ -33,7 +33,14 @@ namespace ImageDrawer
 
 		protected override void DrawLines(Point[] coords)
 		{
-			graphics.DrawLines(pen, coords);
+			Color[] colors = new Color[] { Color.Black, Color.Black, Color.Black };
+			for (int i = 0; i < coords.Length - 1; i++)
+			{
+				pen.Color = colors[i % 3];
+				Point a = coords[i];
+				Point b = coords[i + 1];
+				graphics.DrawLine(pen, a, b);
+			}
 		}
 
 		protected override void DrawVariableLines(Point[] coords, int y)
