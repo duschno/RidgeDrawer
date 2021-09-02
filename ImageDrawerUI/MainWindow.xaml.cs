@@ -54,7 +54,8 @@ namespace ImageDrawerUI
 			GreyLevel.Text = 127.ToString();
 			Angle.Text = 0.ToString();
 			DrawOnSides.IsChecked = true;
-			Backend.SelectedItem = typeof(GDIPlus);
+			Backend.SelectedItem = typeof(Sandbox);
+			LineType.SelectedItem = ImageDrawer.LineType.Curve;
 
 			filename = @"D:\Fraps Pictures\iw3mp 2020-05-06 01-39-35-97 — копия.bmp";
 			if (!string.IsNullOrEmpty(filename))

@@ -22,7 +22,7 @@ namespace ImageDrawer
 
 		protected override void DrawCurve(Point[] coords)
 		{
-			graphics.DrawCurve(pen, coords);
+			graphics.DrawCurve(pen, coords); //TODO implement tension to manual too
 		}
 
 		protected override void DrawDots(Point[] coords)
