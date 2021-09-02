@@ -23,6 +23,11 @@ namespace ImageDrawer
 				{
 					for (int j = 0; j < param.Stroke; j++)
 					{
+						if (param.Stroke > 2 && ((j == 0 && i == 0) || (j == param.Stroke-1 && i == param.Stroke-1) || (j == param.Stroke-1 && i == 0) || (j == 0 && i == param.Stroke-1)))
+						{
+							//TODO: рисовать круг вместо точки. в слачае антиалиасинга хз пока
+							continue;
+						}
 						if (x+i > 0 && y+j > 0 && x+i < newBitmap.Width && y+j < newBitmap.Height)
 							newBitmap.SetPixel(x+i, y+j, Color.Black);
 					}
