@@ -15,7 +15,20 @@ namespace ImageDrawer
 
 		protected override void DrawDots(Point[] coords)
 		{
-			throw new NotImplementedException();
+			foreach (var coord in coords)
+			{
+				var x = coord.X;
+				var y = coord.Y;
+				for (int i = 0; i < param.Stroke; i++)
+				{
+					for (int j = 0; j < param.Stroke; j++)
+					{
+						if (x+i > 0 && y+j > 0 && x+i < newBitmap.Width && y+j < newBitmap.Height)
+							newBitmap.SetPixel(x+i, y+j, Color.Black);
+					}
+				}
+				
+			}
 		}
 
 		protected override void DrawLines(Point[] coords)
