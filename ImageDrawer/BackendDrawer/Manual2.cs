@@ -7,6 +7,11 @@ namespace ImageDrawer
 {
 	public class Manual2 : BackendDrawerBase
 	{
+		protected override void DrawBezier(Point[] coords)
+		{
+			throw new NotImplementedException();
+		}
+
 		protected override void DrawCurve(Point[] coords)
 		{
 			throw new NotImplementedException();

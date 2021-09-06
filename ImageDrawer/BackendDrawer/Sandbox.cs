@@ -50,5 +50,10 @@ namespace ImageDrawer
 		{
 			Play();
 		}
+
+		protected override void DrawBezier(Point[] coords)
+		{
+			Play();
+		}
 	}
 }

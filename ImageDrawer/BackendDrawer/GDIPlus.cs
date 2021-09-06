@@ -20,6 +20,14 @@ namespace ImageDrawer
 				SmoothingMode.AntiAlias : SmoothingMode.None;
 		}
 
+		protected override void DrawBezier(Point[] coords)
+		{
+			Point[] fin = new Point[(coords.Length - 1) / 3 * 3 + 1];
+			for (int i = 0; i < fin.Length; i++)
+				fin[i] = coords[i];
+			graphics.DrawBeziers(pen, fin);
+		}
+
 		protected override void DrawCurve(Point[] coords)
 		{
 			graphics.DrawCurve(pen, coords); //TODO implement tension to manual too

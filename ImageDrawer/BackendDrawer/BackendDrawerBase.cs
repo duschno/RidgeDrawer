@@ -12,6 +12,7 @@ namespace ImageDrawer
 		protected abstract void DrawDots(Point[] coords);
 		protected abstract void DrawVariableLines(Point[] coords, int y);
 		protected abstract void DrawCurve(Point[] coords);
+		protected abstract void DrawBezier(Point[] coords);
 
 		#endregion
 
@@ -114,6 +115,9 @@ namespace ImageDrawer
 					break;
 				case LineType.Curve:
 					DrawCurve(coords.ToArray());
+					break;
+				case LineType.Bezier:
+					DrawBezier(coords.ToArray());
 					break;
 				case LineType.Dot:
 					DrawDots(coords.ToArray());

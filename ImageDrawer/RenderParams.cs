@@ -14,7 +14,8 @@ namespace ImageDrawer
 		Line,
 		VariableLine,
 		Dot,
-		Curve
+		Curve,
+		Bezier
 	}
 
 	public enum MethodType

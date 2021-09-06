@@ -8,6 +8,11 @@ namespace ImageDrawer
 {
 	public class Manual : BackendDrawerBase
 	{
+		protected override void DrawBezier(Point[] coords)
+		{
+			throw new NotImplementedException();
+		}
+
 		protected override void DrawCurve(Point[] coords)
 		{
 			throw new NotImplementedException();
@@ -36,73 +41,63 @@ namespace ImageDrawer
 			}
 		}
 
+		private void DrawNonAALine(int x0, int y0, int x1, int y1)
+		{
+			int dx = Math.Abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
+			int dy = -Math.Abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
+			int err = dx + dy, e2; /* error value e_xy */
+
+			for (; ; )
+			{  /* loop */
+				SetPixel(x0, y0, Color.Black);
+				if (x0 == x1 && y0 == y1) break;
+				e2 = 2 * err;
+				if (e2 >= dy) { err += dy; x0 += sx; } /* e_xy+e_x > 0 */
+				if (e2 <= dx) { err += dx; y0 += sy; } /* e_xy+e_y < 0 */
+			}
+		}
+
+		private void DrawAALine(int x0, int y0, int x1, int y1)
+		{
+			int dx = Math.Abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
+			int dy = Math.Abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
+			int err = dx - dy, e2, x2;                       /* error value e_xy */
+			int ed = dx + dy == 0 ? 1 : (int)Math.Sqrt(dx * dx + dy * dy);
+
+			for (; ; )
+			{                                         /* pixel loop */
+				SetPixel(x0, y0, Color.Black, 255 * Math.Abs(err - dx + dy) / ed);
+				e2 = err; x2 = x0;
+				if (2 * e2 >= -dx)
+				{                                    /* x step */
+					if (x0 == x1) break;
+					if (e2 + dy < ed) SetPixel(x0, y0 + sy, Color.Black, 255 * (e2 + dy) / ed);
+					err -= dy; x0 += sx;
+				}
+				if (2 * e2 <= dy)
+				{                                     /* y step */
+					if (y0 == y1) break;
+					if (dx - e2 < ed) SetPixel(x2 + sx, y0, Color.Black, 255 * (dx - e2) / ed);
+					err += dx; y0 += sy;
+				}
+			}
+		}
+
+		private void SetPixel(int x, int y, Color color, int alpha = 0)
+		{
+			if (x > 0 && y > 0 && x < newBitmap.Width && y < newBitmap.Height)
+				newBitmap.SetPixel(x, y, Color.FromArgb(255 - alpha, color));
+		}
+
 		protected override void DrawLines(Point[] coords)
 		{
 			Color[] colors = new Color[] { Color.Black, Color.Black, Color.Black };
 
 			for (int i = 0; i < coords.Length - 1; i++)
-			{
-				int x0 = coords[i].X;
-				int y0 = coords[i].Y;
-				int x1 = coords[i + 1].X;
-				int y1 = coords[i + 1].Y;
-
-				int dx = Math.Abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
-				int dy = -Math.Abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
-				int err = dx + dy, e2; /* error value e_xy */
-
-				for (; ; )
-				{  /* loop */
-					if (x0 > 0 && y0 > 0 && x0 < newBitmap.Width && y0 < newBitmap.Height)
-						newBitmap.SetPixel(x0, y0, colors[i % 3]);
-					if (x0 == x1 && y0 == y1) break;
-					e2 = 2 * err;
-					if (e2 >= dy) { err += dy; x0 += sx; } /* e_xy+e_x > 0 */
-					if (e2 <= dx) { err += dx; y0 += sy; } /* e_xy+e_y < 0 */
-				}
-			}
-
-			//for (int i = 0; i < coords.Length - 1; i++)
-			//{
-			//	int x = coords[i].X;
-			//	int y = coords[i].Y;
-			//	int x2 = coords[i + 1].X;
-			//	int y2 = coords[i + 1].Y;
-
-			//	int w = x2 - x;
-			//	int h = y2 - y;
-			//	int dx1 = 0, dy1 = 0, dx2 = 0, dy2 = 0;
-			//	if (w < 0) dx1 = -1; else if (w > 0) dx1 = 1;
-			//	if (h < 0) dy1 = -1; else if (h > 0) dy1 = 1;
-			//	if (w < 0) dx2 = -1; else if (w > 0) dx2 = 1;
-			//	int longest = Math.Abs(w);
-			//	int shortest = Math.Abs(h);
-			//	if (!(longest > shortest))
-			//	{
-			//		longest = Math.Abs(h);
-			//		shortest = Math.Abs(w);
-			//		if (h < 0) dy2 = -1; else if (h > 0) dy2 = 1;
-			//		dx2 = 0;
-			//	}
-			//	int numerator = longest >> 1;
-			//	for (int j = 0; j <= longest; j++)
-			//	{
-			//		if (x > 0 && y > 0 && x < newBitmap.Width && y < newBitmap.Height)
-			//			newBitmap.SetPixel(x, y, colors[i % 3]);
-			//		numerator += shortest;
-			//		if (!(numerator < longest))
-			//		{
-			//			numerator -= longest;
-			//			x += dx1;
-			//			y += dy1;
-			//		}
-			//		else
-			//		{
-			//			x += dx2;
-			//			y += dy2;
-			//		}
-			//	}
-			//}
+				if (param.Smoothing == SmoothingType.Antialias)
+					DrawAALine(coords[i].X, coords[i].Y, coords[i + 1].X, coords[i + 1].Y);
+				else
+					DrawNonAALine(coords[i].X, coords[i].Y, coords[i + 1].X, coords[i + 1].Y);
 		}
 
 		protected override void DrawVariableLines(Point[] coords, int y)
