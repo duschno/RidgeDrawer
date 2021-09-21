@@ -15,6 +15,7 @@ namespace ImageDrawer
 		VariableLine,
 		Dot,
 		Curve,
+		ClosedCurve,
 		Bezier
 	}
 

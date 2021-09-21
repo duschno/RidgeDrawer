@@ -28,8 +28,10 @@ namespace ImageDrawer
 			graphics.DrawBeziers(pen, fin);
 		}
 
-		protected override void DrawCurve(Point[] coords)
+		protected override void DrawCurve(Point[] coords, bool isClosed)
 		{
+			if (isClosed)
+				graphics.FillClosedCurve(new SolidBrush(Color.White), coords);
 			graphics.DrawCurve(pen, coords); //TODO implement tension to manual too
 		}
 
