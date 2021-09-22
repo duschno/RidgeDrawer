@@ -28,9 +28,9 @@ namespace ImageDrawer
 			graphics.DrawBeziers(pen, fin);
 		}
 
-		protected override void DrawCurve(Point[] coords, bool isClosed)
+		protected override void DrawCurve(Point[] coords)
 		{
-			if (isClosed)
+			if (param.FillInside)
 				graphics.FillClosedCurve(new SolidBrush(Color.White), coords);
 			graphics.DrawCurve(pen, coords); //TODO implement tension to manual too
 		}
@@ -44,6 +44,8 @@ namespace ImageDrawer
 		protected override void DrawLines(Point[] coords)
 		{
 			Color[] colors = new Color[] { Color.Black, Color.Black, Color.Black };
+			if (param.FillInside)
+				graphics.FillPolygon(new SolidBrush(Color.White), coords);
 			for (int i = 0; i < coords.Length - 1; i++)
 			{
 				pen.Color = colors[i % 3];

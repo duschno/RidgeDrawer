@@ -31,7 +31,7 @@ namespace ImageDrawer
 			}
 		}
 
-		protected override void DrawCurve(Point[] coords, bool isClosed)
+		protected override void DrawCurve(Point[] coords)
 		{
 			Play();
 		}

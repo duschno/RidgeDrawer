@@ -124,6 +124,7 @@ namespace ImageDrawer
 				LineType = LineType.Curve,
 				Method = MethodType.Squiggle,
 				DrawOnSides = true,
+				FillInside = false,
 				Backend = typeof(GDIPlus)
 			};
 

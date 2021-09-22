@@ -17,7 +17,7 @@ namespace ImageDrawer
 			throw new NotImplementedException();
 		}
 
-		protected override void DrawCurve(Point[] coords, bool isClosed)
+		protected override void DrawCurve(Point[] coords)
 		{
 			throw new NotImplementedException();
 		}

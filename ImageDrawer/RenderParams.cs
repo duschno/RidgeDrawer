@@ -15,7 +15,6 @@ namespace ImageDrawer
 		VariableLine,
 		Dot,
 		Curve,
-		ClosedCurve,
 		Bezier
 	}
 
@@ -37,6 +36,7 @@ namespace ImageDrawer
 		public LineType LineType; // в конце
 		public MethodType Method; // в начале
 		public bool DrawOnSides;
+		public bool FillInside;
 		public Type Backend;
 		//TODO рендерится не все сразу, а можно отрендерить лишь одну вертиальную линию например, чтобы можно было это анимировать
 	}

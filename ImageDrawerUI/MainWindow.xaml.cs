@@ -86,6 +86,7 @@ namespace ImageDrawerUI
 				LineType = (LineType)LineType.Items[LineType.SelectedIndex],
 				Method = (MethodType)Method.Items[Method.SelectedIndex],
 				DrawOnSides = DrawOnSides.IsChecked ?? false,
+				FillInside = FillInside.IsChecked ?? false,
 				Backend = (Type)Backend.Items[Backend.SelectedIndex]
 			};
 
@@ -273,7 +274,7 @@ namespace ImageDrawerUI
 				Logic.Save(processed as BitmapSource, dlg.FileName);
 		}
 
-		private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		private void ParametersChanged(object sender, SelectionChangedEventArgs e)
 		{
 			if (filename != null)
 				Render(filename);
@@ -386,9 +387,9 @@ namespace ImageDrawerUI
 
 		#endregion
 
-		private void DrawOnSides_Checked(object sender, RoutedEventArgs e)
+		private void ParametersChanged(object sender, RoutedEventArgs e)
 		{
-			ComboBox_SelectionChanged(null, null);
+			ParametersChanged(null, null);
 		}
 	}
 }

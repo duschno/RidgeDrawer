@@ -91,22 +91,25 @@
 
             <Label Content="Smoothing" Margin="10,336,0,0" />
             <ComboBox x:Name="Smoothing" Margin="84,340,0,0"
-                      TabIndex="6" SelectionChanged="ComboBox_SelectionChanged" />
+                      TabIndex="6" SelectionChanged="ParametersChanged" />
 
             <Label Content="LineType"  Margin="10,366,0,0" />
             <ComboBox x:Name="LineType" Margin="84,370,0,0"
-                      TabIndex="7" SelectionChanged="ComboBox_SelectionChanged"/>
+                      TabIndex="7" SelectionChanged="ParametersChanged"/>
 
             <Label Content="Method" Margin="10,396,0,0"/>
             <ComboBox x:Name="Method" Margin="84,400,0,0"
-                      TabIndex="8" SelectionChanged="ComboBox_SelectionChanged"/>
+                      TabIndex="8" SelectionChanged="ParametersChanged"/>
 
             <Label Content="Backend" Margin="10,426,0,0"/>
             <ComboBox x:Name="Backend" Margin="84,430,0,0" DisplayMemberPath="Name"
-                      TabIndex="9" SelectionChanged="ComboBox_SelectionChanged"/>
+                      TabIndex="9" SelectionChanged="ParametersChanged"/>
             <CheckBox x:Name="DrawOnSides" Content="Draw on sides" HorizontalAlignment="Left"
                       Margin="15,480,0,0" VerticalAlignment="Top" TabIndex="10"
-                      Checked="DrawOnSides_Checked" Unchecked="DrawOnSides_Checked"/>
+                      Checked="ParametersChanged" Unchecked="ParametersChanged"/>
+            <CheckBox x:Name="FillInside" Content="Fill inside" HorizontalAlignment="Left"
+                      Margin="15,500,0,0" VerticalAlignment="Top" TabIndex="10"
+                      Checked="ParametersChanged" Unchecked="ParametersChanged"/>
 
             <!--#endregion-->
 
