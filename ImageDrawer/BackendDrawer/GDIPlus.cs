@@ -46,13 +46,14 @@ namespace ImageDrawer
 			Color[] colors = new Color[] { Color.Black, Color.Black, Color.Black };
 			if (param.FillInside)
 				graphics.FillPolygon(new SolidBrush(Color.White), coords);
-			for (int i = 0; i < coords.Length - 1; i++)
-			{
-				pen.Color = colors[i % 3];
-				Point a = coords[i];
-				Point b = coords[i + 1];
-				graphics.DrawLine(pen, a, b);
-			}
+			graphics.DrawLines(pen, coords);
+			//for (int i = 0; i < coords.Length - 1; i++) // there are visible breaks if use this way with antialiasing
+			//{
+			//	pen.Color = colors[i % 3];
+			//	Point a = coords[i];
+			//	Point b = coords[i + 1];
+			//	graphics.DrawLine(pen, a, b);
+			//}
 		}
 
 		protected override void DrawVariableLines(Point[] coords, int y)

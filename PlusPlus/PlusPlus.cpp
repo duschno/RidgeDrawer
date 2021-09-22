@@ -6,6 +6,7 @@
 #include <limits.h>
 #define _USE_MATH_DEFINES
 #include <math.h>
+#include <gdiplus.h>
 #include "PlusPlus.h"
 
 void Draw(HDC hdc, int* x, int* y, int size)
