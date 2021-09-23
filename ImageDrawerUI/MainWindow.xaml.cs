@@ -235,23 +235,41 @@ namespace ImageDrawerUI
 
 		private void PositiveNumberValidation(object sender, TextCompositionEventArgs e)
 		{
-			string text = (sender as TextBox).Text + e.Text;
+			string text = GetTextForValidation(sender as TextBox, e);
+
 			Regex regex = new Regex("^[0-9]+$");
 			e.Handled = !regex.IsMatch(text);
 		}
 
 		private void AngleValidation(object sender, TextCompositionEventArgs e)
 		{
-			string text = (sender as TextBox).Text + e.Text;
+			string text = GetTextForValidation(sender as TextBox, e);
+
 			Regex regex = new Regex("^-?[0-9]*$");
 			e.Handled = !regex.IsMatch(text);
 		}
 
 		private void ColorRangeValidation(object sender, TextCompositionEventArgs e)
 		{
-			string text = (sender as TextBox).Text + e.Text;
+			string text = GetTextForValidation(sender as TextBox, e);
+
 			int value;
 			e.Handled = !(int.TryParse(text, out value) && value > 0 && value < 256);
+		}
+
+		private string GetTextForValidation(TextBox textBox, TextCompositionEventArgs e)
+		{
+			string text;
+			if (textBox.SelectionLength == 0)
+				text = textBox.Text + e.Text;
+			else
+			{
+				text = textBox.Text.Substring(0, textBox.SelectionStart) +
+					   e.Text +
+					   textBox.Text.Substring(textBox.SelectionStart + textBox.SelectionLength);
+			}
+
+			return text;
 		}
 
 		#region Event handlers
