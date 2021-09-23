@@ -54,7 +54,8 @@ namespace ImageDrawerUI
 			GreyLevel.Text = 127.ToString();
 			Angle.Text = 0.ToString();
 			DrawOnSides.IsChecked = true;
-			Backend.SelectedItem = typeof(Sandbox);
+			Backend.SelectedItem = typeof(GDIPlus);
+			Method.SelectedItem = ImageDrawer.MethodType.Squiggle;
 			LineType.SelectedItem = ImageDrawer.LineType.Curve;
 
 			filename = @"D:\Fraps Pictures\iw3mp 2020-05-06 01-39-35-97 — копия.bmp";
@@ -234,20 +235,23 @@ namespace ImageDrawerUI
 
 		private void PositiveNumberValidation(object sender, TextCompositionEventArgs e)
 		{
-			Regex regex = new Regex("[^0-9]+");
-			e.Handled = regex.IsMatch(e.Text);
+			string text = (sender as TextBox).Text + e.Text;
+			Regex regex = new Regex("^[0-9]+$");
+			e.Handled = !regex.IsMatch(text);
 		}
 
 		private void AngleValidation(object sender, TextCompositionEventArgs e)
 		{
-			Regex regex = new Regex("[\\-0-9]+");
-			e.Handled = !regex.IsMatch(e.Text);
+			string text = (sender as TextBox).Text + e.Text;
+			Regex regex = new Regex("^-?[0-9]*$");
+			e.Handled = !regex.IsMatch(text);
 		}
 
 		private void ColorRangeValidation(object sender, TextCompositionEventArgs e)
 		{
+			string text = (sender as TextBox).Text + e.Text;
 			int value;
-			e.Handled = !int.TryParse(e.Text, out value) && value > 0 && value < 256;
+			e.Handled = !(int.TryParse(text, out value) && value > 0 && value < 256);
 		}
 
 		#region Event handlers
@@ -390,6 +394,12 @@ namespace ImageDrawerUI
 		private void ParametersChanged(object sender, RoutedEventArgs e)
 		{
 			ParametersChanged(null, null);
+		}
+
+		private void ParamChange_PreviewKeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.Key == Key.Space)
+				e.Handled = true;
 		}
 	}
 }

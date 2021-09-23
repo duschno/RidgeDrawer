@@ -20,6 +20,8 @@
                 <Setter Property="HorizontalAlignment" Value="Left" />
                 <Setter Property="VerticalAlignment" Value="Top" />
                 <Setter Property="TextWrapping" Value="Wrap" />
+                <EventSetter Event="KeyDown" Handler="ParamChange_KeyDown"/>
+                <EventSetter Event="PreviewKeyDown" Handler="ParamChange_PreviewKeyDown"/>
             </Style>
             <Style TargetType="{x:Type ComboBox}">
                 <Setter Property="Width" Value="100" />
@@ -63,27 +65,27 @@
 
             <Label Content="LinesCount" Margin="10,136,0,0" />
             <TextBox x:Name="LinesCount" PreviewTextInput="PositiveNumberValidation"
-                     TabIndex="0" Margin="84,140,0,0" KeyDown="ParamChange_KeyDown"/>
+                     TabIndex="0" Margin="84,140,0,0" />
 
             <Label Content="Stroke" Margin="10,166,0,0"/>
             <TextBox x:Name="Stroke" PreviewTextInput="PositiveNumberValidation" 
-                     TabIndex="1" Margin="84,170,0,0" KeyDown="ParamChange_KeyDown"/>
+                     TabIndex="1" Margin="84,170,0,0" />
 
             <Label Content="Factor" Margin="10,196,0,0" />
             <TextBox x:Name="Factor" PreviewTextInput="PositiveNumberValidation"
-                     TabIndex="2" Margin="84,200,0,0" KeyDown="ParamChange_KeyDown"/>
+                     TabIndex="2" Margin="84,200,0,0" />
 
             <Label Content="ChunkSize" Margin="10,226,0,0" />
             <TextBox x:Name="ChunkSize" PreviewTextInput="PositiveNumberValidation"
-                     TabIndex="3" Margin="84,230,0,0" KeyDown="ParamChange_KeyDown"/>
+                     TabIndex="3" Margin="84,230,0,0" />
 
             <Label Content="Angle" Margin="10,256,0,0" />
             <TextBox x:Name="Angle" PreviewTextInput="AngleValidation"
-                     TabIndex="4" Margin="84,260,0,0" KeyDown="ParamChange_KeyDown"/>
+                     TabIndex="4" Margin="84,260,0,0" />
 
             <Label Content="Grey level" Margin="10,286,0,0" />
             <TextBox x:Name="GreyLevel" PreviewTextInput="ColorRangeValidation"
-                     TabIndex="5" Margin="84,290,0,0" KeyDown="ParamChange_KeyDown"/>
+                     TabIndex="5" Margin="84,290,0,0" />
 
             <!--#endregion-->
 
