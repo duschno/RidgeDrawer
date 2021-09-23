@@ -102,4 +102,12 @@ namespace ImageDrawer
 			return g;
 		}
 	}
+
+	public static class ColorExtension
+	{
+		public static int Grayscale(this Color c)
+		{
+			return (c.R + c.G + c.B) / 3;
+		}
+	}
 }

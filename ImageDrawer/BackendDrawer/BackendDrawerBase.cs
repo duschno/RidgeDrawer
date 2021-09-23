@@ -66,8 +66,7 @@ namespace ImageDrawer
 
 		private Point CalculatePoint(Bitmap origBitmap, int x, int y, RenderParams param)
 		{
-			Color pixel = origBitmap.GetPixel(x, y);
-			int grayscale = (pixel.R + pixel.G + pixel.B) / 3;
+			int grayscale = origBitmap.GetPixel(x, y).Grayscale();
 			int factor = param.Factor * grayscale / (param.GreyLevel == 0 ? 1 : param.GreyLevel);
 			return new Point(x + (int)(factor * Math.Sin(Math.PI * -param.Angle / 180.0)),
 							 y + (int)(factor * Math.Cos(Math.PI * -param.Angle / 180.0)));
@@ -85,8 +84,7 @@ namespace ImageDrawer
 				int accumulator = param.ChunkSize;
 				for (int x = 1; x < origBitmap.Width; x += accumulator)
 				{
-					Color pixel = origBitmap.GetPixel(x, y);
-					int grayscale = 255 - (pixel.R + pixel.G + pixel.B) / 3;
+					int grayscale = 255 - origBitmap.GetPixel(x, y).Grayscale();
 					accumulator = (param.ChunkSize * (255 - grayscale) + 10) / 10;
 					int factor = param.Factor;
 
