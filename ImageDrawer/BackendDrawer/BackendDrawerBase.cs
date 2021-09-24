@@ -50,7 +50,7 @@ namespace ImageDrawer
 			while (lineNumber < param.LinesCount)
 			{
 				List<Point> coords = new List<Point>();
-				int y = (origBitmap.Height * lineNumber / param.LinesCount) + (origBitmap.Height / (param.LinesCount * 2));
+				int y = GetLineY(lineNumber);
 
 				if (param.DrawOnSides)
 					coords.Add(CalculatePoint(origBitmap, 0, y, param));
@@ -66,31 +66,49 @@ namespace ImageDrawer
 
 		private Point CalculatePoint(Bitmap origBitmap, int x, int y, RenderParams param)
 		{
-			int grayscale = origBitmap.GetPixel(x, y).Grayscale();
-			int factor = param.Factor * grayscale / (param.GreyLevel == 0 ? 1 : param.GreyLevel);
+			int greyscale = origBitmap.GetPixel(x, y).Greyscale();
+			int factor = param.Factor * greyscale / param.GreyPoint;
 			return new Point(x + (int)(factor * Math.Sin(Math.PI * -param.Angle / 180.0)),
 							 y + (int)(factor * Math.Cos(Math.PI * -param.Angle / 180.0)));
 		}
 
+		private int GetLineY(int lineNumber)
+		{
+			//	точное положение линии от нуля							прибавляем половину интервала, чтобы было посередине
+			return (origBitmap.Height * lineNumber / param.LinesCount) + (origBitmap.Height / (param.LinesCount * 2));
+		}
+
 		private void MethodSquiggle()
 		{
+			if (param.WhitePoint == param.BlackPoint)
+				throw new NotImplementedException($"White point is equal to black point");
+
+			int maxLevel = Math.Max(param.WhitePoint, param.BlackPoint);
+			int minLevel = Math.Min(param.WhitePoint, param.BlackPoint);
+
 			int lineNumber = 0;
 			while (lineNumber < param.LinesCount)
 			{
 				List<Point> coords = new List<Point>();
 				int sign = -1;
-				int y = (origBitmap.Height * lineNumber / param.LinesCount) + (origBitmap.Height / (param.LinesCount * 2));
+				int y = GetLineY(lineNumber);
 				coords.Add(new Point(0, y));
 				int accumulator = param.ChunkSize;
 				for (int x = 1; x < origBitmap.Width; x += accumulator)
 				{
-					int grayscale = 255 - origBitmap.GetPixel(x, y).Grayscale();
-					accumulator = (param.ChunkSize * (255 - grayscale) + 10) / 10;
-					int factor = param.Factor;
+					int p = origBitmap.GetPixel(x, y).Greyscale();
+					if (p > maxLevel)
+						p = maxLevel;
+					if (p < minLevel)
+						p = minLevel;
 
-					grayscale = grayscale == 0 ? 1 : grayscale;
-					coords.Add(new Point(
-						x + accumulator, y + (sign * factor * grayscale / 80)));
+					int f = param.WhitePoint > param.BlackPoint ? p - minLevel : maxLevel - p;
+					double greyscale = f / (double)(maxLevel - minLevel);
+					//accumulator = (int)(param.ChunkSize * greyscale);
+					//accumulator = (param.ChunkSize * (255 - greyscale) + 10) / 10;
+					//int factor = param.Factor;
+
+					coords.Add(new Point(x + accumulator, y + (int)(sign * param.Factor * greyscale)));
 					sign *= -1;
 				}
 

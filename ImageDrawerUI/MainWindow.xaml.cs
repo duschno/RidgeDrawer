@@ -51,7 +51,9 @@ namespace ImageDrawerUI
 			Stroke.Text = 1.ToString();
 			Factor.Text = 30.ToString();
 			ChunkSize.Text = 5.ToString();
-			GreyLevel.Text = 127.ToString();
+			BlackPoint.Text = 0.ToString();
+			GreyPoint.Text = 127.ToString();
+			WhitePoint.Text = 255.ToString();
 			Angle.Text = 0.ToString();
 			DrawOnSides.IsChecked = true;
 			Backend.SelectedItem = typeof(GDIPlus);
@@ -81,7 +83,9 @@ namespace ImageDrawerUI
 				Stroke = Convert.ToInt32(Stroke.Text),
 				Factor = Convert.ToInt32(Factor.Text),
 				ChunkSize = Convert.ToInt32(ChunkSize.Text),
-				GreyLevel = Convert.ToInt32(GreyLevel.Text),
+				BlackPoint = Convert.ToInt32(BlackPoint.Text),
+				GreyPoint = Convert.ToInt32(GreyPoint.Text),
+				WhitePoint = Convert.ToInt32(WhitePoint.Text),
 				Angle = Convert.ToInt32(Angle.Text),
 				Smoothing = (SmoothingType)Smoothing.Items[Smoothing.SelectedIndex],
 				LineType = (LineType)LineType.Items[LineType.SelectedIndex],
@@ -97,8 +101,9 @@ namespace ImageDrawerUI
 			{
 				processed = ConvertToNativeDpi(Logic.ProcessByFilename(filename, param));
 			}
-			catch (NotImplementedException)
+			catch (NotImplementedException e)
 			{
+				NotImplementedLabel.Content = e.Message;
 				NotImplementedLabel.Visibility = Visibility.Visible;
 			}
 
@@ -253,8 +258,7 @@ namespace ImageDrawerUI
 		{
 			string text = GetTextForValidation(sender as TextBox, e);
 
-			int value;
-			e.Handled = !(int.TryParse(text, out value) && value > 0 && value < 256);
+			e.Handled = !(int.TryParse(text, out int value) && value > 0 && value < 256);
 		}
 
 		private string GetTextForValidation(TextBox textBox, TextCompositionEventArgs e)
@@ -298,8 +302,32 @@ namespace ImageDrawerUI
 
 		private void ParametersChanged(object sender, SelectionChangedEventArgs e)
 		{
+			LockUnusedParams();
+
 			if (filename != null)
 				Render(filename);
+		}
+
+		private void LockUnusedParams()
+		{
+			if (Method.SelectedItem != null)
+			{
+				switch ((MethodType)Method.SelectedItem)
+				{
+					case MethodType.Ridge:
+						GreyPoint.IsEnabled = true;
+						WhitePoint.IsEnabled = false;
+						BlackPoint.IsEnabled = false;
+						break;
+					case MethodType.Squiggle:
+						GreyPoint.IsEnabled = false;
+						WhitePoint.IsEnabled = true;
+						BlackPoint.IsEnabled = true;
+						break;
+					default:
+						break;
+				}
+			}
 		}
 
 		private void Image_MouseWheel(object sender, MouseWheelEventArgs e)

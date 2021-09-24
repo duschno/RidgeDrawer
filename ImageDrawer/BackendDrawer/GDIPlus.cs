@@ -105,7 +105,7 @@ namespace ImageDrawer
 
 	public static class ColorExtension
 	{
-		public static int Grayscale(this Color c)
+		public static int Greyscale(this Color c)
 		{
 			return (c.R + c.G + c.B) / 3;
 		}

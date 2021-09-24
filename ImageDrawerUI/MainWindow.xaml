@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         x:Name="Window"
-        Title="Ridge Drawer" Height="600" Width="1000" MinWidth="400" MinHeight="400" KeyDown="Window_KeyDown">
+        Title="Ridge Drawer" Height="625" Width="1000" MinWidth="400" MinHeight="625" KeyDown="Window_KeyDown">
     <Window.Resources>
         <ResourceDictionary>
             <Style TargetType="{x:Type Button}">
@@ -63,7 +63,7 @@
 
             <!--#region Text boxes-->
 
-            <Label Content="LinesCount" Margin="10,136,0,0" />
+            <Label Content="Lines count" Margin="10,136,0,0" />
             <TextBox x:Name="LinesCount" PreviewTextInput="PositiveNumberValidation"
                      TabIndex="0" Margin="84,140,0,0" />
 
@@ -75,7 +75,7 @@
             <TextBox x:Name="Factor" PreviewTextInput="PositiveNumberValidation"
                      TabIndex="2" Margin="84,200,0,0" />
 
-            <Label Content="ChunkSize" Margin="10,226,0,0" />
+            <Label Content="Chunk size" Margin="10,226,0,0" />
             <TextBox x:Name="ChunkSize" PreviewTextInput="PositiveNumberValidation"
                      TabIndex="3" Margin="84,230,0,0" />
 
@@ -83,34 +83,42 @@
             <TextBox x:Name="Angle" PreviewTextInput="AngleValidation"
                      TabIndex="4" Margin="84,260,0,0" />
 
-            <Label Content="Grey level" Margin="10,286,0,0" />
-            <TextBox x:Name="GreyLevel" PreviewTextInput="ColorRangeValidation"
+            <Label Content="White point" Margin="10,286,0,0" />
+            <TextBox x:Name="WhitePoint" PreviewTextInput="ColorRangeValidation"
                      TabIndex="5" Margin="84,290,0,0" />
+
+            <Label Content="Grey point" Margin="10,316,0,0" />
+            <TextBox x:Name="GreyPoint" PreviewTextInput="ColorRangeValidation"
+                     TabIndex="5" Margin="84,320,0,0" />
+
+            <Label Content="Black point" Margin="10,346,0,0" />
+            <TextBox x:Name="BlackPoint" PreviewTextInput="ColorRangeValidation"
+                     TabIndex="5" Margin="84,350,0,0" />
 
             <!--#endregion-->
 
             <!--#region Combo boxes-->
 
-            <Label Content="Smoothing" Margin="10,336,0,0" />
-            <ComboBox x:Name="Smoothing" Margin="84,340,0,0"
+            <Label Content="Smoothing" Margin="10,384,0,0" />
+            <ComboBox x:Name="Smoothing" Margin="84,388,0,0"
                       TabIndex="6" SelectionChanged="ParametersChanged" />
 
-            <Label Content="LineType"  Margin="10,366,0,0" />
-            <ComboBox x:Name="LineType" Margin="84,370,0,0"
+            <Label Content="LineType"  Margin="10,414,0,0" />
+            <ComboBox x:Name="LineType" Margin="84,418,0,0"
                       TabIndex="7" SelectionChanged="ParametersChanged"/>
 
-            <Label Content="Method" Margin="10,396,0,0"/>
-            <ComboBox x:Name="Method" Margin="84,400,0,0"
+            <Label Content="Method" Margin="10,444,0,0"/>
+            <ComboBox x:Name="Method" Margin="84,448,0,0"
                       TabIndex="8" SelectionChanged="ParametersChanged"/>
 
-            <Label Content="Backend" Margin="10,426,0,0"/>
-            <ComboBox x:Name="Backend" Margin="84,430,0,0" DisplayMemberPath="Name"
+            <Label Content="Backend" Margin="10,474,0,0"/>
+            <ComboBox x:Name="Backend" Margin="84,478,0,0" DisplayMemberPath="Name"
                       TabIndex="9" SelectionChanged="ParametersChanged"/>
             <CheckBox x:Name="DrawOnSides" Content="Draw on sides" HorizontalAlignment="Left"
-                      Margin="15,480,0,0" VerticalAlignment="Top" TabIndex="10"
+                      Margin="15,528,0,0" VerticalAlignment="Top" TabIndex="10"
                       Checked="ParametersChanged" Unchecked="ParametersChanged"/>
             <CheckBox x:Name="FillInside" Content="Fill inside" HorizontalAlignment="Left"
-                      Margin="15,500,0,0" VerticalAlignment="Top" TabIndex="10"
+                      Margin="15,548,0,0" VerticalAlignment="Top" TabIndex="10"
                       Checked="ParametersChanged" Unchecked="ParametersChanged"/>
 
             <!--#endregion-->
@@ -123,7 +131,7 @@
             <Button x:Name="FullsizeButton" Content="Fullsize (0/F)" Style="{StaticResource FullsizeButtonStyle}" 
                     HorizontalAlignment="Left" Margin="5,5,0,0" VerticalAlignment="Top" 
                     Panel.ZIndex="2" Width="70" Height="20" Click="FullsizeButton_Click"/>
-            <Label x:Name="NotImplementedLabel" Content="Not implemented" Panel.ZIndex="3"
+            <Label x:Name="NotImplementedLabel" Panel.ZIndex="3"
                    VerticalAlignment="Center" HorizontalAlignment="Center"
                    Foreground="Red" FontSize="18" Visibility="Hidden"/>
             <Image x:Name="image" Stretch="None" Panel.ZIndex="1"/>
