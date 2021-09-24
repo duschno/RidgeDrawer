@@ -92,6 +92,7 @@ namespace ImageDrawerUI
 				Method = (MethodType)Method.Items[Method.SelectedIndex],
 				DrawOnSides = DrawOnSides.IsChecked ?? false,
 				FillInside = FillInside.IsChecked ?? false,
+				Invert = Invert.IsChecked ?? false,
 				Backend = (Type)Backend.Items[Backend.SelectedIndex]
 			};
 

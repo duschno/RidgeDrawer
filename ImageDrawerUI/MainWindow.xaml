@@ -120,6 +120,9 @@
             <CheckBox x:Name="FillInside" Content="Fill inside" HorizontalAlignment="Left"
                       Margin="15,548,0,0" VerticalAlignment="Top" TabIndex="10"
                       Checked="ParametersChanged" Unchecked="ParametersChanged"/>
+            <CheckBox x:Name="Invert" Content="Invert" HorizontalAlignment="Left"
+                      Margin="15,568,0,0" VerticalAlignment="Top" TabIndex="10"
+                      Checked="ParametersChanged" Unchecked="ParametersChanged"/>
 
             <!--#endregion-->
 

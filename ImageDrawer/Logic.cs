@@ -127,6 +127,7 @@ namespace ImageDrawer
 				Method = MethodType.Squiggle,
 				DrawOnSides = true,
 				FillInside = false,
+				Invert = false,
 				Backend = typeof(GDIPlus)
 			};
 

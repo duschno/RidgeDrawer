@@ -80,11 +80,11 @@ namespace ImageDrawer
 
 		private void MethodSquiggle()
 		{
-			if (param.WhitePoint == param.BlackPoint)
-				throw new NotImplementedException($"White point is equal to black point");
+			if (param.WhitePoint <= param.BlackPoint)
+				throw new NotImplementedException($"White point is less or equal to black point");
 
-			int maxLevel = Math.Max(param.WhitePoint, param.BlackPoint);
-			int minLevel = Math.Min(param.WhitePoint, param.BlackPoint);
+			int maxChunk = 20;
+			int minChunk = 3;
 
 			int lineNumber = 0;
 			while (lineNumber < param.LinesCount)
@@ -93,20 +93,16 @@ namespace ImageDrawer
 				int sign = -1;
 				int y = GetLineY(lineNumber);
 				coords.Add(new Point(0, y));
-				int accumulator = param.ChunkSize;
+				int accumulator = minChunk;
 				for (int x = 1; x < origBitmap.Width; x += accumulator)
 				{
 					int p = origBitmap.GetPixel(x, y).Greyscale();
-					if (p > maxLevel)
-						p = maxLevel;
-					if (p < minLevel)
-						p = minLevel;
+					if (p > param.WhitePoint) p = param.WhitePoint;
+					if (p < param.BlackPoint) p = param.BlackPoint;
 
-					int f = param.WhitePoint > param.BlackPoint ? p - minLevel : maxLevel - p;
-					double greyscale = f / (double)(maxLevel - minLevel);
-					//accumulator = (int)(param.ChunkSize * greyscale);
-					//accumulator = (param.ChunkSize * (255 - greyscale) + 10) / 10;
-					//int factor = param.Factor;
+					int f = param.Invert ? param.WhitePoint - p : p - param.BlackPoint;
+					double greyscale = f / (double)(param.WhitePoint - param.BlackPoint);
+					accumulator = (int)(maxChunk - (maxChunk - minChunk) * greyscale);
 
 					coords.Add(new Point(x + accumulator, y + (int)(sign * param.Factor * greyscale)));
 					sign *= -1;
