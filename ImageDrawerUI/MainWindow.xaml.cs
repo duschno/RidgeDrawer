@@ -43,6 +43,8 @@ namespace ImageDrawerUI
 		{
 			InitializeComponent();
 
+			Height = SystemParameters.PrimaryScreenHeight * 0.9;
+			Width = SystemParameters.PrimaryScreenWidth * 0.9;
 			FillComboBox(Smoothing, typeof(SmoothingType));
 			FillComboBox(LineType, typeof(LineType));
 			FillComboBox(Method, typeof(MethodType));
@@ -52,7 +54,6 @@ namespace ImageDrawerUI
 			Factor.Text = 30.ToString();
 			ChunkSize.Text = 5.ToString();
 			BlackPoint.Text = 0.ToString();
-			GreyPoint.Text = 127.ToString();
 			WhitePoint.Text = 255.ToString();
 			Angle.Text = 0.ToString();
 			DrawOnSides.IsChecked = true;
@@ -84,7 +85,6 @@ namespace ImageDrawerUI
 				Factor = Convert.ToInt32(Factor.Text),
 				ChunkSize = Convert.ToInt32(ChunkSize.Text),
 				BlackPoint = Convert.ToInt32(BlackPoint.Text),
-				GreyPoint = Convert.ToInt32(GreyPoint.Text),
 				WhitePoint = Convert.ToInt32(WhitePoint.Text),
 				Angle = Convert.ToInt32(Angle.Text),
 				Smoothing = (SmoothingType)Smoothing.Items[Smoothing.SelectedIndex],
@@ -93,6 +93,7 @@ namespace ImageDrawerUI
 				DrawOnSides = DrawOnSides.IsChecked ?? false,
 				FillInside = FillInside.IsChecked ?? false,
 				Invert = Invert.IsChecked ?? false,
+				Debug = Debug.IsChecked ?? false,
 				Backend = (Type)Backend.Items[Backend.SelectedIndex]
 			};
 
@@ -259,7 +260,7 @@ namespace ImageDrawerUI
 		{
 			string text = GetTextForValidation(sender as TextBox, e);
 
-			e.Handled = !(int.TryParse(text, out int value) && value > 0 && value < 256);
+			e.Handled = !(int.TryParse(text, out int value) && value >= 0 && value < 256);
 		}
 
 		private string GetTextForValidation(TextBox textBox, TextCompositionEventArgs e)
@@ -316,12 +317,10 @@ namespace ImageDrawerUI
 				switch ((MethodType)Method.SelectedItem)
 				{
 					case MethodType.Ridge:
-						GreyPoint.IsEnabled = true;
-						WhitePoint.IsEnabled = false;
-						BlackPoint.IsEnabled = false;
+						WhitePoint.IsEnabled = true;
+						BlackPoint.IsEnabled = true;
 						break;
 					case MethodType.Squiggle:
-						GreyPoint.IsEnabled = false;
 						WhitePoint.IsEnabled = true;
 						BlackPoint.IsEnabled = true;
 						break;

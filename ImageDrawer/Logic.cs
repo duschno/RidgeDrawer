@@ -120,7 +120,6 @@ namespace ImageDrawer
 				Factor = 5,
 				ChunkSize = 5,
 				BlackPoint = 0,
-				GreyPoint = 127,
 				WhitePoint = 255,
 				Smoothing = SmoothingType.Antialias,
 				LineType = LineType.Curve,
@@ -128,6 +127,7 @@ namespace ImageDrawer
 				DrawOnSides = true,
 				FillInside = false,
 				Invert = false,
+				Debug = false,
 				Backend = typeof(GDIPlus)
 			};
 

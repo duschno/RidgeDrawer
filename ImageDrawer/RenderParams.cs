@@ -31,7 +31,6 @@ namespace ImageDrawer
 		public int Factor;
 		public int ChunkSize;
 		public int BlackPoint;
-		public int GreyPoint;
 		public int WhitePoint;
 		public int Angle;
 		public SmoothingType Smoothing; // в начале
@@ -40,6 +39,7 @@ namespace ImageDrawer
 		public bool DrawOnSides;
 		public bool FillInside;
 		public bool Invert;
+		public bool Debug;
 		public Type Backend;
 		//TODO рендерится не все сразу, а можно отрендерить лишь одну вертиальную линию например, чтобы можно было это анимировать
 	}

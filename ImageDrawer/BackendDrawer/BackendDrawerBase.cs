@@ -44,10 +44,10 @@ namespace ImageDrawer
 			}
 		}
 
-		private void MethodRidge()
+		private void MethodRidge() // TODO: чекни скрин на телефоне с женщиной, там линии объемно смещаются от центра
 		{
-			int lineNumber = 0;
-			while (lineNumber < param.LinesCount)
+			int lineNumber = 0; // сейчас он считает так: насколько относительно серого цвета сместить вверх или вниз линию. надо переделать от белого
+			while (lineNumber < param.LinesCount) // TODO: delete grey point and use white an dblack instead
 			{
 				List<Point> coords = new List<Point>();
 				int y = GetLineY(lineNumber);
@@ -67,9 +67,16 @@ namespace ImageDrawer
 		private Point CalculatePoint(Bitmap origBitmap, int x, int y, RenderParams param)
 		{
 			int greyscale = origBitmap.GetPixel(x, y).Greyscale();
-			int factor = param.Factor * greyscale / param.GreyPoint;
-			return new Point(x + (int)(factor * Math.Sin(Math.PI * -param.Angle / 180.0)),
-							 y + (int)(factor * Math.Cos(Math.PI * -param.Angle / 180.0)));
+			if (greyscale > param.WhitePoint) greyscale = param.WhitePoint;
+			if (greyscale < param.BlackPoint) greyscale = param.BlackPoint;
+			int factor = param.Factor * (greyscale - param.BlackPoint) / (param.WhitePoint - param.BlackPoint);
+			return CalculateAngle(x, y, factor, factor);
+		}
+
+		private Point CalculateAngle(int x, int y, int factorX, int factorY)
+		{
+			return new Point(x + (int)(factorX * Math.Sin(Math.PI * -param.Angle / 180.0)),
+							 y + (int)(factorY * Math.Cos(Math.PI * -param.Angle / 180.0)));
 		}
 
 		private int GetLineY(int lineNumber)
@@ -96,15 +103,17 @@ namespace ImageDrawer
 				int accumulator = minChunk;
 				for (int x = 1; x < origBitmap.Width; x += accumulator)
 				{
-					int p = origBitmap.GetPixel(x, y).Greyscale();
-					if (p > param.WhitePoint) p = param.WhitePoint;
-					if (p < param.BlackPoint) p = param.BlackPoint;
+					int pixel = origBitmap.GetPixel(x, y).Greyscale();
+					if (pixel > param.WhitePoint) pixel = param.WhitePoint;
+					if (pixel < param.BlackPoint) pixel = param.BlackPoint;
 
-					int f = param.Invert ? param.WhitePoint - p : p - param.BlackPoint;
+					int f = param.Invert ? param.WhitePoint - pixel : pixel - param.BlackPoint;
 					double greyscale = f / (double)(param.WhitePoint - param.BlackPoint);
 					accumulator = (int)(maxChunk - (maxChunk - minChunk) * greyscale);
 
-					coords.Add(new Point(x + accumulator, y + (int)(sign * param.Factor * greyscale)));
+					coords.Add(CalculateAngle(x, y, accumulator, (int)(sign * param.Factor * greyscale)));
+					//coords.Add(new Point(x + accumulator,
+					//					 y + (int)(sign * param.Factor * greyscale))); // TODO: angle support
 					sign *= -1;
 				}
 
