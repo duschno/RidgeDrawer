@@ -18,8 +18,8 @@ namespace ImageDrawer
 			base.Construct(newBitmap, origBitmap, param);
 			graphics = Graphics.FromImage(newBitmap);
 			brush = new SolidBrush(Color.Black);
-			Random random = new Random(666);
-			debugColors = new List<Color>(20);
+			Random random = new Random(1337);
+			debugColors = new List<Color>(30);
 			for (int i = 0; i < debugColors.Capacity; i++)
 				debugColors.Add(Color.FromArgb(random.Next(127, 256), random.Next(127, 256), random.Next(127, 256)));
 			pen = new Pen(brush, param.Stroke);
@@ -38,7 +38,14 @@ namespace ImageDrawer
 		protected override void DrawCurve(Point[] coords)
 		{
 			if (param.FillInside)
-				graphics.FillClosedCurve(new SolidBrush(GetColor()), coords); // TODO: заполнение неправильное, возможно надо в конце проводить линию под кривой, чтобы правильно замыкалось
+			{
+				List<Point> fillCoords = new List<Point>();
+				fillCoords.Add(new Point(coords[0].X, coords[0].Y + 50));
+				fillCoords.AddRange(coords);
+				fillCoords.Add(new Point(coords[coords.Length - 1].X, coords[coords.Length - 1].Y + 50));
+				graphics.FillClosedCurve(new SolidBrush(GetColor()), fillCoords.ToArray()); // TODO: заполнение неправильное, возможно надо в конце проводить линию под кривой, чтобы правильно замыкалось
+			}
+
 			graphics.DrawCurve(pen, coords); // TODO: implement tension to manual too
 		}
 

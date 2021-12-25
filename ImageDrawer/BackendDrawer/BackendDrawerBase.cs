@@ -66,10 +66,12 @@ namespace ImageDrawer
 
 		private Point CalculatePoint(Bitmap origBitmap, int x, int y, RenderParams param)
 		{
-			int greyscale = origBitmap.GetPixel(x, y).Greyscale();
-			if (greyscale > param.WhitePoint) greyscale = param.WhitePoint;
-			if (greyscale < param.BlackPoint) greyscale = param.BlackPoint;
-			int factor = param.Factor * (greyscale - param.BlackPoint) / (param.WhitePoint - param.BlackPoint);
+			int pixel = origBitmap.GetPixel(x, y).Greyscale();
+			if (pixel > param.WhitePoint) pixel = param.WhitePoint;
+			if (pixel < param.BlackPoint) pixel = param.BlackPoint;
+
+			int f = param.Invert ? param.WhitePoint - pixel : pixel - param.BlackPoint;
+			int factor = (int)(param.Factor * f / (double)(param.WhitePoint - param.BlackPoint));
 			return CalculateAngle(x, y, factor, factor);
 		}
 
@@ -103,7 +105,7 @@ namespace ImageDrawer
 				int accumulator = minChunk;
 				for (int x = 1; x < origBitmap.Width; x += accumulator)
 				{
-					int pixel = origBitmap.GetPixel(x, y).Greyscale();
+					int pixel = origBitmap.GetPixel(x, y).Greyscale(); // тут и в CalculatePoint код одинаковый почти, подумай как переделать
 					if (pixel > param.WhitePoint) pixel = param.WhitePoint;
 					if (pixel < param.BlackPoint) pixel = param.BlackPoint;
 
