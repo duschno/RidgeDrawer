@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Reflection;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
+using System.Text.RegularExpressions;
 
 namespace ImageDrawer
 {
+	[Guid("1A91BC9C-09A1-4817-9C71-4D91A674AAF1")]
 	public class Logic
 	{
 		/// <summary>
@@ -113,42 +116,99 @@ namespace ImageDrawer
 		/// <param name="args">Command line arguments</param>
 		private static void Main(string[] args)
 		{
+			string inputFileName = null;
+			string outputFileName = null;
 			RenderParams param = new RenderParams
 			{
-				LinesCount = 120,
+				LinesCount = 1,
 				Stroke = 1,
-				Factor = 5,
-				ChunkSize = 5,
+				Factor = 0,
+				ChunkSize = 1,
 				BlackPoint = 0,
 				WhitePoint = 255,
-				Smoothing = SmoothingType.Antialias,
-				LineType = LineType.Curve,
-				Method = MethodType.Squiggle,
-				DrawOnSides = true,
+				Smoothing = SmoothingType.None,
+				LineType = LineType.Line,
+				Method = MethodType.Ridge,
+				DrawOnSides = false,
 				FillInside = false,
 				Invert = false,
 				Debug = false,
 				Backend = typeof(GDIPlus)
 			};
 
-			string imageName = GetImageName("Rachel-Carson.jpg", args);
-			Bitmap bmp = ProcessByFilename(imageName, param);
-			bmp.Save(AddPostfix(imageName), ImageFormat.Bmp);
+#if DEBUG
+				//inputFileName = @"..\Rachel-Carson.jpg";
+				//outputFileName = @"..\Rachel-Carson_proc.jpg";
+				//param = new RenderParams
+				//{
+				//	LinesCount = 80,
+				//	Stroke = 1,
+				//	Factor = 5,
+				//	ChunkSize = 5,
+				//	BlackPoint = 0,
+				//	WhitePoint = 255,
+				//	Smoothing = SmoothingType.Antialias,
+				//	LineType = LineType.Curve,
+				//	Method = MethodType.Squiggle,
+				//	DrawOnSides = true,
+				//	FillInside = true,
+				//	Invert = false,
+				//	Debug = false,
+				//	Backend = typeof(GDIPlus)
+				//};
+#endif
+
+			ParseArgs(ref inputFileName, ref outputFileName, ref param, args);
+			Bitmap bmp = ProcessByFilename(inputFileName, param);
+			bmp.Save(outputFileName, ImageFormat.Bmp);
 		}
 
-		/// <summary>
-		/// Gest name of the image to process
-		/// </summary>
-		/// <param name="defaultName">Name of the default image to process</param>
-		/// <param name="args">Command line arguments</param>
-		/// <returns>Name of the image to process</returns>
-		private static string GetImageName(string defaultName, string[] args = null)
+		private static void ParseArgs(ref string inputFileName, ref string outputFileName, ref RenderParams param, string[] args)
 		{
-			string imageName = defaultName;
-			if (args != null && args.Length > 0)
-				imageName = args[0];
+			if (inputFileName == null && args.Length == 0)
+				throw new ArgumentException("Image filename not specified");
+			if (args.Length == 0)
+				return;
 
-			return imageName;
+			inputFileName = args[0];
+
+			if (!args[1].StartsWith("-"))
+				outputFileName = args[1];
+			else
+				outputFileName = AddPostfix(inputFileName);
+
+			FieldInfo[] fields = param.GetType().GetFields();
+			Regex r = new Regex(@"-(\w+):(.+)");
+			object paramObj = param;
+			foreach (string arg in args)
+			{
+				Match match = r.Match(arg);
+				if (match.Success)
+				{
+					string name = match.Groups[1].Value;
+					string value = match.Groups[2].Value;
+					FieldInfo field = fields.FirstOrDefault(
+						f => (string)f.CustomAttributes.FirstOrDefault().ConstructorArguments[0].Value == name);
+
+					if (field != null)
+					{
+						object obj = null;
+						if (field.FieldType == typeof(bool))
+							obj = bool.Parse(value.Replace("1", "true").Replace("0", "false"));
+						else if (field.FieldType.IsEnum)
+							obj = Enum.Parse(field.FieldType, value, true);
+						else if (field.FieldType == typeof(Type))
+							obj = Type.GetType($"{Assembly.GetExecutingAssembly().GetName().Name}.{value}", true, true);
+						else
+							obj = Convert.ChangeType(value, field.FieldType);
+
+						field.SetValue(paramObj, obj);
+					}
+				}
+
+			}
+
+			param = (RenderParams)paramObj;
 		}
 
 		/// <summary>
@@ -163,6 +223,6 @@ namespace ImageDrawer
 			return filename + "_processed." + outputExt; 
 		}
 
-		#endregion
+#endregion
 	}
 }
