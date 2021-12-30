@@ -111,7 +111,7 @@ namespace ImageDrawer
 				for (int x = 1; x < origBitmap.Width; x += accumulator)
 				{
 					double greyscale = CalculateGreyScale(origBitmap, x, y, param);
-					accumulator = (int)(maxChunk - (maxChunk - minChunk) * greyscale);
+					accumulator = (int)(maxChunk - (maxChunk - minChunk) * greyscale); // TODO: зря удалил грей поинт, без него теперь нельзя посчитать уровень серого, от которого потом идет приращение аниз и вверх и от еоторого можно было бы считать угол
 
 					coords.Add(CalculateAngle(x, y, accumulator, (int)(sign * param.Factor * greyscale)));
 					sign *= -1;
