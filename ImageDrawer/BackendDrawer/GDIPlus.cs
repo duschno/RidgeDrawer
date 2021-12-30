@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Linq;
 
 namespace ImageDrawer
 {
@@ -11,17 +12,20 @@ namespace ImageDrawer
 		private Graphics graphics;
 		private Pen pen;
 		private Brush brush;
-		private List<Color> debugColors;
-		private int debugColorsIndex;
+		private List<Color> debugFillColors;
+		private List<Color> debugStrokeColors;
+		private int debugFillColorsIndex;
+		private int debugStrokeColorsIndex;
 		public override void Construct(Bitmap newBitmap, Bitmap origBitmap, RenderParams param)
 		{
 			base.Construct(newBitmap, origBitmap, param);
 			graphics = Graphics.FromImage(newBitmap);
 			brush = new SolidBrush(Color.Black);
 			Random random = new Random(1337);
-			debugColors = new List<Color>(30);
-			for (int i = 0; i < debugColors.Capacity; i++)
-				debugColors.Add(Color.FromArgb(random.Next(127, 256), random.Next(127, 256), random.Next(127, 256)));
+			debugFillColors = new List<Color>(30);
+			debugStrokeColors = new List<Color> { Color.Red, Color.Blue, Color.Green, Color.Black };
+			for (int i = 0; i < debugFillColors.Capacity; i++)
+				debugFillColors.Add(Color.FromArgb(random.Next(200, 256), random.Next(200, 256), random.Next(200, 256)));
 			pen = new Pen(brush, param.Stroke);
 			graphics.SmoothingMode = param.Smoothing == SmoothingType.Antialias ?
 				SmoothingMode.AntiAlias : SmoothingMode.None;
@@ -39,22 +43,31 @@ namespace ImageDrawer
 		{
 			if (param.FillInside)
 			{
-				List<Point> fillCoords = new List<Point>();
-				fillCoords.Add(new Point(coords[0].X, coords[0].Y + 50));
-				fillCoords.AddRange(coords);
-				fillCoords.Add(new Point(coords[coords.Length - 1].X, coords[coords.Length - 1].Y + 50));
-				graphics.FillClosedCurve(new SolidBrush(GetColor()), fillCoords.ToArray()); // TODO: заполнение неправильное, возможно надо в конце проводить линию под кривой, чтобы правильно замыкалось
+				graphics.FillClosedCurve(new SolidBrush(GetColor(true)), GetFillCoordinates(coords));
 			}
 
+			if (param.Debug)
+				pen.Color = GetColor(false);
 			graphics.DrawCurve(pen, coords); // TODO: implement tension to manual too
 		}
 
-		private Color GetColor()
+		private Color GetColor(bool isFill)
 		{
-			if (param.Debug)
-				return debugColors[debugColorsIndex < debugColors.Capacity ? debugColorsIndex++ : debugColorsIndex = 0];
+			if (isFill)
+			{
+				if (param.Debug)
+					return debugFillColors[debugFillColorsIndex + 1 < debugFillColors.Count ? ++debugFillColorsIndex : debugFillColorsIndex = 0];
+				else
+					return Color.White;
+			}
 			else
-				return Color.White;
+			{
+				if (param.Debug)
+					return debugStrokeColors[debugStrokeColorsIndex + 1 < debugStrokeColors.Count ? ++debugStrokeColorsIndex : debugStrokeColorsIndex = 0];
+				else
+					return Color.Black;
+			}
+			
 		}
 
 		protected override void DrawDots(Point[] coords)
@@ -63,11 +76,26 @@ namespace ImageDrawer
 				graphics.FillRectangle(brush, coord.X, coord.Y, param.Stroke, param.Stroke);
 		}
 
+		private Point[] GetFillCoordinates(Point[] coords)
+		{
+			int addition = 5; // in Curves mode there are pits always before the peak, thus have to compensate this
+			int maxY = coords.Max(p => p.Y);
+			List<Point> fillCoords = new List<Point>();
+			fillCoords.Add(new Point(coords[0].X, coords[0].Y + (maxY - coords[0].Y) + addition));
+			fillCoords.AddRange(coords);
+			fillCoords.Add(new Point(coords[coords.Length - 1].X, coords[coords.Length - 1].Y + (maxY - coords[0].Y) + addition));
+			return fillCoords.ToArray();
+		}
+
 		protected override void DrawLines(Point[] coords)
 		{
-			Color[] colors = new Color[] { Color.Black, Color.Black, Color.Black };
 			if (param.FillInside)
-				graphics.FillPolygon(new SolidBrush(Color.White), coords);
+			{
+				graphics.FillPolygon(new SolidBrush(GetColor(true)), GetFillCoordinates(coords));
+			}
+
+			if (param.Debug)
+				pen.Color = GetColor(false);
 			graphics.DrawLines(pen, coords);
 			//for (int i = 0; i < coords.Length - 1; i++) // TODO: there are visible breaks if use this way with antialiasing
 			//{

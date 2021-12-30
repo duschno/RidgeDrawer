@@ -28,12 +28,12 @@ namespace ImageDrawer
 				{
 					for (int j = 0; j < param.Stroke; j++)
 					{
-						if (param.Stroke > 2 && ((j == 0 && i == 0) || (j == param.Stroke-1 && i == param.Stroke-1) || (j == param.Stroke-1 && i == 0) || (j == 0 && i == param.Stroke-1)))
+						if (param.Stroke > 2 && ((j == 0 && i == 0) || (j == param.Stroke-1 && i == param.Stroke-1) || (j == param.Stroke-1 && i == 0) || (j == 0 && i == param.Stroke-1))) // do not draw rectangle corner pixels
 						{
 							// TODO: рисовать круг вместо точки. в случае антиалиасинга хз пока
 							continue;
 						}
-						if (x+i > 0 && y+j > 0 && x+i < newBitmap.Width && y+j < newBitmap.Height)
+						if (x+i > 0 && y+j > 0 && x+i < newBitmap.Width && y+j < newBitmap.Height) // do not draw on image bounds
 							newBitmap.SetPixel(x+i, y+j, Color.Black);
 					}
 				}
