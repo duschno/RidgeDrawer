@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 
-namespace ImageDrawer
+namespace ImageDrawer // TODO: каждая линия со своими параматрами, но это уже в афтере - типа рандом такой
 {
 	public abstract class BackendDrawerBase
 	{
@@ -47,14 +47,14 @@ namespace ImageDrawer
 		private void MethodRidge() // TODO: чекни скрин на телефоне с женщиной, там линии объемно смещаются от центра
 		{
 			int lineNumber = 0; // сейчас он считает так: насколько относительно серого цвета сместить вверх или вниз линию. надо переделать от белого
-			while (lineNumber < param.LinesCount) // TODO: delete grey point and use white an dblack instead
+			while (lineNumber < param.LinesCount)
 			{
 				List<Point> coords = new List<Point>();
 				int y = GetLineY(lineNumber);
 
 				if (param.DrawOnSides)
 					coords.Add(CalculatePoint(origBitmap, 0, y, param));
-				for (int x = origBitmap.Width / 2 % param.ChunkSize; x < origBitmap.Width; x += param.ChunkSize)
+				for (int x = origBitmap.Width / 2 % param.ChunkSize; x < origBitmap.Width; x += param.ChunkSize) // сделать так, что бы при некратных значениях (50 и 51 наприм) не было фликеринга, а просто добавлялась новая координата
 					coords.Add(CalculatePoint(origBitmap, x, y, param));
 				if (param.DrawOnSides)
 					coords.Add(CalculatePoint(origBitmap, origBitmap.Width - 1, y, param));
@@ -66,7 +66,7 @@ namespace ImageDrawer
 
 		private Point CalculatePoint(Bitmap origBitmap, int x, int y, RenderParams param)
 		{
-			int greyscaleFactored = (int)(CalculateGreyScale(origBitmap, x, y, param) * param.Factor);
+			int greyscaleFactored = (int)Math.Round((CalculateGreyScale(origBitmap, x, y, param) * param.Factor)); // round is used because otherwise angle=0 differs from angle=1 for 127 color
 			return CalculateAngle(x, y, greyscaleFactored, greyscaleFactored);
 		}
 
@@ -82,8 +82,11 @@ namespace ImageDrawer
 
 		private Point CalculateAngle(int x, int y, int factorX, int factorY)
 		{
-			return new Point(x + (int)(factorX * Math.Sin(Math.PI * -param.Angle / 180.0)),
-							 y + (int)(factorY * Math.Cos(Math.PI * -param.Angle / 180.0)));
+			double sin = Math.Sin(Math.PI * -param.Angle / 180.0);
+			double cos = Math.Cos(Math.PI * -param.Angle / 180.0);
+			int c = (int)((factorY - param.Factor / 2.0) * cos);
+			return new Point(x + (int)((factorX - param.Factor / 2.0) * sin),
+							 y + (int)((factorY - param.Factor / 2.0) * cos));
 		}
 
 		private int GetLineY(int lineNumber)
@@ -111,7 +114,7 @@ namespace ImageDrawer
 				for (int x = 1; x < origBitmap.Width; x += accumulator)
 				{
 					double greyscale = CalculateGreyScale(origBitmap, x, y, param);
-					accumulator = (int)(maxChunk - (maxChunk - minChunk) * greyscale); // TODO: зря удалил грей поинт, без него теперь нельзя посчитать уровень серого, от которого потом идет приращение аниз и вверх и от еоторого можно было бы считать угол
+					accumulator = (int)(maxChunk - (maxChunk - minChunk) * greyscale); // TODO: добавить грей поинт. который будет центром. по дефолту приращение вниз и вверх одинаковое, но например при грей поинте 10 приращние белого будет намного сильнее, чем черного
 
 					coords.Add(CalculateAngle(x, y, accumulator, (int)(sign * param.Factor * greyscale)));
 					sign *= -1;
