@@ -83,7 +83,7 @@ namespace ImageDrawer
 			List<Point> fillCoords = new List<Point>();
 			fillCoords.Add(new Point(coords[0].X, coords[0].Y + (maxY - coords[0].Y) + addition));
 			fillCoords.AddRange(coords);
-			fillCoords.Add(new Point(coords[coords.Length - 1].X, coords[coords.Length - 1].Y + (maxY - coords[0].Y) + addition));
+			fillCoords.Add(new Point(coords[coords.Length - 1].X, coords[coords.Length - 1].Y + (maxY - coords[coords.Length - 1].Y) + addition));
 			return fillCoords.ToArray();
 		}
 
