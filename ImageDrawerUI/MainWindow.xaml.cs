@@ -61,7 +61,7 @@ namespace ImageDrawerUI
 			Method.SelectedItem = ImageDrawer.MethodType.Squiggle;
 			LineType.SelectedItem = ImageDrawer.LineType.Curve;
 
-			filename = @"..\soldier.bmp";
+			filename = @"..\soldier.png";
 			if (!string.IsNullOrEmpty(filename))
 				Render(filename);
 		}

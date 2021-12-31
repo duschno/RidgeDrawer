@@ -15,7 +15,7 @@ namespace SequenceGenerator
 				p.StartInfo.Arguments = string.Join(" ", 
 					new string[]
 					{
-						$@"..\soldier.bmp",
+						$@"..\soldier.png",
 						$@"{folderName}\res{i}.bmp",
 						$"-l:80",
 						$"-f:30",
