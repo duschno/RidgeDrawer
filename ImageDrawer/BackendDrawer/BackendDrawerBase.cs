@@ -52,12 +52,13 @@ namespace ImageDrawer // TODO: каждая линия со своими пар�
 				List<Point> coords = new List<Point>();
 				int y = GetLineY(lineNumber);
 
-				if (param.DrawOnSides)
-					coords.Add(CalculatePoint(origBitmap, 0, y, param));
 				for (int x = origBitmap.Width / 2 % param.ChunkSize; x < origBitmap.Width; x += param.ChunkSize) // TODO: чанки распределять на оси Х не равномерно, а без сдвига, что бы при некратных значениях (50 и 51 наприм) не было фликеринга, а просто добавлялась новая координата
 					coords.Add(CalculatePoint(origBitmap, x, y, param));
 				if (param.DrawOnSides)
+				{
+					coords.Insert(0, CalculatePoint(origBitmap, 0, y, param));
 					coords.Add(CalculatePoint(origBitmap, origBitmap.Width - 1, y, param));
+				}
 
 				RenderLine(coords, param, y);
 				lineNumber++;
@@ -109,7 +110,6 @@ namespace ImageDrawer // TODO: каждая линия со своими пар�
 				List<Point> coords = new List<Point>();
 				int sign = -1;
 				int y = GetLineY(lineNumber);
-				coords.Add(new Point(0, y));
 				int accumulator = minChunk;
 				for (int x = 1; x < origBitmap.Width; x += accumulator)
 				{
@@ -118,6 +118,12 @@ namespace ImageDrawer // TODO: каждая линия со своими пар�
 
 					coords.Add(CalculateAngle(x, y, accumulator, (int)(sign * param.Factor * greyscale)));
 					sign *= -1;
+				}
+
+				if (param.DrawOnSides)
+				{
+					coords.Insert(0, new Point(0, coords[0].Y));
+					coords.Add(new Point(origBitmap.Width - 1, coords[coords.Count - 1].Y));
 				}
 
 				RenderLine(coords, param, y);
