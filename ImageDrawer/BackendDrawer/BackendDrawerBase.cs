@@ -122,8 +122,10 @@ namespace ImageDrawer // TODO: каждая линия со своими пар�
 
 				if (param.DrawOnSides)
 				{
-					coords.Insert(0, new Point(0, coords[0].Y));
-					coords.Add(new Point(origBitmap.Width - 1, coords[coords.Count - 1].Y));
+					int stepLeft = coords[1].X - coords[0].X;
+					int stepRight = coords[coords.Count - 1].X - coords[coords.Count - 2].X;
+					coords.Insert(0, new Point(-stepLeft, coords[1].Y));
+					coords.Add(new Point(origBitmap.Width - 1 + stepRight, coords[coords.Count - 2].Y));
 				}
 
 				RenderLine(coords, param, y);
