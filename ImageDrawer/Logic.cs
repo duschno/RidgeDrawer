@@ -172,21 +172,22 @@ namespace ImageDrawer
 
 			inputFileName = args[0];
 
-			if (!args[1].StartsWith("-"))
+			if (args.Length > 1 && !args[1].StartsWith("-"))
 				outputFileName = args[1];
 			else
 				outputFileName = AddPostfix(inputFileName);
 
 			FieldInfo[] fields = param.GetType().GetFields();
-			Regex r = new Regex(@"-(\w+):(.+)");
+			Regex r = new Regex(@"-(?'name'\w+)(?'value':.+)?");
 			object paramObj = param;
 			foreach (string arg in args)
 			{
 				Match match = r.Match(arg);
 				if (match.Success)
 				{
-					string name = match.Groups[1].Value;
-					string value = match.Groups[2].Value;
+					string name = match.Groups["name"].Value;
+					string value = match.Groups["value"].Value;
+					value = string.IsNullOrEmpty(value) ? null : value.Substring(1);
 					FieldInfo field = fields.FirstOrDefault(
 						f => (string)f.CustomAttributes.FirstOrDefault().ConstructorArguments[0].Value == name);
 
@@ -194,7 +195,7 @@ namespace ImageDrawer
 					{
 						object obj = null;
 						if (field.FieldType == typeof(bool))
-							obj = bool.Parse(value.Replace("1", "true").Replace("0", "false"));
+							obj = bool.Parse((value ?? "true").Replace("1", "true").Replace("0", "false"));
 						else if (field.FieldType.IsEnum)
 							obj = Enum.Parse(field.FieldType, value, true);
 						else if (field.FieldType == typeof(Type))
