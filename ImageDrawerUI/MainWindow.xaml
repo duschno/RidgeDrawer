@@ -52,78 +52,88 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <ScrollViewer Grid.Column="0" Width="210" VerticalScrollBarVisibility="Auto">
-            <Grid Width="200" HorizontalAlignment="Left">
-                <!--#region Buttons-->
-                <Button Content="Open image (O)" Margin="0,20,0,0" Click="Open_Click"/>
-                <Button Content="Compare (C)" Margin="0,60,0,0" Click="Compare_Click"/>
-                <Button Content="Save (S)" Margin="0,100,0,0" Click="Save_Click"/>
-                <!--#endregion-->
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid Width="200" HorizontalAlignment="Left" Grid.Row="0">
+                    <!--#region Buttons-->
+                    <Button Content="Open image (O)" Margin="0,20,0,0" Click="Open_Click"/>
+                    <Button Content="Compare (C)" Margin="0,60,0,0" Click="Compare_Click"/>
+                    <Button Content="Save (S)" Margin="0,100,0,0" Click="Save_Click"/>
+                    <!--#endregion-->
 
-                <!--#region Text boxes-->
-                <Label Content="Lines count" Margin="10,136,0,0" />
-                <TextBox x:Name="LinesCount" PreviewTextInput="PositiveNumberValidation"
+                    <!--#region Text boxes-->
+                    <Label Content="Lines count" Margin="10,136,0,0" />
+                    <TextBox x:Name="LinesCount" PreviewTextInput="PositiveNumberValidation"
                      TabIndex="0" Margin="84,140,0,0" />
 
-                <Label Content="Stroke" Margin="10,166,0,0"/>
-                <TextBox x:Name="Stroke" PreviewTextInput="PositiveNumberValidation" 
+                    <Label Content="Stroke" Margin="10,166,0,0"/>
+                    <TextBox x:Name="Stroke" PreviewTextInput="PositiveNumberValidation" 
                      TabIndex="1" Margin="84,170,0,0" />
 
-                <Label Content="Factor" Margin="10,196,0,0" />
-                <TextBox x:Name="Factor" PreviewTextInput="PositiveNumberValidation"
+                    <Label Content="Factor" Margin="10,196,0,0" />
+                    <TextBox x:Name="Factor" PreviewTextInput="PositiveNumberValidation"
                      TabIndex="2" Margin="84,200,0,0" />
 
-                <Label Content="Chunk size" Margin="10,226,0,0" />
-                <TextBox x:Name="ChunkSize" PreviewTextInput="PositiveNumberValidation"
+                    <Label Content="Chunk size" Margin="10,226,0,0" />
+                    <TextBox x:Name="ChunkSize" PreviewTextInput="PositiveNumberValidation"
                      TabIndex="3" Margin="84,230,0,0" />
 
-                <Label Content="Angle" Margin="10,256,0,0" />
-                <TextBox x:Name="Angle" PreviewTextInput="AngleValidation"
+                    <Label Content="Angle" Margin="10,256,0,0" />
+                    <TextBox x:Name="Angle" PreviewTextInput="AngleValidation"
                      TabIndex="4" Margin="84,260,0,0" />
 
-                <Label Content="Black point" Margin="10,286,0,0" />
-                <TextBox x:Name="BlackPoint" PreviewTextInput="ColorRangeValidation"
+                    <Label Content="Black point" Margin="10,286,0,0" />
+                    <TextBox x:Name="BlackPoint" PreviewTextInput="ColorRangeValidation"
                      TabIndex="5" Margin="84,290,0,0" />
 
-                <Label Content="White point" Margin="10,316,0,0" />
-                <TextBox x:Name="WhitePoint" PreviewTextInput="ColorRangeValidation"
+                    <Label Content="White point" Margin="10,316,0,0" />
+                    <TextBox x:Name="WhitePoint" PreviewTextInput="ColorRangeValidation"
                      TabIndex="6" Margin="84,320,0,0" />
-                <!--#endregion-->
+                    <!--#endregion-->
 
-                <!--#region Combo boxes-->
-                <Label Content="Smoothing" Margin="10,376,0,0" />
-                <ComboBox x:Name="Smoothing" Margin="84,380,0,0"
+                    <!--#region Combo boxes-->
+                    <Label Content="Smoothing" Margin="10,376,0,0" />
+                    <ComboBox x:Name="Smoothing" Margin="84,380,0,0"
                       TabIndex="7" SelectionChanged="ParametersChanged" />
 
-                <Label Content="LineType"  Margin="10,406,0,0" />
-                <ComboBox x:Name="LineType" Margin="84,410,0,0"
+                    <Label Content="LineType"  Margin="10,406,0,0" />
+                    <ComboBox x:Name="LineType" Margin="84,410,0,0"
                       TabIndex="8" SelectionChanged="ParametersChanged"/>
 
-                <Label Content="Method" Margin="10,436,0,0"/>
-                <ComboBox x:Name="Method" Margin="84,440,0,0"
+                    <Label Content="Method" Margin="10,436,0,0"/>
+                    <ComboBox x:Name="Method" Margin="84,440,0,0"
                       TabIndex="9" SelectionChanged="ParametersChanged"/>
-                <!--#endregion-->
+                    <!--#endregion-->
 
-                <!--#region Check boxes-->
-                <Label Content="Backend" Margin="10,466,0,0"/>
-                <ComboBox x:Name="Backend" Margin="84,470,0,0" DisplayMemberPath="Name"
+                    <!--#region Check boxes-->
+                    <Label Content="Backend" Margin="10,466,0,0"/>
+                    <ComboBox x:Name="Backend" Margin="84,470,0,0" DisplayMemberPath="Name"
                       TabIndex="10" SelectionChanged="ParametersChanged"/>
-                <CheckBox x:Name="DrawOnSides" Content="Draw on sides" HorizontalAlignment="Left"
+                    <CheckBox x:Name="DrawOnSides" Content="Draw on sides" HorizontalAlignment="Left"
                       Margin="15,520,0,0" VerticalAlignment="Top" TabIndex="11"
                       Checked="ParametersChanged" Unchecked="ParametersChanged"/>
-                <CheckBox x:Name="FillInside" Content="Fill inside" HorizontalAlignment="Left"
+                    <CheckBox x:Name="FillInside" Content="Fill inside" HorizontalAlignment="Left"
                       Margin="15,540,0,0" VerticalAlignment="Top" TabIndex="12"
                       Checked="ParametersChanged" Unchecked="ParametersChanged"/>
-                <CheckBox x:Name="Invert" Content="Invert" HorizontalAlignment="Left"
+                    <CheckBox x:Name="Invert" Content="Invert" HorizontalAlignment="Left"
                       Margin="15,560,0,0" VerticalAlignment="Top" TabIndex="13"
                       Checked="ParametersChanged" Unchecked="ParametersChanged"/>
-                <CheckBox x:Name="Debug" Content="Debug" HorizontalAlignment="Left"
+                    <CheckBox x:Name="Debug" Content="Debug" HorizontalAlignment="Left"
                       Margin="15,580,0,0" VerticalAlignment="Top" TabIndex="14"
                       Checked="ParametersChanged" Unchecked="ParametersChanged"/>
-                <!--#endregion-->
+                    <!--#endregion-->
 
-                <Label Content="Specific parameters:" Margin="10,620,0,0"/>
+                    <Label Content="Specific parameters:" Margin="10,620,0,0"/>
 
 
+                </Grid>
+                <Grid Width="200" HorizontalAlignment="Left" Grid.Row="2">
+                    <Button x:Name="CopyArgs" Content="Copy args" Margin="0,20" VerticalAlignment="Bottom" Click="CopyArgs_Click"/>
+                </Grid>
             </Grid>
         </ScrollViewer>
         

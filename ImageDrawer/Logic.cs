@@ -212,6 +212,29 @@ namespace ImageDrawer
 			param = (RenderParams)paramObj;
 		}
 
+		public static string CopyArgs(string filename, RenderParams param)
+		{
+			string result = filename.Contains(" ") ? $"\"{filename}\"" : filename;
+			FieldInfo[] fields = param.GetType().GetFields();
+			foreach (FieldInfo field in fields)
+			{
+				string name = (string)field.CustomAttributes.FirstOrDefault().ConstructorArguments[0].Value;
+				string value = field.GetValue(param).ToString();
+				if (field.FieldType == typeof(Type))
+					value = value.Substring(value.LastIndexOf('.') + 1);
+
+				if (field.FieldType == typeof(bool))
+				{
+					if ((bool)field.GetValue(param))
+						result += $" -{name}";
+				}
+				else
+					result += $" -{name}:{value}";
+			}
+
+			return result;
+		}
+
 		/// <summary>
 		/// Adds postfix to the name of processed image
 		/// </summary>

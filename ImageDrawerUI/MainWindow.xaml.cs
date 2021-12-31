@@ -183,6 +183,11 @@ namespace ImageDrawerUI
 				e.Handled = true;
 		}
 
-#endregion
+		#endregion
+
+		private void CopyArgs_Click(object sender, RoutedEventArgs e)
+		{
+			Clipboard.SetText(Logic.CopyArgs(filename, param));
+		}
 	}
 }

@@ -18,6 +18,7 @@ namespace ImageDrawerUI
 		private readonly double scaleFactor = 2;
 		private System.Windows.Point startPos;
 		private Thickness oldMargin;
+		private RenderParams param;
 
 		private bool IsFitsGrid
 		{
@@ -75,7 +76,7 @@ namespace ImageDrawerUI
 		private void Render(string filename)
 		{
 			NotImplementedLabel.Visibility = Visibility.Collapsed;
-			RenderParams param = new RenderParams
+			param = new RenderParams
 			{
 				LinesCount = Convert.ToInt32(LinesCount.Text),
 				Stroke = Convert.ToInt32(Stroke.Text),
