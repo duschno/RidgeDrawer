@@ -22,6 +22,7 @@ namespace ImageDrawer
 	{
 		Ridge,
 		Squiggle
+		// TODO: коэф стягивания к указанной точке (типа как блюр по z индексу в афтере)
 	}
 
 	public struct RenderParams

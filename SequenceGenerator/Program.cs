@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using ImageDrawer;
+using System;
+using System.Diagnostics;
 
 namespace SequenceGenerator
 {
@@ -6,26 +8,29 @@ namespace SequenceGenerator
 	{
 		static void Main(string[] args)
 		{
+			Console.Write("press Y to start: ");
+			if (Console.ReadLine() != "Y")
+				return;
+
 			string folderName = "sequence";
 			System.IO.Directory.CreateDirectory(folderName);
-			Process p = new Process();
-			p.StartInfo.FileName = "ImageDrawer.exe";
-			for (int i = 180; i > 1; i--)
+			for (int i = 0; i < 360; i += 10)
 			{
-				p.StartInfo.Arguments = string.Join(" ", 
-					new string[]
-					{
-						$@"..\soldier.png",
-						$@"{folderName}\res{i}.bmp",
-						$"-l:80",
-						$"-f:30",
-						$"-c:{i}",
-						$"-lt:curve",
-						$"-mt:ridge",
-						$"-dos:1",
-						$"-a:0",
-					});
-				p.Start();
+				//p.StartInfo.Arguments = string.Join(" ",
+				//	new string[]
+				//	{
+				//		$@"..\soldier.png",
+				//		$@"{folderName}\res{i}.bmp",
+				//		$"-l:80",
+				//		$"-f:30",
+				//		$"-c:{i}",
+				//		$"-lt:curve",
+				//		$"-mt:ridge",
+				//		$"-dos:1",
+				//		$"-a:0",
+				//	});
+				string[] arguments = $"..\\soldier.png {folderName}\\res{i}.bmp -l:50 -s:1 -f:50 -c:5 -b:0 -w:255 -a:{i} -st:None -lt:Line -mt:Ridge -bt:GDIPlus -inv".Split(' ');
+				Logic.ProcessByArgs(arguments);
 			}
 		}
 	}
