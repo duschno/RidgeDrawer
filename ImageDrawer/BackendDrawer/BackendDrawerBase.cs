@@ -96,7 +96,7 @@ namespace ImageDrawer // TODO: каждая линия со своими пар�
 			return (origBitmap.Height * lineNumber / param.LinesCount) + (origBitmap.Height / (param.LinesCount * 2));
 		}
 
-		private void MethodSquiggle()
+		private void MethodSquiggle() // TODO: фактор у линии тоже должен быть таким, что чем больше частота - тем больше амплитуда
 		{
 			if (param.WhitePoint <= param.BlackPoint)
 				throw new NotImplementedException($"White point is less or equal to black point");
@@ -116,7 +116,9 @@ namespace ImageDrawer // TODO: каждая линия со своими пар�
 					double greyscale = CalculateGreyScale(origBitmap, x, y, param);
 					accumulator = (int)(maxChunk - (maxChunk - minChunk) * greyscale); // TODO: добавить грей поинт. который будет центром. по дефолту приращение вниз и вверх одинаковое, но например при грей поинте 10 приращние белого будет намного сильнее, чем черного
 
-					coords.Add(CalculateAngle(x, y, accumulator, (int)(sign * param.Factor * greyscale)));
+					Point point = CalculateAngle(x, y, accumulator, (int)(sign * param.Factor * greyscale));
+					point.Y += param.Factor / 2;
+					coords.Add(point);
 					sign *= -1;
 				}
 

@@ -23,7 +23,7 @@ namespace ImageDrawer
 			brush = new SolidBrush(Color.Black);
 			Random random = new Random(1337);
 			debugFillColors = new List<Color>(30);
-			debugStrokeColors = new List<Color> { Color.Red, Color.Blue, Color.Green, Color.Black };
+			debugStrokeColors = new List<Color> { Color.Red, Color.Blue, Color.Magenta, Color.Black, Color.LimeGreen };
 			for (int i = 0; i < debugFillColors.Capacity; i++)
 				debugFillColors.Add(Color.FromArgb(random.Next(200, 256), random.Next(200, 256), random.Next(200, 256)));
 			pen = new Pen(brush, param.Stroke);
