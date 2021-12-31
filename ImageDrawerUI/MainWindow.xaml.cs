@@ -240,7 +240,7 @@ namespace ImageDrawerUI
 			ChangeUIProps();
 		}
 
-		#region Event handlers
+#region Event handlers
 
 		private void Compare_Click(object sender, RoutedEventArgs e)
 		{
@@ -397,8 +397,6 @@ namespace ImageDrawerUI
 			}
 		}
 
-		#endregion
-
 		private void ParametersChanged(object sender, RoutedEventArgs e)
 		{
 			ParametersChanged(null, null);
@@ -409,5 +407,7 @@ namespace ImageDrawerUI
 			if (e.Key == Key.Space)
 				e.Handled = true;
 		}
+
+#endregion
 	}
 }
