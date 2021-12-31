@@ -51,7 +51,7 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <ScrollViewer Grid.Column="0" Width="210" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer Grid.Column="0" Width="210" VerticalScrollBarVisibility="Auto" Background="White">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -138,7 +138,7 @@
         </ScrollViewer>
         
         <Grid Name="ImageGrid" SnapsToDevicePixels="True" UseLayoutRounding="True" Grid.Column="1"
-          MouseWheel="Image_MouseWheel"  MouseMove="Image_MouseMove" 
+          MouseWheel="Image_MouseWheel"  MouseMove="Image_MouseMove" Panel.ZIndex="-1"
           MouseLeftButtonDown="Image_MouseLeftButtonDown" MouseLeftButtonUp="Image_MouseLeftButtonUp"
           Loaded="ImageGrid_Loaded" SizeChanged="ImageGrid_SizeChanged">
             <Button x:Name="FullsizeButton" Content="Fullsize (0/F)" Style="{StaticResource FullsizeButtonStyle}" 
