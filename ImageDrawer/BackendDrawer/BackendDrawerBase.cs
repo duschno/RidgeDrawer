@@ -54,7 +54,7 @@ namespace ImageDrawer // TODO: каждая линия со своими пар�
 
 				if (param.DrawOnSides)
 					coords.Add(CalculatePoint(origBitmap, 0, y, param));
-				for (int x = origBitmap.Width / 2 % param.ChunkSize; x < origBitmap.Width; x += param.ChunkSize) // сделать так, что бы при некратных значениях (50 и 51 наприм) не было фликеринга, а просто добавлялась новая координата
+				for (int x = origBitmap.Width / 2 % param.ChunkSize; x < origBitmap.Width; x += param.ChunkSize) // TODO: чанки распределять на оси Х не равномерно, а без сдвига, что бы при некратных значениях (50 и 51 наприм) не было фликеринга, а просто добавлялась новая координата
 					coords.Add(CalculatePoint(origBitmap, x, y, param));
 				if (param.DrawOnSides)
 					coords.Add(CalculatePoint(origBitmap, origBitmap.Width - 1, y, param));

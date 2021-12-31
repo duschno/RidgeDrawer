@@ -10,9 +10,21 @@ namespace SequenceGenerator
 			System.IO.Directory.CreateDirectory(folderName);
 			Process p = new Process();
 			p.StartInfo.FileName = "ImageDrawer.exe";
-			for (int i = 20; i > 0; i--)
+			for (int i = 180; i > 1; i--)
 			{
-				p.StartInfo.Arguments = $"\"..\\soldier.bmp\" \"{folderName}\\res{i}.bmp\" -l:50 -f:10 -c:{i}";
+				p.StartInfo.Arguments = string.Join(" ", 
+					new string[]
+					{
+						$@"..\soldier.bmp",
+						$@"{folderName}\res{i}.bmp",
+						$"-l:80",
+						$"-f:30",
+						$"-c:{i}",
+						$"-lt:curve",
+						$"-mt:ridge",
+						$"-dos:1",
+						$"-a:0",
+					});
 				p.Start();
 			}
 		}
