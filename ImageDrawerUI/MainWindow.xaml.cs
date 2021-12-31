@@ -61,7 +61,7 @@ namespace ImageDrawerUI
 			Method.SelectedItem = ImageDrawer.MethodType.Squiggle;
 			LineType.SelectedItem = ImageDrawer.LineType.Curve;
 
-			filename = @"..\iw3mp 2020-05-06 01-39-35-97 — копия.bmp";
+			filename = @"..\soldier.bmp";
 			if (!string.IsNullOrEmpty(filename))
 				Render(filename);
 		}
