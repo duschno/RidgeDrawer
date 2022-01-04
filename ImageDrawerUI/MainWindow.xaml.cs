@@ -74,7 +74,7 @@ namespace ImageDrawerUI
 
 		private void Image_MouseMove(object sender, MouseEventArgs e)
 		{
-			if ((e.LeftButton == MouseButtonState.Pressed || e.MiddleButton == MouseButtonState.Pressed) && !IsNonScaled)
+			if ((e.LeftButton == MouseButtonState.Pressed || e.MiddleButton == MouseButtonState.Pressed) && image.Stretch != Stretch.None)
 			{
 				System.Windows.Point newPos = Mouse.GetPosition(Window);
 				Thickness margin = image.Margin;
@@ -84,12 +84,6 @@ namespace ImageDrawerUI
 					margin.Left = oldMargin.Left - (startPos - newPos).X;
 
 				image.Margin = CheckBoundaries(margin);
-
-				//Debug.WriteLine("* margin.left = {0}, margin.top = {1}", image.Margin.Left, image.Margin.Top);
-				//Debug.WriteLine("* width = {0}, height = {1}, ac. width = {2}, ac. height = {3}",
-				//	image.Width, image.Height, image.ActualWidth, image.ActualHeight);
-				//Debug.WriteLine("* grid.width = {0}, grid.height = {1}, grid.ac. width = {2}, grid.ac. height = {3}\n",
-				//	ImageGrid.Width, ImageGrid.Height, ImageGrid.ActualWidth, ImageGrid.ActualHeight);
 			}
 		}
 
@@ -128,7 +122,7 @@ namespace ImageDrawerUI
 
 		private void ImageGrid_Loaded(object sender, RoutedEventArgs e)
 		{
-			if (!IsFitsGrid)
+			if (!IsFittingGrid)
 			{
 				image.Stretch = Stretch.Uniform;
 				RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.Linear);

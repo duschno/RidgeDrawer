@@ -23,7 +23,7 @@ namespace ImageDrawer
 			brush = new SolidBrush(Color.Black);
 			Random random = new Random(1337);
 			debugFillColors = new List<Color>(30);
-			debugStrokeColors = new List<Color> { Color.Red, Color.Blue, Color.Magenta, Color.Black, Color.LimeGreen };
+			debugStrokeColors = new List<Color> { Color.Blue, Color.Magenta, Color.Black, Color.LimeGreen };
 			for (int i = 0; i < debugFillColors.Capacity; i++)
 				debugFillColors.Add(Color.FromArgb(random.Next(200, 256), random.Next(200, 256), random.Next(200, 256)));
 			pen = new Pen(brush, param.Stroke);
@@ -48,7 +48,7 @@ namespace ImageDrawer
 
 			if (param.Debug)
 				pen.Color = GetColor(false);
-			graphics.DrawCurve(pen, coords); // TODO: implement tension to manual too
+			graphics.DrawCurve(pen, coords, .25f); // TODO: implement tension to manual too
 		}
 
 		private Color GetColor(bool isFill)
@@ -72,8 +72,14 @@ namespace ImageDrawer
 
 		protected override void DrawDots(Point[] coords)
 		{
+			int strokeAmount = param.Stroke;
+			if (param.Debug)
+			{
+				brush = new SolidBrush(Color.Red);
+				strokeAmount++;
+			}
 			foreach (Point coord in coords)
-				graphics.FillRectangle(brush, coord.X, coord.Y, param.Stroke, param.Stroke);
+				graphics.FillRectangle(brush, coord.X, coord.Y, strokeAmount, strokeAmount);
 		}
 
 		private Point[] GetFillCoordinates(Point[] coords)
@@ -97,6 +103,8 @@ namespace ImageDrawer
 			if (param.Debug)
 				pen.Color = GetColor(false);
 			graphics.DrawLines(pen, coords);
+			if (param.Debug)
+				DrawDots(coords);
 			//for (int i = 0; i < coords.Length - 1; i++) // TODO: there are visible breaks if use this way with antialiasing
 			//{
 			//	pen.Color = colors[i % 3];
