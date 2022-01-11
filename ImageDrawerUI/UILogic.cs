@@ -13,13 +13,29 @@ namespace ImageDrawerUI
 	public partial class MainWindow : Window
 	{
 		private string filename;
+		private RenderParams param;
 		private ImageSource original;
 		private ImageSource processed;
 		private int scaleFactor = 1;
 		private readonly int maxScaleFactor = 8;
 		private System.Windows.Point startPos;
 		private Thickness oldMargin;
-		private RenderParams param;
+
+		private double OriginalWidth
+		{
+			get
+			{
+				return image.Source.Width;
+			}
+		}
+
+		private double OriginalHeight
+		{
+			get
+			{
+				return image.Source.Height;
+			}
+		}
 
 		private bool IsFittingGrid
 		{
@@ -34,7 +50,7 @@ namespace ImageDrawerUI
 		{
 			get
 			{
-				return double.IsNaN(image.Width) || OriginalWidth == image.Width;
+				return double.IsNaN(image.Width) || image.Width == OriginalWidth;
 			}
 		}
 
@@ -131,12 +147,6 @@ namespace ImageDrawerUI
 				pixelData, stride);
 		}
 
-		/// <summary>
-		/// Calculates the next scale factor
-		/// </summary>
-		/// <param name="zoomIn">Is zoom in or zoom out happened</param>
-		/// <param name="oldScaleFactor">Old scale factor value</param>
-		/// <returns>New scale factor value</returns>
 		private int GetNextScaleFactor(bool zoomIn, int oldScaleFactor)
 		{
 			if ((zoomIn && oldScaleFactor == maxScaleFactor) || (!zoomIn && oldScaleFactor == 1))
@@ -145,15 +155,11 @@ namespace ImageDrawerUI
 			return oldScaleFactor + (zoomIn ? 1 : -1);
 		}
 
-		private void SetOriginalSize()
+		private void SetToFitGrid()
 		{
 			scaleFactor = 1;
 			image.Width = image.Height = double.NaN;
 		}
-
-		private double OriginalWidth => image.Source.Width;
-
-		private double OriginalHeight => image.Source.Height;
 
 		private void ChangeScale(bool zoomIn)
 		{
@@ -181,14 +187,14 @@ namespace ImageDrawerUI
 					return;
 
 				if (image.Width <= OriginalWidth)
-					SetOriginalSize();
+					SetToFitGrid();
 				else
 				{
 					scaleFactor = GetNextScaleFactor(zoomIn, scaleFactor);
 					image.Width = OriginalWidth * scaleFactor;
 					image.Height = OriginalHeight * scaleFactor;
 					if (image.Width < OriginalWidth)
-						SetOriginalSize();
+						SetToFitGrid();
 				}
 
 				if (!IsOriginalSize)
@@ -257,11 +263,12 @@ namespace ImageDrawerUI
 			return margin;
 		}
 
-		private void SetFullsize()
+		private void SetOriginalSize()
 		{
 			if (image.Source == null)
 				return;
 
+			scaleFactor = 1;
 			image.Width = OriginalWidth;
 			image.Height = OriginalHeight;
 			ChangeUIProps();

@@ -113,7 +113,7 @@ namespace ImageDrawerUI
 			if (e.Key == Key.S)
 				Save_Click(null, null);
 			if (e.Key == Key.D0 || e.Key == Key.NumPad0 || e.Key == Key.F)
-				SetFullsize();
+				SetOriginalSize();
 			if (e.Key == Key.Add || e.Key == Key.OemPlus)
 				ChangeZoom(true);
 			if (e.Key == Key.Subtract || e.Key == Key.OemMinus)
@@ -137,7 +137,7 @@ namespace ImageDrawerUI
 
 		private void FullsizeButton_Click(object sender, RoutedEventArgs e)
 		{
-			SetFullsize();
+			SetOriginalSize();
 		}
 
 		private void ParamChange_KeyDown(object sender, KeyEventArgs e)
@@ -177,11 +177,11 @@ namespace ImageDrawerUI
 				e.Handled = true;
 		}
 
-		#endregion
-
 		private void CopyArgs_Click(object sender, RoutedEventArgs e)
 		{
 			Clipboard.SetText(Logic.CopyArgs(filename, param));
 		}
+
+		#endregion
 	}
 }
