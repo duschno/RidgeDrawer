@@ -239,7 +239,7 @@ namespace ImageDrawerUI
 					image.Margin = new Thickness();
 					oldMargin = new Thickness();
 					ImageGrid.Cursor = Cursors.Arrow;
-					image.Stretch = Stretch.None;
+					image.Stretch = Stretch.Uniform;
 				}
 				else
 				{

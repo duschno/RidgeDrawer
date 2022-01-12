@@ -208,5 +208,16 @@ namespace ImageDrawerUI
 			PullPointY.Text = ((int)point.Y / scaleFactor).ToString();
 			ParametersChanged(null, null);
 		}
+
+		private void image_MouseMove_1(object sender, MouseEventArgs e)
+		{
+			System.Windows.Point point = Mouse.GetPosition(image);
+			CursorPosition.Text = $"{(int)point.X / scaleFactor}, {(int)point.Y / scaleFactor}";
+		}
+
+		private void image_MouseLeave(object sender, MouseEventArgs e)
+		{
+			CursorPosition.Text = string.Empty;
+		}
 	}
 }
