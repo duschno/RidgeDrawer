@@ -64,9 +64,34 @@ namespace ImageDrawer // TODO: каждая линия со своими пар�
 					coords.Add(CalculatePoint(origBitmap, origBitmap.Width - 1, y, param));
 				}
 
-				RenderLine(coords, param, y);
+				foreach (List<Point> coordsPart in GetAffectedPoints(coords, y))
+					RenderLine(coordsPart, param, y);
 				lineNumber++;
 			}
+		}
+
+		private List<List<Point>> GetAffectedPoints(List<Point> coords, int zeroLevel)
+		{
+			if (!param.IgnoreNonAffectedPoints)
+				return new List<List<Point>>() { coords };
+
+			List<List<Point>> coordsParts = new List<List<Point>>();
+			int endIndex = 0;
+			int startIndex = 0;
+			while (startIndex != -1 && endIndex != -1)
+			{
+				startIndex = coords.FindIndex(endIndex, p => p.Y != zeroLevel);
+				if (startIndex != -1)
+				{
+					endIndex = coords.FindIndex(startIndex, p => p.Y == zeroLevel);
+					if (endIndex != -1)
+					{
+						coordsParts.Add(coords.GetRange(startIndex, endIndex - startIndex));
+					}
+				}
+			}
+
+			return coordsParts;
 		}
 
 		/// <summary>
@@ -191,7 +216,8 @@ namespace ImageDrawer // TODO: каждая линия со своими пар�
 					coords.Add(new Point(origBitmap.Width - 1 + stepRight, coords[coords.Count - 2].Y));
 				}
 
-				RenderLine(coords, param, y);
+				foreach (List<Point> coordsPart in GetAffectedPoints(coords, y))
+					RenderLine(coordsPart, param, y);
 				lineNumber++;
 			}
 		}

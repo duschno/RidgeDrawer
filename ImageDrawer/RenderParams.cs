@@ -63,6 +63,9 @@ namespace ImageDrawer
 		[ConsoleArgument("dos")]
 		public bool DrawOnSides;
 
+		[ConsoleArgument("dgpl")]
+		public bool IgnoreNonAffectedPoints;
+
 		[ConsoleArgument("fi")]
 		public bool FillInside;
 

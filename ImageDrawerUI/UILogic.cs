@@ -108,6 +108,7 @@ namespace ImageDrawerUI
 				LineType = (LineType)LineType.Items[LineType.SelectedIndex],
 				Method = (MethodType)Method.Items[Method.SelectedIndex],
 				DrawOnSides = DrawOnSides.IsChecked ?? false,
+				IgnoreNonAffectedPoints = IgnoreNonAffectedPoints.IsChecked ?? false,
 				FillInside = FillInside.IsChecked ?? false,
 				Invert = Invert.IsChecked ?? false,
 				Debug = Debug.IsChecked ?? false,
