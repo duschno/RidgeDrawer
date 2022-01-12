@@ -72,6 +72,12 @@ namespace ImageDrawer
 		[ConsoleArgument("d")]
 		public bool Debug;
 
+		[ConsoleArgument("px")]
+		public int PullPointX;
+
+		[ConsoleArgument("p")]
+		public int PullPointY;
+
 		//TODO: рендерится не все сразу, а можно отрендерить лишь одну вертиальную линию например, чтобы можно было это анимировать. ниче не понял
 	}
 

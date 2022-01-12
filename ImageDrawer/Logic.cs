@@ -138,29 +138,31 @@ namespace ImageDrawer
 				FillInside = false,
 				Invert = false,
 				Debug = false,
-				Backend = typeof(GDIPlus)
+				Backend = typeof(GDIPlus),
+				PullPointX = 960,
+				PullPointY = 540
 			};
 
 #if DEBUG
-				//inputFileName = @"..\Rachel-Carson.jpg";
-				//outputFileName = @"..\Rachel-Carson_proc.jpg";
-				//param = new RenderParams
-				//{
-				//	LinesCount = 80,
-				//	Stroke = 1,
-				//	Factor = 5,
-				//	ChunkSize = 5,
-				//	BlackPoint = 0,
-				//	WhitePoint = 255,
-				//	Smoothing = SmoothingType.Antialias,
-				//	LineType = LineType.Curve,
-				//	Method = MethodType.Squiggle,
-				//	DrawOnSides = true,
-				//	FillInside = true,
-				//	Invert = false,
-				//	Debug = false,
-				//	Backend = typeof(GDIPlus)
-				//};
+			//inputFileName = @"..\Rachel-Carson.jpg";
+			//outputFileName = @"..\Rachel-Carson_proc.jpg";
+			//param = new RenderParams
+			//{
+			//	LinesCount = 80,
+			//	Stroke = 1,
+			//	Factor = 5,
+			//	ChunkSize = 5,
+			//	BlackPoint = 0,
+			//	WhitePoint = 255,
+			//	Smoothing = SmoothingType.Antialias,
+			//	LineType = LineType.Curve,
+			//	Method = MethodType.Squiggle,
+			//	DrawOnSides = true,
+			//	FillInside = true,
+			//	Invert = false,
+			//	Debug = false,
+			//	Backend = typeof(GDIPlus)
+			//};
 #endif
 
 			ParseArgs(ref inputFileName, ref outputFileName, ref param, args);

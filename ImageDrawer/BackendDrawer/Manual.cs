@@ -104,5 +104,10 @@ namespace ImageDrawer
 		{
 			throw new NotImplementedException();
 		}
+
+		protected override void DrawDebugInfo()
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

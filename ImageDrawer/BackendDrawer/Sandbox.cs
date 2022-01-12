@@ -55,5 +55,10 @@ namespace ImageDrawer
 		{
 			Play();
 		}
+
+		protected override void DrawDebugInfo()
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

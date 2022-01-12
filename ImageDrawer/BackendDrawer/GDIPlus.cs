@@ -123,6 +123,14 @@ namespace ImageDrawer
 				graphics.FillVariableLine(brush, coord1.X, coord1.Y, coord2.X, coord2.Y, Math.Abs(y - coord1.Y), Math.Abs(y - coord2.Y));
 			}
 		}
+
+		protected override void DrawDebugInfo()
+		{
+			brush = new SolidBrush(Color.Orange);
+			int width = 20;
+			graphics.FillRectangle(brush, param.PullPointX - 1, param.PullPointY - width / 2, 2, width);
+			graphics.FillRectangle(brush, param.PullPointX - width / 2, param.PullPointY - 1, width, 2);
+		}
 	}
 
 	public static class GraphicsExtension

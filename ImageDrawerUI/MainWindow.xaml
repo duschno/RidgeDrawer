@@ -129,9 +129,19 @@
                       Checked="ParametersChanged" Unchecked="ParametersChanged"/>
                     <!--#endregion-->
 
+                    <!--#region Specific params-->
                     <Label Content="Specific parameters:" Margin="10,620,0,0"/>
-
-
+                    <Label Content="Pull to" Margin="10,650,0,0"/>
+                    <Label Content="X" Margin="67,650,0,0"/>
+                    <TextBox x:Name="PullPointX" PreviewTextInput="PositiveNumberValidation"
+                             TabIndex="15" Margin="84,654,0,0" Width="40"/>
+                    <Label Content="Y" Margin="127,650,0,0"/>
+                    <TextBox x:Name="PullPointY" PreviewTextInput="PositiveNumberValidation"
+                             TabIndex="16" Margin="144,654,0,0" Width="40" />
+                    <Button x:Name="PullPointButton" Content="Via image click" 
+                            Margin="84,684,0,0" Click="PullPointButton_Click"
+                            VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                    <!--#endregion-->
                 </Grid>
                 <Grid Width="200" HorizontalAlignment="Left" Grid.Row="2">
                     <Button x:Name="CopyArgs" Content="Copy args" Margin="0,20"
@@ -139,11 +149,12 @@
                 </Grid>
             </Grid>
         </ScrollViewer>
-        
+
+        <Border x:Name="gridBorder" BorderBrush="OrangeRed" Grid.Column="1" />
         <Grid Name="ImageGrid" SnapsToDevicePixels="True" UseLayoutRounding="True" Grid.Column="1"
-          MouseWheel="Image_MouseWheel"  MouseMove="Image_MouseMove" Panel.ZIndex="-1"
-          MouseLeftButtonDown="Image_MouseLeftButtonDown" MouseLeftButtonUp="Image_MouseLeftButtonUp"
-          Loaded="ImageGrid_Loaded" SizeChanged="ImageGrid_SizeChanged">
+              MouseWheel="Image_MouseWheel"  MouseMove="Image_MouseMove" Panel.ZIndex="-1"
+              MouseLeftButtonDown="Image_MouseLeftButtonDown" MouseLeftButtonUp="Image_MouseLeftButtonUp"
+              Loaded="ImageGrid_Loaded" SizeChanged="ImageGrid_SizeChanged">
             <Button x:Name="FullsizeButton" Content="Fullsize (0/F)" Style="{StaticResource FullsizeButtonStyle}" 
                     HorizontalAlignment="Left" Margin="5,5,0,0" VerticalAlignment="Top" 
                     Panel.ZIndex="2" Width="70" Height="20" Click="FullsizeButton_Click"/>

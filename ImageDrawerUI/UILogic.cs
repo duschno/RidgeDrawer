@@ -75,6 +75,8 @@ namespace ImageDrawerUI
 			Backend.SelectedItem = typeof(GDIPlus);
 			Method.SelectedItem = ImageDrawer.MethodType.Ridge;
 			LineType.SelectedItem = ImageDrawer.LineType.Curve;
+			PullPointX.Text = 960.ToString();
+			PullPointY.Text = 540.ToString();
 
 			filename = @"..\soldier.png";
 			if (!string.IsNullOrEmpty(filename))
@@ -109,7 +111,9 @@ namespace ImageDrawerUI
 				FillInside = FillInside.IsChecked ?? false,
 				Invert = Invert.IsChecked ?? false,
 				Debug = Debug.IsChecked ?? false,
-				Backend = (Type)Backend.Items[Backend.SelectedIndex]
+				Backend = (Type)Backend.Items[Backend.SelectedIndex],
+				PullPointX = Convert.ToInt32(PullPointX.Text),
+				PullPointY = Convert.ToInt32(PullPointY.Text)
 			};
 
 			Cursor = Cursors.Wait;

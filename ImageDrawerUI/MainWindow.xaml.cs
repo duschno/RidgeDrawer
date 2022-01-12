@@ -183,5 +183,30 @@ namespace ImageDrawerUI
 		}
 
 		#endregion
+
+		private void PullPointButton_Click(object sender, RoutedEventArgs e)
+		{
+			if (gridBorder.BorderThickness.Left == 5)
+			{
+				image.MouseDown -= new MouseButtonEventHandler(image_MouseDown);
+				gridBorder.BorderThickness = new Thickness(0);
+			}
+			else
+			{
+				image.MouseDown += new MouseButtonEventHandler(image_MouseDown);
+				gridBorder.BorderThickness = new Thickness(5);
+			}
+		}
+
+		private void image_MouseDown(object sender, MouseButtonEventArgs e)
+		{
+			image.MouseDown -= new MouseButtonEventHandler(image_MouseDown);
+			gridBorder.BorderThickness = new Thickness(0);
+
+			System.Windows.Point point = Mouse.GetPosition(image);
+			PullPointX.Text = ((int)point.X / scaleFactor).ToString();
+			PullPointY.Text = ((int)point.Y / scaleFactor).ToString();
+			ParametersChanged(null, null);
+		}
 	}
 }

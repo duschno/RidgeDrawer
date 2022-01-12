@@ -13,6 +13,7 @@ namespace ImageDrawer // TODO: каждая линия со своими пар�
 		protected abstract void DrawVariableLines(Point[] coords, int y);
 		protected abstract void DrawCurve(Point[] coords);
 		protected abstract void DrawBezier(Point[] coords);
+		protected abstract void DrawDebugInfo();
 
 		#endregion
 
@@ -31,7 +32,7 @@ namespace ImageDrawer // TODO: каждая линия со своими пар�
 
 		public void Draw()
 		{
-			switch (param.Method)
+			switch (param.Method) // TODO: не рисовать линии без приращения
 			{
 				case MethodType.Ridge:
 					MethodRidge();
@@ -42,6 +43,9 @@ namespace ImageDrawer // TODO: каждая линия со своими пар�
 				default:
 					throw new NotImplementedException($"{param.Method} drawing method is not supported");
 			}
+
+			if (param.Debug)
+				DrawDebugInfo();
 		}
 
 		private void MethodRidge() // TODO: чекни скрин на телефоне с женщиной, там линии объемно смещаются от центра
@@ -65,9 +69,65 @@ namespace ImageDrawer // TODO: каждая линия со своими пар�
 			}
 		}
 
+		/// <summary>
+		/// Calculates a distance between two points
+		/// </summary>
+		/// <param name="p1">First point</param>
+		/// <param name="p2">Second point</param>
+		/// <returns></returns>
+		private double Distance(Point p1, Point p2)
+		{
+			int x = p1.X - p2.X;
+			int y = p1.Y - p2.Y;
+			return Math.Sqrt(x * x + y * y);
+		}
+
+		private Point PullToPoint(Point point, double force)
+		{
+			return point;
+
+			if (force == 0)
+			{
+				return point;
+			}
+			int centerX = param.PullPointX;
+			int centerY = param.PullPointY;
+
+			bool mustNotBeLessThanCenterX = point.X > centerX;
+			bool mustNotBeLessThanCenterY = point.Y > centerY;
+
+			double len = Distance(new Point(centerX, centerY), point);
+
+			point.X += (int)((centerX - point.X)/* * force*/ * len * 0.0002);
+			point.Y += (int)((centerY - point.Y)/* * force*/ * len * 0.0002);
+			if (mustNotBeLessThanCenterX)
+			{
+				if (point.X < centerX)
+					point.X = centerX;
+			}
+			else
+			{
+				if (point.X > centerX)
+					point.X = centerX;
+			}
+
+			if (mustNotBeLessThanCenterY)
+			{
+				if (point.Y < centerY)
+					point.Y = centerY;
+			}
+			else
+			{
+				if (point.Y > centerY)
+					point.Y = centerY;
+			}
+
+			return point;
+		}
+
 		private Point CalculatePoint(Bitmap origBitmap, int x, int y, RenderParams param)
 		{
-			int greyscaleFactored = (int)Math.Round((CalculateGreyScale(origBitmap, x, y, param) * param.Factor)); // round is used because otherwise angle=0 differs from angle=1 for 127 color
+			int greyscaleFactored = (int)Math.Round(CalculateGreyScale(origBitmap, x, y, param) * param.Factor); // round is used because otherwise angle=0 differs from angle=1 for 127 color. ебаное решение, переделывай
 			return CalculateAngle(x, y, greyscaleFactored, greyscaleFactored);
 		}
 
@@ -83,11 +143,12 @@ namespace ImageDrawer // TODO: каждая линия со своими пар�
 
 		private Point CalculateAngle(int x, int y, int factorX, int factorY)
 		{
-			double sin = Math.Sin(Math.PI * -param.Angle / 180.0);
+			double sin = Math.Sin(Math.PI * -param.Angle / 180.0); // param.Angle is negative to rotate it clockwise
 			double cos = Math.Cos(Math.PI * -param.Angle / 180.0);
-			int c = (int)((factorY - param.Factor / 2.0) * cos);
-			return new Point(x + (int)((factorX - param.Factor / 2.0) * sin),
-							 y + (int)((factorY - param.Factor / 2.0) * cos));
+			int xAddition = (int)((factorX - param.Factor / 2.0) * sin); // вычитаем param.Factor / 2.0, чтобы линии построенные по серому не сдвигались. но с черным и белым это не работает. мб все таки ввести точку серого?
+			int yAddition = (int)((factorY - param.Factor / 2.0) * cos);
+			double len = Distance(new Point(x, y), new Point(x + xAddition, y + yAddition));
+			return PullToPoint(new Point(x + xAddition, y + yAddition), len);
 		}
 
 		private int GetLineY(int lineNumber)
