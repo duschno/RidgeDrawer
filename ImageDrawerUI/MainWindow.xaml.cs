@@ -7,6 +7,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Drawing;
 using System.Text.RegularExpressions;
+using System.Windows.Data;
+using System.Globalization;
 
 namespace ImageDrawerUI
 {
@@ -219,10 +221,21 @@ namespace ImageDrawerUI
 		{
 			CursorPosition.Text = string.Empty;
 		}
+	}
 
-		private void Debug_Checked(object sender, RoutedEventArgs e)
+	public class BooleanToVisibilityConverter : IValueConverter
+	{
+
+		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
+			bool visible = System.Convert.ToBoolean(value, culture);
+			return visible ? Visibility.Visible : Visibility.Collapsed;
+		}
 
+
+		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+		{
+			return DependencyProperty.UnsetValue;
 		}
 	}
 }
