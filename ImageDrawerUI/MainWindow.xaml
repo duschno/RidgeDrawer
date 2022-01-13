@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         x:Name="Window"
         Title="Ridge Drawer" Height="800" Width="1000" MinWidth="640" MinHeight="480"
-        KeyDown="Window_KeyDown" WindowStartupLocation="CenterScreen">
+        KeyDown="Window_KeyDown" WindowStartupLocation="CenterScreen" PreviewMouseDown="Window_MouseDown">
     <Window.Resources>
         <ResourceDictionary>
             <local:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />

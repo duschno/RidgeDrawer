@@ -184,26 +184,30 @@ namespace ImageDrawerUI
 
 		private void PullPointButton_Click(object sender, RoutedEventArgs e)
 		{
-			if (gridBorder.BorderThickness.Left == 5)
-			{
-				Image.MouseDown -= new MouseButtonEventHandler(image_MouseDown);
-				gridBorder.BorderThickness = new Thickness(0);
-			}
-			else
-			{
-				Image.MouseDown += new MouseButtonEventHandler(image_MouseDown);
-				gridBorder.BorderThickness = new Thickness(5);
-			}
+			Image.MouseDown += new MouseButtonEventHandler(image_MouseDown);
+			gridBorder.BorderThickness = new Thickness(5);
 		}
 
 		private void image_MouseDown(object sender, MouseButtonEventArgs e)
 		{
+			
 			Image.MouseDown -= new MouseButtonEventHandler(image_MouseDown);
-			gridBorder.BorderThickness = new Thickness(0);
 
 			System.Windows.Point point = Mouse.GetPosition(Image);
-			PullPointX.Text = ((int)point.X / scaleFactor).ToString();
-			PullPointY.Text = ((int)point.Y / scaleFactor).ToString();
+			int pointX = 0;
+			int pointY = 0;
+			if (double.IsNaN(Image.Width))
+			{
+				pointX = (int)(point.X * OriginalWidth / Image.ActualWidth);
+				pointY = (int)(point.Y * OriginalHeight / Image.ActualHeight);
+			}
+			else
+			{
+				pointX = (int)point.X / scaleFactor;
+				pointY = (int)point.Y / scaleFactor;
+			}
+			PullPointX.Text = pointX.ToString();
+			PullPointY.Text = pointY.ToString();
 			ParametersChanged(null, null);
 		}
 
@@ -221,6 +225,16 @@ namespace ImageDrawerUI
 		private void CopyArgs_Click(object sender, RoutedEventArgs e)
 		{
 			Clipboard.SetText(Logic.CopyArgs(filename, param));
+		}
+
+		private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+		{
+			if (e.OriginalSource != Image)
+			{
+				Image.MouseDown -= new MouseButtonEventHandler(image_MouseDown);
+				gridBorder.BorderThickness = new Thickness(0);
+				e.Handled = false;
+			}
 		}
 	}
 
