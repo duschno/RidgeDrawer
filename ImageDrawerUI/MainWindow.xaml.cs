@@ -193,28 +193,34 @@ namespace ImageDrawerUI
 			
 			Image.MouseDown -= new MouseButtonEventHandler(image_MouseDown);
 
+			System.Windows.Point point = GetCursorOverImagePosition();
+			PullPointX.Text = point.X.ToString();
+			PullPointY.Text = point.Y.ToString();
+			ParametersChanged(null, null);
+		}
+
+		private System.Windows.Point GetCursorOverImagePosition()
+		{
 			System.Windows.Point point = Mouse.GetPosition(Image);
-			int pointX = 0;
-			int pointY = 0;
+			System.Windows.Point resPoint = new System.Windows.Point();
 			if (double.IsNaN(Image.Width))
 			{
-				pointX = (int)(point.X * OriginalWidth / Image.ActualWidth);
-				pointY = (int)(point.Y * OriginalHeight / Image.ActualHeight);
+				resPoint.X = (int)(point.X * OriginalWidth / Image.ActualWidth);
+				resPoint.Y = (int)(point.Y * OriginalHeight / Image.ActualHeight);
 			}
 			else
 			{
-				pointX = (int)point.X / scaleFactor;
-				pointY = (int)point.Y / scaleFactor;
+				resPoint.X = (int)point.X / scaleFactor;
+				resPoint.Y = (int)point.Y / scaleFactor;
 			}
-			PullPointX.Text = pointX.ToString();
-			PullPointY.Text = pointY.ToString();
-			ParametersChanged(null, null);
+
+			return resPoint;
 		}
 
 		private void Image_MouseMove(object sender, MouseEventArgs e)
 		{
-			System.Windows.Point point = Mouse.GetPosition(Image);
-			CursorPosition.Text = $"{(int)point.X / scaleFactor}, {(int)point.Y / scaleFactor}";
+			System.Windows.Point point = GetCursorOverImagePosition();
+			CursorPosition.Text = $"{point.X}, {point.Y}";
 		}
 
 		private void Image_MouseLeave(object sender, MouseEventArgs e)
