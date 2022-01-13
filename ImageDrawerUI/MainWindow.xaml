@@ -179,7 +179,7 @@
                         Panel.ZIndex="2" Width="80" Height="20" Click="FullsizeButton_Click"/>
                 <Label x:Name="NotImplementedLabel" Panel.ZIndex="3"
                        VerticalAlignment="Center" HorizontalAlignment="Center"
-                       Foreground="Red" FontSize="18" Visibility="Hidden"/>
+                       Foreground="#E6E4E1" Visibility="Hidden" FontFamily="Consolas" Background="#1E1E1E"/>
                 <Image x:Name="Image" Stretch="None" Panel.ZIndex="1" MouseMove="Image_MouseMove" MouseLeave="Image_MouseLeave"/>
                 <Rectangle Fill="Gray"/>
             </Grid>

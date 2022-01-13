@@ -126,7 +126,7 @@ namespace ImageDrawerUI
 			}
 			catch (NotImplementedException e)
 			{
-				NotImplementedLabel.Content = e.Message;
+				NotImplementedLabel.Content = $"{e.Message}:\n{e.StackTrace}";
 				NotImplementedLabel.Visibility = Visibility.Visible;
 			}
 
