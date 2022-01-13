@@ -78,17 +78,29 @@ namespace ImageDrawer // TODO: каждая линия со своими пар�
 			List<List<Point>> coordsParts = new List<List<Point>>();
 			int endIndex = 0;
 			int startIndex = 0;
-			while (startIndex != -1 && endIndex != -1)
+			//while (startIndex != -1 && endIndex != -1)
+			//{
+			//	startIndex = coords.FindIndex(endIndex, p => p.Y != zeroLevel);
+			//	if (startIndex != -1)
+			//	{
+			//		endIndex = coords.FindIndex(startIndex, p => p.Y == zeroLevel /* либо достигли конца*/);
+			//		if (endIndex != -1)
+			//		{
+			//			coordsParts.Add(coords.GetRange(startIndex - (startIndex > 0 ? 1 : 0), endIndex - startIndex + 1 + (endIndex < coords.Count - 1 ? 1 : 0)));
+			//		}
+			//	}
+			//}
+
+
+			int shift = 0;
+			while (shift < coords.Count)
 			{
-				startIndex = coords.FindIndex(endIndex, p => p.Y != zeroLevel);
-				if (startIndex != -1)
-				{
-					endIndex = coords.FindIndex(startIndex, p => p.Y == zeroLevel);
-					if (endIndex != -1)
-					{
-						coordsParts.Add(coords.GetRange(startIndex, endIndex - startIndex));
-					}
-				}
+				startIndex = coords.FindIndex(shift, p => p.Y != zeroLevel);
+				if (startIndex == -1)
+					return coordsParts;
+				endIndex = coords.FindIndex(startIndex, p => p.Y == zeroLevel);
+				coordsParts.Add(coords.GetRange(startIndex, endIndex - startIndex));
+				shift += startIndex;
 			}
 
 			return coordsParts;
@@ -189,6 +201,8 @@ namespace ImageDrawer // TODO: каждая линия со своими пар�
 
 			int maxChunk = 20;
 			int minChunk = 3;
+			int greyAccumulatorValue = 11;
+			int counter = 0;
 
 			int lineNumber = 0;
 			while (lineNumber < param.LinesCount)
@@ -201,6 +215,18 @@ namespace ImageDrawer // TODO: каждая линия со своими пар�
 				{
 					double greyscale = CalculateGreyScale(origBitmap, x, y, param);
 					accumulator = (int)(maxChunk - (maxChunk - minChunk) * greyscale); // TODO: добавить грей поинт. который будет центром. по дефолту приращение вниз и вверх одинаковое, но например при грей поинте 10 приращние белого будет намного сильнее, чем черного
+
+					if (accumulator == greyAccumulatorValue)
+					{
+						counter++;
+						if (counter == 3)
+						{
+							counter = 0;
+							var c = (int)Math.Ceiling((double)x / (greyAccumulatorValue)) * greyAccumulatorValue;
+							accumulator = c - (x + accumulator);
+							sign = c % 2 == 0 ? 1 : -1;
+						}
+					}
 
 					Point point = CalculateAngle(x, y, accumulator, (int)(sign * param.Factor * greyscale));
 					point.Y += param.Factor / 2;
