@@ -22,8 +22,8 @@ namespace ImageDrawerUI
 		private void Compare_Click(object sender, RoutedEventArgs e)
 		{
 			ImageSource temp = original;
-			original = image.Source;
-			image.Source = temp;
+			original = Image.Source;
+			Image.Source = temp;
 		}
 
 		private void Save_Click(object sender, RoutedEventArgs e)
@@ -69,36 +69,37 @@ namespace ImageDrawerUI
 			}
 		}
 
-		private void Image_MouseWheel(object sender, MouseWheelEventArgs e)
+		private void ImageGrid_MouseWheel(object sender, MouseWheelEventArgs e)
 		{
 			ChangeZoom(e.Delta > 0);
 		}
 
-		private void Image_MouseMove(object sender, MouseEventArgs e)
+		private void ImageGrid_MouseMove(object sender, MouseEventArgs e)
 		{
-			if ((e.LeftButton == MouseButtonState.Pressed || e.MiddleButton == MouseButtonState.Pressed) && image.Stretch != Stretch.None)
+			if ((e.LeftButton == MouseButtonState.Pressed || e.MiddleButton == MouseButtonState.Pressed) && 
+				Image.Stretch != Stretch.None)
 			{
 				System.Windows.Point newPos = Mouse.GetPosition(Window);
-				Thickness margin = image.Margin;
-				if (ImageGrid.ActualHeight < image.ActualHeight)
+				Thickness margin = Image.Margin;
+				if (ImageGrid.ActualHeight < Image.ActualHeight)
 					margin.Top = oldMargin.Top - (startPos - newPos).Y;
-				if (ImageGrid.ActualWidth < image.ActualWidth)
+				if (ImageGrid.ActualWidth < Image.ActualWidth)
 					margin.Left = oldMargin.Left - (startPos - newPos).X;
 
-				image.Margin = CheckBoundaries(margin);
+				Image.Margin = CheckBoundaries(margin);
 			}
 		}
 
-		private void Image_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		private void ImageGrid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
 			Keyboard.ClearFocus();
 			startPos = Mouse.GetPosition(Window);
-			Mouse.Capture(image);
+			Mouse.Capture(Image);
 		}
 
-		private void Image_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+		private void ImageGrid_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
 		{
-			oldMargin = image.Margin;
+			oldMargin = Image.Margin;
 			Mouse.Capture(null);
 		}
 
@@ -126,8 +127,8 @@ namespace ImageDrawerUI
 		{
 			if (!IsFittingGrid)
 			{
-				image.Stretch = Stretch.Uniform;
-				RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.Linear);
+				Image.Stretch = Stretch.Uniform;
+				RenderOptions.SetBitmapScalingMode(Image, BitmapScalingMode.Linear);
 			}
 		}
 
@@ -179,47 +180,47 @@ namespace ImageDrawerUI
 				e.Handled = true;
 		}
 
-		private void CopyArgs_Click(object sender, RoutedEventArgs e)
-		{
-			Clipboard.SetText(Logic.CopyArgs(filename, param));
-		}
-
 		#endregion
 
 		private void PullPointButton_Click(object sender, RoutedEventArgs e)
 		{
 			if (gridBorder.BorderThickness.Left == 5)
 			{
-				image.MouseDown -= new MouseButtonEventHandler(image_MouseDown);
+				Image.MouseDown -= new MouseButtonEventHandler(image_MouseDown);
 				gridBorder.BorderThickness = new Thickness(0);
 			}
 			else
 			{
-				image.MouseDown += new MouseButtonEventHandler(image_MouseDown);
+				Image.MouseDown += new MouseButtonEventHandler(image_MouseDown);
 				gridBorder.BorderThickness = new Thickness(5);
 			}
 		}
 
 		private void image_MouseDown(object sender, MouseButtonEventArgs e)
 		{
-			image.MouseDown -= new MouseButtonEventHandler(image_MouseDown);
+			Image.MouseDown -= new MouseButtonEventHandler(image_MouseDown);
 			gridBorder.BorderThickness = new Thickness(0);
 
-			System.Windows.Point point = Mouse.GetPosition(image);
+			System.Windows.Point point = Mouse.GetPosition(Image);
 			PullPointX.Text = ((int)point.X / scaleFactor).ToString();
 			PullPointY.Text = ((int)point.Y / scaleFactor).ToString();
 			ParametersChanged(null, null);
 		}
 
-		private void image_MouseMove_1(object sender, MouseEventArgs e)
+		private void Image_MouseMove(object sender, MouseEventArgs e)
 		{
-			System.Windows.Point point = Mouse.GetPosition(image);
+			System.Windows.Point point = Mouse.GetPosition(Image);
 			CursorPosition.Text = $"{(int)point.X / scaleFactor}, {(int)point.Y / scaleFactor}";
 		}
 
-		private void image_MouseLeave(object sender, MouseEventArgs e)
+		private void Image_MouseLeave(object sender, MouseEventArgs e)
 		{
 			CursorPosition.Text = string.Empty;
+		}
+
+		private void CopyArgs_Click(object sender, RoutedEventArgs e)
+		{
+			Clipboard.SetText(Logic.CopyArgs(filename, param));
 		}
 	}
 

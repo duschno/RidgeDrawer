@@ -222,12 +222,18 @@ namespace ImageDrawer
 
 		public static string CopyArgs(string filename, RenderParams param)
 		{
+			if (string.IsNullOrEmpty(filename))
+				return string.Empty;
+
 			string result = filename.Contains(" ") ? $"\"{filename}\"" : filename;
 			FieldInfo[] fields = param.GetType().GetFields();
 			foreach (FieldInfo field in fields)
 			{
 				string name = (string)field.CustomAttributes.FirstOrDefault().ConstructorArguments[0].Value;
-				string value = field.GetValue(param).ToString();
+				object fieldValue = field.GetValue(param);
+				if (fieldValue == null)
+					continue;
+				string value = fieldValue.ToString();
 				if (field.FieldType == typeof(Type))
 					value = value.Substring(value.LastIndexOf('.') + 1);
 

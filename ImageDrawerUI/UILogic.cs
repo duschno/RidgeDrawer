@@ -25,7 +25,7 @@ namespace ImageDrawerUI
 		{
 			get
 			{
-				return image.Source.Width;
+				return Image.Source.Width;
 			}
 		}
 
@@ -33,7 +33,7 @@ namespace ImageDrawerUI
 		{
 			get
 			{
-				return image.Source.Height;
+				return Image.Source.Height;
 			}
 		}
 
@@ -41,8 +41,8 @@ namespace ImageDrawerUI
 		{
 			get
 			{
-				return image.ActualWidth <= ImageGrid.ActualWidth &&
-					image.ActualHeight <= ImageGrid.ActualHeight;
+				return Image.ActualWidth <= ImageGrid.ActualWidth &&
+					Image.ActualHeight <= ImageGrid.ActualHeight;
 			}
 		}
 
@@ -50,7 +50,7 @@ namespace ImageDrawerUI
 		{
 			get
 			{
-				return double.IsNaN(image.Width) || image.Width == OriginalWidth;
+				return double.IsNaN(Image.Width) || Image.Width == OriginalWidth;
 			}
 		}
 
@@ -118,6 +118,7 @@ namespace ImageDrawerUI
 			};
 
 			Cursor = Cursors.Wait;
+			Arguments.Text = Logic.CopyArgs(filename, param);
 			original = ConvertToNativeDpi(new Bitmap(filename));
 			try
 			{
@@ -129,9 +130,9 @@ namespace ImageDrawerUI
 				NotImplementedLabel.Visibility = Visibility.Visible;
 			}
 
-			image.Source = processed;
-			image.MaxWidth = OriginalWidth * maxScaleFactor;
-			image.MaxHeight = OriginalHeight * maxScaleFactor;
+			Image.Source = processed;
+			Image.MaxWidth = OriginalWidth * maxScaleFactor;
+			Image.MaxHeight = OriginalHeight * maxScaleFactor;
 			Cursor = Cursors.Arrow;
 		}
 
@@ -163,47 +164,47 @@ namespace ImageDrawerUI
 		private void SetToFitGrid()
 		{
 			scaleFactor = 1;
-			image.Width = image.Height = double.NaN;
+			Image.Width = Image.Height = double.NaN;
 		}
 
 		private void ChangeScale(bool zoomIn)
 		{
 
-			if (image.Source == null)
+			if (Image.Source == null)
 				return;
 
 			if (zoomIn)
 			{
-				if (image.ActualWidth < OriginalWidth)
+				if (Image.ActualWidth < OriginalWidth)
 				{
-					image.Width = OriginalWidth;
-					image.Height = OriginalHeight;
+					Image.Width = OriginalWidth;
+					Image.Height = OriginalHeight;
 				}
 				else
 				{
 					scaleFactor = GetNextScaleFactor(zoomIn, scaleFactor);
-					image.Width = OriginalWidth * scaleFactor;
-					image.Height = OriginalHeight * scaleFactor;
+					Image.Width = OriginalWidth * scaleFactor;
+					Image.Height = OriginalHeight * scaleFactor;
 				}
 			}
 			else
 			{
-				if (image.Stretch == Stretch.None)
+				if (Image.Stretch == Stretch.None)
 					return;
 
-				if (image.Width <= OriginalWidth)
+				if (Image.Width <= OriginalWidth)
 					SetToFitGrid();
 				else
 				{
 					scaleFactor = GetNextScaleFactor(zoomIn, scaleFactor);
-					image.Width = OriginalWidth * scaleFactor;
-					image.Height = OriginalHeight * scaleFactor;
-					if (image.Width < OriginalWidth)
+					Image.Width = OriginalWidth * scaleFactor;
+					Image.Height = OriginalHeight * scaleFactor;
+					if (Image.Width < OriginalWidth)
 						SetToFitGrid();
 				}
 
 				if (!IsOriginalSize)
-					image.Margin = CheckBoundaries(image.Margin);
+					Image.Margin = CheckBoundaries(Image.Margin);
 			}
 		}
 
@@ -215,46 +216,46 @@ namespace ImageDrawerUI
 
 		private void ChangeUIProps()
 		{
-			if (image.Source == null)
+			if (Image.Source == null)
 				return;
 
 			if (IsOriginalSize)
 			{
 				if (OriginalWidth < ImageGrid.ActualWidth &&
 					OriginalHeight < ImageGrid.ActualHeight)
-					image.Stretch = Stretch.None;
+					Image.Stretch = Stretch.None;
 				else
-					image.Stretch = Stretch.Uniform;
+					Image.Stretch = Stretch.Uniform;
 
 				ImageGrid.Cursor = Cursors.Arrow;
-				RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.Linear);
-				image.Margin = new Thickness();
+				RenderOptions.SetBitmapScalingMode(Image, BitmapScalingMode.Linear);
+				Image.Margin = new Thickness();
 				oldMargin = new Thickness();
 			}
 			else
 			{
-				if (image.Width <= ImageGrid.ActualWidth &&
-					image.Height <= ImageGrid.ActualHeight)
+				if (Image.Width <= ImageGrid.ActualWidth &&
+					Image.Height <= ImageGrid.ActualHeight)
 				{
-					image.Margin = new Thickness();
+					Image.Margin = new Thickness();
 					oldMargin = new Thickness();
 					ImageGrid.Cursor = Cursors.Arrow;
-					image.Stretch = Stretch.Uniform;
+					Image.Stretch = Stretch.Uniform;
 				}
 				else
 				{
 					ImageGrid.Cursor = Cursors.SizeAll;
-					image.Stretch = Stretch.Uniform;
+					Image.Stretch = Stretch.Uniform;
 				}
 
-				RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.NearestNeighbor);
+				RenderOptions.SetBitmapScalingMode(Image, BitmapScalingMode.NearestNeighbor);
 			}
 		}
 
 		private Thickness CheckBoundaries(Thickness margin)
 		{
-			double widthOver = ImageGrid.ActualWidth - image.Width;
-			double heightOver = ImageGrid.ActualHeight - image.Height;
+			double widthOver = ImageGrid.ActualWidth - Image.Width;
+			double heightOver = ImageGrid.ActualHeight - Image.Height;
 
 			if (widthOver >= 0 || margin.Left > 0)
 				margin.Left = 0;
@@ -270,12 +271,12 @@ namespace ImageDrawerUI
 
 		private void SetOriginalSize()
 		{
-			if (image.Source == null)
+			if (Image.Source == null)
 				return;
 
 			scaleFactor = 1;
-			image.Width = OriginalWidth;
-			image.Height = OriginalHeight;
+			Image.Width = OriginalWidth;
+			Image.Height = OriginalHeight;
 			ChangeUIProps();
 		}
 	}

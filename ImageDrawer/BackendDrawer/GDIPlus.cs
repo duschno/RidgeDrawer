@@ -12,20 +12,19 @@ namespace ImageDrawer
 		private Graphics graphics;
 		private Pen pen;
 		private Brush brush;
-		private List<Color> debugFillColors;
-		private List<Color> debugStrokeColors;
-		private int debugFillColorsIndex;
-		private int debugStrokeColorsIndex;
+		private IEnumerator debugFillColorsEnumerator;
+		private IEnumerator debugStrokeColorsEnumerator;
 		public override void Construct(Bitmap newBitmap, Bitmap origBitmap, RenderParams param)
 		{
 			base.Construct(newBitmap, origBitmap, param);
 			graphics = Graphics.FromImage(newBitmap);
 			brush = new SolidBrush(Color.Black);
 			Random random = new Random(1337);
-			debugFillColors = new List<Color>(30);
-			debugStrokeColors = new List<Color> { Color.Blue, Color.Magenta, Color.Black, Color.LimeGreen };
+			debugStrokeColorsEnumerator = new List<Color> { Color.Blue, Color.Magenta, Color.Black, Color.LimeGreen }.GetEnumerator();
+			List<Color> debugFillColors = new List<Color>(30);
 			for (int i = 0; i < debugFillColors.Capacity; i++)
 				debugFillColors.Add(Color.FromArgb(random.Next(200, 256), random.Next(200, 256), random.Next(200, 256)));
+			debugFillColorsEnumerator = debugFillColors.GetEnumerator();
 			pen = new Pen(brush, param.Stroke);
 			graphics.SmoothingMode = param.Smoothing == SmoothingType.Antialias ?
 				SmoothingMode.AntiAlias : SmoothingMode.None;
@@ -46,28 +45,25 @@ namespace ImageDrawer
 				graphics.FillClosedCurve(new SolidBrush(GetColor(true)), GetFillCoordinates(coords));
 			}
 
-			if (param.Debug)
-				pen.Color = GetColor(false);
+			pen.Color = GetColor(false);
 			graphics.DrawCurve(pen, coords, .25f); // TODO: implement tension to manual too
 		}
 
 		private Color GetColor(bool isFill)
 		{
-			if (isFill)
+			if (param.Debug)
 			{
-				if (param.Debug)
-					return debugFillColors[debugFillColorsIndex + 1 < debugFillColors.Count ? ++debugFillColorsIndex : debugFillColorsIndex = 0];
-				else
-					return Color.White;
+				IEnumerator enumerator = isFill ? debugFillColorsEnumerator : debugStrokeColorsEnumerator;
+				if (!enumerator.MoveNext())
+				{
+					enumerator.Reset();
+					enumerator.MoveNext();
+				}
+
+				return (Color)enumerator.Current;
 			}
-			else
-			{
-				if (param.Debug)
-					return debugStrokeColors[debugStrokeColorsIndex + 1 < debugStrokeColors.Count ? ++debugStrokeColorsIndex : debugStrokeColorsIndex = 0];
-				else
-					return Color.Black;
-			}
-			
+
+			return isFill ? Color.White : Color.Black;
 		}
 
 		protected override void DrawDots(Point[] coords)

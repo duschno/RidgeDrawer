@@ -63,7 +63,7 @@ namespace ImageDrawer
 		[ConsoleArgument("dos")]
 		public bool DrawOnSides;
 
-		[ConsoleArgument("dgpl")]
+		[ConsoleArgument("ina")]
 		public bool IgnoreNonAffectedPoints;
 
 		[ConsoleArgument("fi")]
@@ -75,10 +75,10 @@ namespace ImageDrawer
 		[ConsoleArgument("d")]
 		public bool Debug;
 
-		[ConsoleArgument("px")]
+		[ConsoleArgument("ptx")]
 		public int PullPointX;
 
-		[ConsoleArgument("p")]
+		[ConsoleArgument("pty")]
 		public int PullPointY;
 
 		//TODO: рендерится не все сразу, а можно отрендерить лишь одну вертиальную линию например, чтобы можно было это анимировать. ниче не понял
