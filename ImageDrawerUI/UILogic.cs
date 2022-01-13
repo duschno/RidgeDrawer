@@ -128,6 +128,7 @@ namespace ImageDrawerUI
 			{
 				NotImplementedLabel.Content = $"{e.Message}:\n{e.StackTrace}";
 				NotImplementedLabel.Visibility = Visibility.Visible;
+				Arguments.Text = string.Empty;
 			}
 
 			Image.Source = processed;
