@@ -24,11 +24,18 @@
                 <EventSetter Event="KeyDown" Handler="ParamChange_KeyDown"/>
                 <EventSetter Event="PreviewKeyDown" Handler="ParamChange_PreviewKeyDown"/>
             </Style>
+            <Style TargetType="{x:Type CheckBox}">
+                <Setter Property="HorizontalAlignment" Value="Left" />
+                <Setter Property="VerticalAlignment" Value="Top" />
+                <EventSetter Event="Checked" Handler="ParametersChanged"/>
+                <EventSetter Event="Unchecked" Handler="ParametersChanged"/>
+            </Style>
             <Style TargetType="{x:Type ComboBox}">
                 <Setter Property="Width" Value="100" />
                 <Setter Property="Height" Value="20" />
                 <Setter Property="HorizontalAlignment" Value="Left" />
                 <Setter Property="VerticalAlignment" Value="Top" />
+                <EventSetter Event="SelectionChanged" Handler="ParametersChanged"/>
             </Style>
             <Style TargetType="{x:Type Label}">
                 <Setter Property="HorizontalAlignment" Value="Left" />
@@ -65,93 +72,101 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <Grid Width="200" HorizontalAlignment="Left" Grid.Row="0">
+                    <StackPanel Width="200" HorizontalAlignment="Left" Grid.Row="0">
                         <!--#region Buttons-->
                         <Button Content="Open image (O)" Margin="0,20,0,0" Click="Open_Click"/>
-                        <Button Content="Compare (C)" Margin="0,60,0,0" Click="Compare_Click"/>
-                        <Button Content="Save (S)" Margin="0,100,0,0" Click="Save_Click"/>
+                        <Button Content="Compare (C)" Margin="0,20,0,0" Click="Compare_Click"/>
+                        <Button Content="Save (S)" Margin="0,20,0,0" Click="Save_Click"/>
                         <!--#endregion-->
+
+                        <Separator Height="8" Visibility="Hidden"/>
 
                         <!--#region Text boxes-->
-                        <Label Content="Lines count" Margin="10,136,0,0" />
+                        <Label Content="Lines count" Margin="10,4,0,0" />
                         <TextBox x:Name="LinesCount" PreviewTextInput="PositiveNumberValidation"
-                     TabIndex="0" Margin="84,140,0,0" />
+                                 TabIndex="0" Margin="84,-22,0,0" />
 
-                        <Label Content="Stroke" Margin="10,166,0,0"/>
-                        <TextBox x:Name="Stroke" PreviewTextInput="PositiveNumberValidation" 
-                     TabIndex="1" Margin="84,170,0,0" />
+                        <Label Content="Stroke" Margin="10,4,0,0"/>
+                        <TextBox x:Name="Stroke" PreviewTextInput="PositiveNumberValidation"
+                                 TabIndex="1" Margin="84,-22,0,0" />
 
-                        <Label Content="Factor" Margin="10,196,0,0" />
+                        <Label Content="Factor" Margin="10,4,0,0" />
                         <TextBox x:Name="Factor" PreviewTextInput="PositiveNumberValidation"
-                     TabIndex="2" Margin="84,200,0,0" />
+                                 TabIndex="2" Margin="84,-22,0,0" />
 
-                        <Label Content="Chunk size" Margin="10,226,0,0" />
+                        <Label Content="Chunk size" Margin="10,4,0,0" />
                         <TextBox x:Name="ChunkSize" PreviewTextInput="PositiveNumberValidation"
-                     TabIndex="3" Margin="84,230,0,0" />
+                                 TabIndex="3" Margin="84,-22,0,0" />
 
-                        <Label Content="Angle" Margin="10,256,0,0" />
+                        <Label Content="Angle" Margin="10,4,0,0" />
                         <TextBox x:Name="Angle" PreviewTextInput="AngleValidation"
-                     TabIndex="4" Margin="84,260,0,0" />
+                                 TabIndex="4" Margin="84,-22,0,0" />
 
-                        <Label Content="Black point" Margin="10,286,0,0" />
+                        <Label Content="Black point" Margin="10,4,0,0" />
                         <TextBox x:Name="BlackPoint" PreviewTextInput="ColorRangeValidation"
-                     TabIndex="5" Margin="84,290,0,0" />
+                                 TabIndex="5" Margin="84,-22,0,0" />
 
-                        <Label Content="White point" Margin="10,316,0,0" />
+                        <Label Content="White point" Margin="10,4,0,0" />
                         <TextBox x:Name="WhitePoint" PreviewTextInput="ColorRangeValidation"
-                     TabIndex="6" Margin="84,320,0,0" />
+                                 TabIndex="6" Margin="84,-22,0,0" />
                         <!--#endregion-->
+
+                        <Separator Height="8" Visibility="Hidden"/>
 
                         <!--#region Combo boxes-->
-                        <Label Content="Smoothing" Margin="10,376,0,0" />
-                        <ComboBox x:Name="Smoothing" Margin="84,380,0,0"
-                      TabIndex="7" SelectionChanged="ParametersChanged" />
+                        <Label Content="Smoothing" Margin="10,4,0,0" />
+                        <ComboBox x:Name="Smoothing" Margin="84,-22,0,0"
+                                  TabIndex="7" />
 
-                        <Label Content="LineType"  Margin="10,406,0,0" />
-                        <ComboBox x:Name="LineType" Margin="84,410,0,0"
-                      TabIndex="8" SelectionChanged="ParametersChanged"/>
+                        <Label Content="LineType"  Margin="10,4,0,0" />
+                        <ComboBox x:Name="LineType" Margin="84,-22,0,0"
+                                  TabIndex="8" />
 
-                        <Label Content="Method" Margin="10,436,0,0"/>
-                        <ComboBox x:Name="Method" Margin="84,440,0,0"
-                      TabIndex="9" SelectionChanged="ParametersChanged"/>
+                        <Label Content="Method" Margin="10,4,0,0"/>
+                        <ComboBox x:Name="Method" Margin="84,-22,0,0"
+                                  TabIndex="9" />
+
+                        <Label Content="Backend" Margin="10,4,0,0"/>
+                        <ComboBox x:Name="Backend" Margin="84,-22,0,0" DisplayMemberPath="Name"
+                                  TabIndex="10" />
                         <!--#endregion-->
+
+                        <Separator Height="7" Visibility="Hidden"/>
 
                         <!--#region Check boxes-->
-                        <Label Content="Backend" Margin="10,466,0,0"/>
-                        <ComboBox x:Name="Backend" Margin="84,470,0,0" DisplayMemberPath="Name"
-                      TabIndex="10" SelectionChanged="ParametersChanged"/>
-                        <CheckBox x:Name="DrawOnSides" Content="Draw on sides" HorizontalAlignment="Left"
-                      Margin="15,520,0,0" VerticalAlignment="Top" TabIndex="11"
-                      Checked="ParametersChanged" Unchecked="ParametersChanged"/>
-                        <CheckBox x:Name="FillInside" Content="Fill inside" HorizontalAlignment="Left"
-                      Margin="15,540,0,0" VerticalAlignment="Top" TabIndex="12"
-                      Checked="ParametersChanged" Unchecked="ParametersChanged"/>
-                        <CheckBox x:Name="Invert" Content="Invert" HorizontalAlignment="Left"
-                      Margin="15,560,0,0" VerticalAlignment="Top" TabIndex="13"
-                      Checked="ParametersChanged" Unchecked="ParametersChanged"/>
-                        <CheckBox x:Name="IgnoreNonAffectedPoints" Content="Ignore non affected points" HorizontalAlignment="Left"
-                        Margin="15,580,0,0" VerticalAlignment="Top" TabIndex="14"
-                        Checked="ParametersChanged" Unchecked="ParametersChanged"/>
-                        <CheckBox x:Name="Debug" Content="Debug" HorizontalAlignment="Left"
-                      Margin="15,600,0,0" VerticalAlignment="Top" TabIndex="15"
-                      Checked="ParametersChanged" Unchecked="ParametersChanged"/>
+                        <CheckBox x:Name="DrawOnSides" Content="Draw on sides"
+                                  Margin="15,5,0,0" TabIndex="11" />
+                        <CheckBox x:Name="FillInside" Content="Fill inside"
+                                  Margin="15,5,0,0" TabIndex="12" />
+                        <CheckBox x:Name="Invert" Content="Invert"
+                                  Margin="15,5,0,0" TabIndex="13" />
+                        <CheckBox x:Name="IgnoreNonAffectedPoints" Content="Ignore non affected points"
+                                  Margin="15,5,0,0" TabIndex="14" />
+                        <CheckBox x:Name="Debug" Content="Debug"
+                                  Margin="15,5,0,0" TabIndex="15" Checked="Debug_Checked" />
+                        <Grid Margin="15,0,0,0" >
+                            <CheckBox x:Name="Debug2" Content="Debug2"
+                                  Margin="15,5,0,0" TabIndex="15" Checked="Debug_Checked" />
+                        </Grid>
 
                         <!--#endregion-->
+
+                        <Separator Height="7" Visibility="Hidden"/>
 
                         <!--#region Specific params-->
-                        <Label Content="Specific parameters:" Margin="10,620,0,0"/>
-                        <Label Content="Pull to" Margin="10,650,0,0"/>
-                        <Label Content="X" Margin="67,650,0,0"/>
+                        <Label Content="Specific parameters:" Margin="10,5,0,0"/>
+                        <Label Content="Pull to" Margin="10,5,0,0"/>
+                        <Label Content="X" Margin="67,-26,0,0"/>
                         <TextBox x:Name="PullPointX" PreviewTextInput="PositiveNumberValidation"
-                             TabIndex="16" Margin="84,654,0,0" Width="40"/>
-                        <Label Content="Y" Margin="127,650,0,0"/>
+                             TabIndex="16" Margin="84,-22,0,0" Width="40"/>
+                        <Label Content="Y" Margin="127,-26,0,0"/>
                         <TextBox x:Name="PullPointY" PreviewTextInput="PositiveNumberValidation"
-                             TabIndex="17" Margin="144,654,0,0" Width="40" />
-                        <Button x:Name="PullPointButton" Content="Via image click" 
-                            Margin="84,684,0,0" Click="PullPointButton_Click"
+                             TabIndex="17" Margin="144,-22,0,0" Width="40" />
+                        <Button x:Name="PullPointButton" Content="Point by click" 
+                            Margin="84,5,0,0" Click="PullPointButton_Click"
                             VerticalAlignment="Top" HorizontalAlignment="Left"/>
                         <!--#endregion-->
-                    </Grid>
+                    </StackPanel>
                     <Grid Width="200" HorizontalAlignment="Left" Grid.Row="2">
                         <Button x:Name="CopyArgs" Content="Copy args" Margin="0,20"
                             VerticalAlignment="Bottom" Click="CopyArgs_Click"/>

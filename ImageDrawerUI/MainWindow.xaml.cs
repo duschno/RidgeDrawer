@@ -219,5 +219,10 @@ namespace ImageDrawerUI
 		{
 			CursorPosition.Text = string.Empty;
 		}
+
+		private void Debug_Checked(object sender, RoutedEventArgs e)
+		{
+
+		}
 	}
 }
