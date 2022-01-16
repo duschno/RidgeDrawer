@@ -235,10 +235,10 @@ namespace ImageDrawerUI
 
 		private void Window_MouseDown(object sender, MouseButtonEventArgs e)
 		{
+			gridBorder.BorderThickness = new Thickness(0);
 			if (e.OriginalSource != Image)
 			{
 				Image.MouseDown -= new MouseButtonEventHandler(image_MouseDown);
-				gridBorder.BorderThickness = new Thickness(0);
 				e.Handled = false;
 			}
 		}
