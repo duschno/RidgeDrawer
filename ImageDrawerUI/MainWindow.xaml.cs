@@ -131,6 +131,8 @@ namespace ImageDrawerUI
 				ChangeZoom(true);
 			if (e.Key == Key.Subtract || e.Key == Key.OemMinus)
 				ChangeZoom(false);
+			if (e.Key == Key.D)
+				Debug.IsChecked = !(Debug.IsChecked ?? false);
 		}
 
 		private void ImageGrid_Loaded(object sender, RoutedEventArgs e)
