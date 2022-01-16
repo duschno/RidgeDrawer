@@ -170,12 +170,19 @@
             </ScrollViewer>
 
             <Border x:Name="gridBorder" BorderBrush="OrangeRed" Grid.Column="1" />
-            <Grid Name="ImageGrid" SnapsToDevicePixels="True" UseLayoutRounding="True" Grid.Column="1"
-                  MouseWheel="ImageGrid_MouseWheel"  MouseMove="ImageGrid_MouseMove" Panel.ZIndex="-1"
-                  MouseLeftButtonDown="ImageGrid_MouseLeftButtonDown" MouseLeftButtonUp="ImageGrid_MouseLeftButtonUp"
-                  Loaded="ImageGrid_Loaded" SizeChanged="ImageGrid_SizeChanged" MouseLeave="ImageGrid_MouseLeave" MouseEnter="ImageGrid_MouseEnter">
-                <Rectangle x:Name="DebugPousePositionX" HorizontalAlignment="Left" Fill="Orange" Panel.ZIndex="4" Width="1" Visibility="Collapsed"/>
-                <Rectangle x:Name="DebugPousePositionY" VerticalAlignment="Top" Fill="Orange" Panel.ZIndex="4" Height="1" Visibility="Collapsed" />
+            <Grid Name="ImageGrid" SnapsToDevicePixels="True" UseLayoutRounding="True" Grid.Column="1" Panel.ZIndex="-1"
+                  Loaded="ImageGrid_Loaded"
+                  SizeChanged="ImageGrid_SizeChanged"
+                  MouseWheel="ImageGrid_MouseWheel"
+                  MouseMove="ImageGrid_MouseMove"
+                  MouseLeftButtonDown="ImageGrid_MouseLeftButtonDown"
+                  MouseLeftButtonUp="ImageGrid_MouseLeftButtonUp"
+                  MouseEnter="ImageGrid_MouseEnter"
+                  MouseLeave="ImageGrid_MouseLeave">
+                <Rectangle x:Name="DebugPousePositionX" HorizontalAlignment="Left" Fill="Orange"
+                           Panel.ZIndex="4" Width="1" Visibility="Collapsed"/>
+                <Rectangle x:Name="DebugPousePositionY" VerticalAlignment="Top" Fill="Orange"
+                           Panel.ZIndex="4" Height="1" Visibility="Collapsed" />
                 <Button x:Name="FullsizeButton" Content="Fullsize (0/F)" Style="{StaticResource FullsizeButtonStyle}"
                         HorizontalAlignment="Left" Margin="5,5,0,0" VerticalAlignment="Top"
                         Panel.ZIndex="2" Width="80" Height="20" Click="FullsizeButton_Click"/>

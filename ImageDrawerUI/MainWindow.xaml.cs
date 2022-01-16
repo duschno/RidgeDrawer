@@ -90,7 +90,13 @@ namespace ImageDrawerUI
 			}
 
 			System.Windows.Point point = GetCursorOverImagePosition();
-			CursorPosition.Text = $"{point.X}, {point.Y}";
+			if (point.X < 0 || point.X > OriginalWidth - 1 ||
+				point.Y < 0 || point.Y > OriginalHeight - 1)
+			{
+				CursorPosition.Text = string.Empty;
+			}
+			else
+				CursorPosition.Text = $"{point.X}, {point.Y}";
 
 			if (param.Debug)
 			{
@@ -246,6 +252,7 @@ namespace ImageDrawerUI
 
 		private void ImageGrid_MouseLeave(object sender, MouseEventArgs e)
 		{
+			CursorPosition.Text = string.Empty;
 			DebugPousePositionX.Visibility = Visibility.Collapsed;
 			DebugPousePositionY.Visibility = Visibility.Collapsed;
 		}
