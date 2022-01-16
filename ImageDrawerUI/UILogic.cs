@@ -71,10 +71,10 @@ namespace ImageDrawerUI
 			BlackPoint.Text = 0.ToString();
 			WhitePoint.Text = 255.ToString();
 			Angle.Text = 0.ToString();
-			DrawOnSides.IsChecked = true;
+			DrawOnSides.IsChecked = false;
 			Backend.SelectedItem = typeof(GDIPlus);
-			Method.SelectedItem = ImageDrawer.MethodType.Ridge;
-			LineType.SelectedItem = ImageDrawer.LineType.Curve;
+			Method.SelectedItem = ImageDrawer.MethodType.Squiggle;
+			LineType.SelectedItem = ImageDrawer.LineType.Line;
 			PullPointX.Text = 960.ToString();
 			PullPointY.Text = 540.ToString();
 

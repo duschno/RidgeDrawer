@@ -88,6 +88,13 @@ namespace ImageDrawerUI
 
 				Image.Margin = CheckBoundaries(margin);
 			}
+
+			if (param.Debug)
+			{
+				System.Windows.Point point = Mouse.GetPosition(ImageGrid);
+				DebugPousePositionX.Margin = new Thickness(point.X, 0, 0, 0);
+				DebugPousePositionY.Margin = new Thickness(0, point.Y, 0, 0);
+			}
 		}
 
 		private void ImageGrid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -241,6 +248,18 @@ namespace ImageDrawerUI
 				Image.MouseDown -= new MouseButtonEventHandler(image_MouseDown);
 				e.Handled = false;
 			}
+		}
+
+		private void ImageGrid_MouseLeave(object sender, MouseEventArgs e)
+		{
+			DebugPousePositionX.Visibility = Visibility.Collapsed;
+			DebugPousePositionY.Visibility = Visibility.Collapsed;
+		}
+
+		private void ImageGrid_MouseEnter(object sender, MouseEventArgs e)
+		{
+			DebugPousePositionX.Visibility = param.Debug ? Visibility.Visible : Visibility.Collapsed;
+			DebugPousePositionY.Visibility = param.Debug ? Visibility.Visible : Visibility.Collapsed;
 		}
 	}
 
