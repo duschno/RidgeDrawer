@@ -46,7 +46,7 @@ namespace ImageDrawer
 			}
 
 			pen.Color = GetColor(false);
-			graphics.DrawCurve(pen, coords, .25f); // TODO: implement tension to manual too
+			graphics.DrawCurve(pen, coords, .5f); // TODO: implement tension to manual too
 		}
 
 		private Color GetColor(bool isFill)

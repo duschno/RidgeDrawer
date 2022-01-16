@@ -197,6 +197,7 @@ namespace ImageDrawer // TODO: каждая линия со своими пар�
 				int sign = -1;
 				int y = GetLineY(lineNumber);
 				int accumulator = minChunk;
+				int xStart = 1;
 				for (int x = 1; x < origBitmap.Width; x += accumulator)
 				{
 					double greyscale = CalculateGreyScale(origBitmap, x, y, param);
@@ -210,10 +211,15 @@ namespace ImageDrawer // TODO: каждая линия со своими пар�
 
 				if (param.DrawOnSides)
 				{
-					int stepLeft = coords[1].X - coords[0].X;
-					int stepRight = coords[coords.Count - 1].X - coords[coords.Count - 2].X;
-					coords.Insert(0, new Point(-stepLeft, coords[1].Y));
-					coords.Add(new Point(origBitmap.Width - 1 + stepRight, coords[coords.Count - 2].Y));
+					Point p1 = coords[0];
+					Point p2 = coords[1];
+					Point pN1 = coords[coords.Count - 1]; // p[N-1]
+					Point pN2 = coords[coords.Count - 2]; // p[N-2]
+					int stepLeft = p2.X - p1.X;
+					int stepRight = pN1.X - pN2.X;
+
+					coords.Insert(0, new Point(xStart - stepLeft, p2.Y)); // не нужно считать угол, потому что он уже был посчитан для точек, которыми тут оперируем
+					coords.Add(new Point(pN1.X + stepRight, pN2.Y));
 				}
 
 				foreach (List<Point> coordsPart in GetAffectedPoints(coords, y))
