@@ -142,7 +142,7 @@
                                   TabIndex="13" />
                     <CheckBox x:Name="IgnoreNonAffectedPoints" Content="Ignore non affected points"
                                   TabIndex="14" />
-                    <CheckBox x:Name="Debug" Content="Debug"
+                    <CheckBox x:Name="Debug" Content="Debug (D)"
                                   TabIndex="15" />
                     <StackPanel Margin="15,0,0,0" Visibility="{Binding IsChecked, ElementName=Debug,
                                                                    Converter={StaticResource BooleanToVisibilityConverter}}">
