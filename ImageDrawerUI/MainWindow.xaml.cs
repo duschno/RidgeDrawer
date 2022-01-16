@@ -92,8 +92,8 @@ namespace ImageDrawerUI
 			if (param.Debug)
 			{
 				System.Windows.Point point = Mouse.GetPosition(ImageGrid);
-				DebugPousePositionX.Margin = new Thickness(point.X, 0, 0, 0);
-				DebugPousePositionY.Margin = new Thickness(0, point.Y, 0, 0);
+				DebugPousePositionX.Margin = new Thickness(point.X - 2, 0, 0, 0);
+				DebugPousePositionY.Margin = new Thickness(0, point.Y - 2, 0, 0);
 			}
 		}
 
