@@ -7,6 +7,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Drawing;
 using System.Text.RegularExpressions;
+using System.IO;
 
 namespace ImageDrawerUI
 {
@@ -119,6 +120,7 @@ namespace ImageDrawerUI
 
 			Cursor = Cursors.Wait;
 			Arguments.Text = Logic.CopyArgs(filename, param);
+			Window.Title = $"{Path.GetFileName(filename)} - Ridge Drawer";
 			original = ConvertToNativeDpi(new Bitmap(filename));
 			try
 			{
