@@ -89,11 +89,14 @@ namespace ImageDrawerUI
 				Image.Margin = CheckBoundaries(margin);
 			}
 
+			System.Windows.Point point = GetCursorOverImagePosition();
+			CursorPosition.Text = $"{point.X}, {point.Y}";
+
 			if (param.Debug)
 			{
-				System.Windows.Point point = Mouse.GetPosition(ImageGrid);
-				DebugPousePositionX.Margin = new Thickness(point.X - 2, 0, 0, 0);
-				DebugPousePositionY.Margin = new Thickness(0, point.Y - 2, 0, 0);
+				point = Mouse.GetPosition(ImageGrid);
+				DebugPousePositionX.Margin = new Thickness(point.X, 0, 0, 0);
+				DebugPousePositionY.Margin = new Thickness(0, point.Y, 0, 0);
 			}
 		}
 
@@ -222,17 +225,6 @@ namespace ImageDrawerUI
 			}
 
 			return resPoint;
-		}
-
-		private void Image_MouseMove(object sender, MouseEventArgs e)
-		{
-			System.Windows.Point point = GetCursorOverImagePosition();
-			CursorPosition.Text = $"{point.X}, {point.Y}";
-		}
-
-		private void Image_MouseLeave(object sender, MouseEventArgs e)
-		{
-			CursorPosition.Text = string.Empty;
 		}
 
 		private void CopyArgs_Click(object sender, RoutedEventArgs e)
