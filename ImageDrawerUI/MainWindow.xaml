@@ -178,7 +178,7 @@
                   MouseLeftButtonDown="ImageGrid_MouseLeftButtonDown"
                   MouseLeftButtonUp="ImageGrid_MouseLeftButtonUp"
                   MouseEnter="ImageGrid_MouseEnter"
-                  MouseLeave="ImageGrid_MouseLeave">
+                  MouseLeave="ImageGrid_MouseLeave" Focusable="True">
                 <Rectangle x:Name="DebugPousePositionX" HorizontalAlignment="Left" Fill="Orange"
                            Panel.ZIndex="4" Width="1" Visibility="Collapsed"/>
                 <Rectangle x:Name="DebugPousePositionY" VerticalAlignment="Top" Fill="Orange"

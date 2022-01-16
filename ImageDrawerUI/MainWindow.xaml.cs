@@ -108,7 +108,7 @@ namespace ImageDrawerUI
 
 		private void ImageGrid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
-			Keyboard.ClearFocus();
+			ImageGrid.Focus();
 			startPos = Mouse.GetPosition(Window);
 			Mouse.Capture(Image);
 		}
