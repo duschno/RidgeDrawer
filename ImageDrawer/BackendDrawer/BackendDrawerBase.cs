@@ -83,13 +83,25 @@ namespace ImageDrawer // TODO: каждая линия со своими пар�
 				startIndex = coords.FindIndex(endIndex, p => p.Y != zeroLevel);
 				if (startIndex != -1)
 				{
-					endIndex = coords.FindIndex(startIndex, p => p.Y == zeroLevel);
+					endIndex = coords.FindIndex(startIndex, p => p.Y == zeroLevel /* либо достигли конца*/);
 					if (endIndex != -1)
 					{
-						coordsParts.Add(coords.GetRange(startIndex, endIndex - startIndex));
+						coordsParts.Add(coords.GetRange(startIndex - (startIndex > 0 ? 1 : 0), endIndex - startIndex + 1 + (endIndex < coords.Count - 1 ? 1 : 0)));
 					}
 				}
 			}
+
+
+			//int shift = 0;
+			//while (shift < coords.Count)
+			//{
+			//	startIndex = coords.FindIndex(shift, p => p.Y != zeroLevel);
+			//	if (startIndex == -1)
+			//		return coordsParts;
+			//	endIndex = coords.FindIndex(startIndex, p => p.Y == zeroLevel);
+			//	coordsParts.Add(coords.GetRange(startIndex, endIndex - startIndex));
+			//	shift += startIndex;
+			//}
 
 			return coordsParts;
 		}
@@ -189,6 +201,8 @@ namespace ImageDrawer // TODO: каждая линия со своими пар�
 
 			int maxChunk = 20;
 			int minChunk = 3;
+			double greyGreyscale = 127 / 255.0;
+			int greyAccumulator = (int)(maxChunk - (maxChunk - minChunk) * greyGreyscale);
 
 			int lineNumber = 0;
 			while (lineNumber < param.LinesCount)
@@ -197,11 +211,44 @@ namespace ImageDrawer // TODO: каждая линия со своими пар�
 				int sign = -1;
 				int y = GetLineY(lineNumber);
 				int accumulator = minChunk;
+				bool prevStepCorrected = false;
 				int xStart = 1;
 				for (int x = xStart; x < origBitmap.Width; x += accumulator)
 				{
 					double greyscale = CalculateGreyScale(origBitmap, x, y, param);
+					int oldAccumulator = accumulator;
 					accumulator = (int)(maxChunk - (maxChunk - minChunk) * greyscale); // TODO: добавить грей поинт. который будет центром. по дефолту приращение вниз и вверх одинаковое, но например при грей поинте 10 приращние белого будет намного сильнее, чем черного
+
+					if (!prevStepCorrected) // point correction for grey color TODO: checkbox "syncronize"
+					{
+						bool cond0 = greyscale == greyGreyscale;
+						bool cond1 = x + greyAccumulator < origBitmap.Width && CalculateGreyScale(origBitmap, x + greyAccumulator, y, param) == greyGreyscale;
+						bool cond2 = x + 2 * greyAccumulator < origBitmap.Width && CalculateGreyScale(origBitmap, x + 2 * greyAccumulator, y, param) == greyGreyscale;
+						bool cond3 = x - oldAccumulator > 0 && CalculateGreyScale(origBitmap, x - oldAccumulator, y, param) != greyGreyscale; // стоит ли фиксить случай когда 
+						if (cond0 && cond1 && cond2 && cond3)
+						{
+							var leftValue = xStart + (x - xStart) / greyAccumulator * greyAccumulator;
+							var rightValue = leftValue + greyAccumulator;
+
+							if (coords.Count > 0 && coords[coords.Count - 1].X > leftValue)
+								x = rightValue;
+							else
+							{
+								if (x - leftValue < rightValue - x)
+									x = leftValue;
+								else
+									x = rightValue;
+							}
+
+							sign = (x / greyAccumulator) % 2 == 0 ? -1 : 1;
+							accumulator = greyAccumulator;
+							prevStepCorrected = true;
+						}
+					}
+					else
+					{
+						prevStepCorrected = false;
+					}
 
 					Point point = CalculateAngle(x, y, accumulator, (int)(sign * param.Factor * greyscale));
 					point.Y += param.Factor / 2;
@@ -219,7 +266,7 @@ namespace ImageDrawer // TODO: каждая линия со своими пар�
 					int stepRight = pN1.X - pN2.X;
 
 					coords.Insert(0, new Point(xStart - stepLeft, p2.Y)); // не нужно считать угол, потому что он уже был посчитан для точек, которыми тут оперируем
-					coords.Add(new Point(pN1.X + stepRight, pN2.Y));
+					coords.Add(new Point(pN1.X + stepRight, pN2.Y)); // TODO: одной новой точки иногда не хватает, все равно остается пустота
 				}
 
 				foreach (List<Point> coordsPart in GetAffectedPoints(coords, y))
