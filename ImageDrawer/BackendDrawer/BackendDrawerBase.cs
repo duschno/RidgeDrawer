@@ -198,7 +198,7 @@ namespace ImageDrawer // TODO: каждая линия со своими пар�
 				int y = GetLineY(lineNumber);
 				int accumulator = minChunk;
 				int xStart = 1;
-				for (int x = 1; x < origBitmap.Width; x += accumulator)
+				for (int x = xStart; x < origBitmap.Width; x += accumulator)
 				{
 					double greyscale = CalculateGreyScale(origBitmap, x, y, param);
 					accumulator = (int)(maxChunk - (maxChunk - minChunk) * greyscale); // TODO: добавить грей поинт. который будет центром. по дефолту приращение вниз и вверх одинаковое, но например при грей поинте 10 приращние белого будет намного сильнее, чем черного
