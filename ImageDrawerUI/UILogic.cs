@@ -6,13 +6,13 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Drawing;
-using System.Text.RegularExpressions;
 using System.IO;
 
 namespace ImageDrawerUI
 {
 	public partial class MainWindow : Window
 	{
+		private string appName = "Ridge Drawer";
 		private string filename;
 		private RenderParams param;
 		private ImageSource original;
@@ -59,6 +59,7 @@ namespace ImageDrawerUI
 		{
 			InitializeComponent();
 
+			Window.Title = appName;
 			Height = SystemParameters.PrimaryScreenHeight * 0.9;
 			Width = SystemParameters.PrimaryScreenWidth * 0.9;
 			FillComboBox(Smoothing, typeof(SmoothingType));
@@ -120,7 +121,7 @@ namespace ImageDrawerUI
 
 			Cursor = Cursors.Wait;
 			Arguments.Text = Logic.CopyArgs(filename, param);
-			Window.Title = $"{Path.GetFileName(filename)} - Ridge Drawer";
+			Window.Title = $"{Path.GetFileName(filename)} - {appName}";
 			original = ConvertToNativeDpi(new Bitmap(filename));
 			try
 			{
