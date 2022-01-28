@@ -215,7 +215,7 @@
                 <Rectangle Fill="Gray"/>
             </Grid>
         </Grid>
-        <StatusBar Grid.Row="1" Height="22">
+        <StatusBar Grid.Row="1">
             <StatusBarItem Width="105">
                 <TextBlock Name="CursorPosition" Style="{StaticResource StatusBarTextBlock}"/>
             </StatusBarItem>
