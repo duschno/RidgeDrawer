@@ -94,9 +94,14 @@ namespace ImageDrawerUI
 				point.Y < 0 || point.Y > OriginalHeight - 1)
 			{
 				CursorPosition.Text = string.Empty;
+				ColorValue.Text = string.Empty;
 			}
 			else
+			{
 				CursorPosition.Text = $"{point.X}, {point.Y}";
+				System.Drawing.Color color = GetPixelOfOriginal((int)point.X, (int)point.Y);
+				ColorValue.Text = $"{color.R,3}, {color.G,3}, {color.B,3}";
+			}
 
 			if (param.Debug)
 			{
@@ -253,6 +258,7 @@ namespace ImageDrawerUI
 		private void ImageGrid_MouseLeave(object sender, MouseEventArgs e)
 		{
 			CursorPosition.Text = string.Empty;
+			ColorValue.Text = string.Empty;
 			DebugPousePositionX.Visibility = Visibility.Collapsed;
 			DebugPousePositionY.Visibility = Visibility.Collapsed;
 		}

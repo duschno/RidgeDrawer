@@ -70,6 +70,9 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+            <Style TargetType="{x:Type TextBlock}" x:Key="StatusBarTextBlock">
+                <Setter Property="FontFamily" Value="Consolas" />
+            </Style>
         </ResourceDictionary>
     </Window.Resources>
     <Grid>
@@ -213,16 +216,21 @@
             </Grid>
         </Grid>
         <StatusBar Grid.Row="1" Height="22">
-            <Grid>
-                <TextBlock Name="CursorPosition" Style="{x:Null}"/>
-                <TextBlock Name="Arguments" Margin="210,0,0,0" Style="{x:Null}">
+            <StatusBarItem Width="105">
+                <TextBlock Name="CursorPosition" Style="{StaticResource StatusBarTextBlock}"/>
+            </StatusBarItem>
+            <StatusBarItem Width="105">
+                <TextBlock Name="ColorValue" Style="{StaticResource StatusBarTextBlock}"/>
+            </StatusBarItem>
+            <StatusBarItem>
+                <TextBlock Name="Arguments" Style="{StaticResource StatusBarTextBlock}">
                     <TextBlock.ContextMenu>
                         <ContextMenu>
                             <MenuItem x:Name="CopyArgs" Header="Copy" Click="CopyArgs_Click" />
                         </ContextMenu>
                     </TextBlock.ContextMenu>
                 </TextBlock>
-            </Grid>
+            </StatusBarItem>
         </StatusBar>
     </Grid>
 </Window>

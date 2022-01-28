@@ -15,6 +15,7 @@ namespace ImageDrawerUI
 		private readonly string appName = "Ridge Drawer";
 		private string filename;
 		private RenderParams param;
+		private Bitmap originalBitmap;
 		private ImageSource original;
 		private ImageSource processed;
 		private int scaleFactor = 1;
@@ -87,6 +88,11 @@ namespace ImageDrawerUI
 				Render(filename);
 		}
 
+		public System.Drawing.Color GetPixelOfOriginal(int x, int y)
+		{
+			return originalBitmap.GetPixel(x, y);
+		}
+
 		private void FillComboBox(ComboBox comboBox, Type type)
 		{
 			if (type.IsEnum)
@@ -125,7 +131,8 @@ namespace ImageDrawerUI
 			Cursor = Cursors.Wait;
 			Arguments.Text = Logic.CopyArgs(filename, param);
 			Window.Title = $"{Path.GetFileName(filename)} - {appName}";
-			original = ConvertToNativeDpi(new Bitmap(filename));
+			originalBitmap = new Bitmap(filename);
+			original = ConvertToNativeDpi(originalBitmap);
 			try
 			{
 				processed = ConvertToNativeDpi(Logic.ProcessByFilename(filename, param));
