@@ -211,8 +211,8 @@
         </Grid>
         <StatusBar Grid.Row="1" Height="22">
             <Grid>
-                <TextBlock Name="CursorPosition"/>
-                <TextBlock Name="Arguments" Margin="210,0,0,0">
+                <TextBlock Name="CursorPosition" Style="{x:Null}"/>
+                <TextBlock Name="Arguments" Margin="210,0,0,0" Style="{x:Null}">
                     <TextBlock.ContextMenu>
                         <ContextMenu>
                             <MenuItem x:Name="CopyArgs" Header="Copy" Click="CopyArgs_Click" />
