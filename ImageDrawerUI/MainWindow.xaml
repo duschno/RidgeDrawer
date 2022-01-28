@@ -46,7 +46,6 @@
             <Style TargetType="{x:Type TextBlock}">
                 <Setter Property="HorizontalAlignment" Value="Left" />
                 <Setter Property="VerticalAlignment" Value="Top" />
-                <Setter Property="MaxWidth" Value="70" />
                 <Setter Property="Padding" Value="5" />
                 <Setter Property="Margin" Value="10,4,0,0" />
             </Style>
@@ -114,37 +113,41 @@
                     <TextBlock Text="Angle" />
                     <TextBox x:Name="Angle" PreviewTextInput="AngleValidation"
                                  TabIndex="4" />
-
+                    
+                    <TextBlock Text="Grey point" />
+                    <TextBox x:Name="GreyPoint" PreviewTextInput="ColorRangeValidation"
+                                 TabIndex="5" />
+                    
                     <TextBlock Text="Black point" />
                     <TextBox x:Name="BlackPoint" PreviewTextInput="ColorRangeValidation"
-                                 TabIndex="5" />
+                                 TabIndex="6" />
 
                     <TextBlock Text="White point" />
                     <TextBox x:Name="WhitePoint" PreviewTextInput="ColorRangeValidation"
-                                 TabIndex="6" />
-                    
-                    <TextBlock Text="Points around peak" TextWrapping="Wrap" />
-                    <TextBox x:Name="PointsAroundPeak"
                                  TabIndex="7" />
+                    
+                    <TextBlock Text="Points around peak" TextWrapping="Wrap" Width="70"/>
+                    <TextBox x:Name="PointsAroundPeak"
+                                 TabIndex="8" />
                     <!--#endregion-->
 
                     <Separator Height="8" Visibility="Hidden"/>
 
                     <!--#region Combo boxes-->
                     <TextBlock Text="Smoothing" />
-                    <ComboBox x:Name="Smoothing" TabIndex="8" 
+                    <ComboBox x:Name="Smoothing" TabIndex="9" 
                               Style="{StaticResource ComboBoxEnumStyle}"/>
 
                     <TextBlock Text="LineType"  />
-                    <ComboBox x:Name="LineType" TabIndex="9" 
+                    <ComboBox x:Name="LineType" TabIndex="10" 
                               Style="{StaticResource ComboBoxEnumStyle}"/>
 
                     <TextBlock Text="Method"/>
-                    <ComboBox x:Name="Method" TabIndex="10" 
+                    <ComboBox x:Name="Method" TabIndex="11" 
                               Style="{StaticResource ComboBoxEnumStyle}" />
 
                     <TextBlock Text="Backend"/>
-                    <ComboBox x:Name="Backend" TabIndex="11"
+                    <ComboBox x:Name="Backend" TabIndex="12"
                               Style="{StaticResource ComboBoxBaseStyle}"
                               DisplayMemberPath="Name"/>
                     <!--#endregion-->
@@ -153,16 +156,16 @@
 
                     <!--#region Check boxes-->
                     <CheckBox x:Name="DrawOnSides" Content="Draw on sides"
-                                  TabIndex="12" />
-                    <CheckBox x:Name="FillInside" Content="Fill inside"
                                   TabIndex="13" />
-                    <CheckBox x:Name="Invert" Content="Invert"
+                    <CheckBox x:Name="FillInside" Content="Fill inside"
                                   TabIndex="14" />
-                    <CheckBox x:Name="Debug" Content="Debug (D)"
+                    <CheckBox x:Name="Invert" Content="Invert"
                                   TabIndex="15" />
+                    <CheckBox x:Name="Debug" Content="Debug (D)"
+                                  TabIndex="16" />
                     <StackPanel Margin="15,0,0,0" Visibility="{Binding IsChecked, ElementName=Debug,
                                                                    Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <CheckBox x:Name="DebugSpecificOption" Content="Not in use" TabIndex="16" />
+                        <CheckBox x:Name="DebugSpecificOption" Content="Not in use" TabIndex="17" />
                     </StackPanel>
 
                     <!--#endregion-->
@@ -174,10 +177,10 @@
                     <TextBlock Text="Pull to" />
                     <TextBlock Text="X" Margin="67,-26,0,0"/>
                     <TextBox x:Name="PullPointX" PreviewTextInput="PositiveNumberValidation"
-                                 TabIndex="17" Margin="84,-22,0,0" Width="40" />
+                                 TabIndex="18" Margin="84,-22,0,0" Width="40" />
                     <TextBlock Text="Y" Margin="127,-26,0,0"/>
                     <TextBox x:Name="PullPointY" PreviewTextInput="PositiveNumberValidation"
-                                 TabIndex="18" Margin="144,-22,0,0" Width="40" />
+                                 TabIndex="19" Margin="144,-22,0,0" Width="40" />
                     <Button x:Name="PullPointButton" Content="Point by click"
                                 Margin="84,5,0,0" Click="PullPointButton_Click"
                                 HorizontalAlignment="Left" />

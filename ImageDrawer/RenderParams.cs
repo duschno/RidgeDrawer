@@ -39,6 +39,9 @@ namespace ImageDrawer
 		[ConsoleArgument("c")]
 		public int ChunkSize;
 
+		[ConsoleArgument("g")]
+		public int GreyPoint;
+
 		[ConsoleArgument("b")]
 		public int BlackPoint;
 

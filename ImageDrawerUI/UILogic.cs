@@ -70,6 +70,7 @@ namespace ImageDrawerUI
 			Stroke.Text = 1.ToString();
 			Factor.Text = 30.ToString();
 			ChunkSize.Text = 5.ToString();
+			GreyPoint.Text = 127.ToString();
 			BlackPoint.Text = 0.ToString();
 			WhitePoint.Text = 255.ToString();
 			Angle.Text = 0.ToString();
@@ -104,6 +105,7 @@ namespace ImageDrawerUI
 				Stroke = Convert.ToInt32(Stroke.Text),
 				Factor = Convert.ToInt32(Factor.Text),
 				ChunkSize = Convert.ToInt32(ChunkSize.Text),
+				GreyPoint = Convert.ToInt32(GreyPoint.Text),
 				BlackPoint = Convert.ToInt32(BlackPoint.Text),
 				WhitePoint = Convert.ToInt32(WhitePoint.Text),
 				Angle = Convert.ToInt32(Angle.Text),

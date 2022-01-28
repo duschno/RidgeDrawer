@@ -129,6 +129,7 @@ namespace ImageDrawer
 				Stroke = 1,
 				Factor = 0,
 				ChunkSize = 1,
+				GreyPoint = 127,
 				BlackPoint = 0,
 				WhitePoint = 255,
 				Smoothing = SmoothingType.None,
