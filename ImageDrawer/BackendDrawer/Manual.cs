@@ -8,17 +8,17 @@ namespace ImageDrawer
 {
 	public class Manual : BackendDrawerBase
 	{
-		protected override void DrawBezier(Point[] coords)
+		protected override void DrawBezier(MyPoint[] coords)
 		{
 			throw new NotImplementedException();
 		}
 
-		protected override void DrawCurve(Point[] coords)
+		protected override void DrawCurve(MyPoint[] coords)
 		{
 			throw new NotImplementedException();
 		}
 
-		protected override void DrawDots(Point[] coords)
+		protected override void DrawDots(MyPoint[] coords)
 		{
 			foreach (var coord in coords)
 			{
@@ -89,7 +89,7 @@ namespace ImageDrawer
 				newBitmap.SetPixel(x, y, Color.FromArgb(255 - alpha, color));
 		}
 
-		protected override void DrawLines(Point[] coords)
+		protected override void DrawLines(MyPoint[] coords)
 		{
 			Color[] colors = new Color[] { Color.Black, Color.Black, Color.Black };
 
@@ -100,7 +100,7 @@ namespace ImageDrawer
 					DrawNonAALine(coords[i].X, coords[i].Y, coords[i + 1].X, coords[i + 1].Y);
 		}
 
-		protected override void DrawVariableLines(Point[] coords, int y)
+		protected override void DrawVariableLines(MyPoint[] coords, int y)
 		{
 			throw new NotImplementedException();
 		}

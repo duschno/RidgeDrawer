@@ -7,22 +7,22 @@ namespace ImageDrawer
 {
 	public class Manual2 : BackendDrawerBase
 	{
-		protected override void DrawBezier(Point[] coords)
+		protected override void DrawBezier(MyPoint[] coords)
 		{
 			throw new NotImplementedException();
 		}
 
-		protected override void DrawCurve(Point[] coords)
+		protected override void DrawCurve(MyPoint[] coords)
 		{
 			throw new NotImplementedException();
 		}
 
-		protected override void DrawDots(Point[] coords)
+		protected override void DrawDots(MyPoint[] coords)
 		{
 			throw new NotImplementedException();
 		}
 
-		protected override void DrawLines(Point[] coords)
+		protected override void DrawLines(MyPoint[] coords)
 		{
 			for (int i = 0; i < coords.Length - 1; i++)
 			{
@@ -52,7 +52,7 @@ namespace ImageDrawer
 			}
 		}
 
-		protected override void DrawVariableLines(Point[] coords, int y)
+		protected override void DrawVariableLines(MyPoint[] coords, int y)
 		{
 			throw new NotImplementedException();
 		}

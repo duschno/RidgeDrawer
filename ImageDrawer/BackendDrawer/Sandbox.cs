@@ -31,27 +31,27 @@ namespace ImageDrawer
 			}
 		}
 
-		protected override void DrawCurve(Point[] coords)
+		protected override void DrawCurve(MyPoint[] coords)
 		{
 			Play();
 		}
 
-		protected override void DrawDots(Point[] coords)
+		protected override void DrawDots(MyPoint[] coords)
 		{
 			Play();
 		}
 
-		protected override void DrawLines(Point[] coords)
+		protected override void DrawLines(MyPoint[] coords)
 		{
 			Play();
 		}
 
-		protected override void DrawVariableLines(Point[] coords, int y)
+		protected override void DrawVariableLines(MyPoint[] coords, int y)
 		{
 			Play();
 		}
 
-		protected override void DrawBezier(Point[] coords)
+		protected override void DrawBezier(MyPoint[] coords)
 		{
 			Play();
 		}

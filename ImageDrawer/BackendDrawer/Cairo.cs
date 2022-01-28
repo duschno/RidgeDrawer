@@ -12,22 +12,22 @@ namespace ImageDrawer
 		[DllImport(@"PlusPlus.dll", CallingConvention = CallingConvention.Cdecl)]
 		private extern static void Draw(IntPtr hdc, int[] x, int[] y, int size);
 
-		protected override void DrawBezier(Point[] coords)
+		protected override void DrawBezier(MyPoint[] coords)
 		{
 			throw new NotImplementedException();
 		}
 
-		protected override void DrawCurve(Point[] coords)
+		protected override void DrawCurve(MyPoint[] coords)
 		{
 			throw new NotImplementedException();
 		}
 
-		protected override void DrawDots(Point[] coords)
+		protected override void DrawDots(MyPoint[] coords)
 		{
 			throw new NotImplementedException();
 		}
 
-		protected override void DrawLines(Point[] coords)
+		protected override void DrawLines(MyPoint[] coords)
 		{
 			using (Graphics graphics = Graphics.FromImage(newBitmap))
 			{
@@ -37,7 +37,7 @@ namespace ImageDrawer
 			}
 		}
 
-		protected override void DrawVariableLines(Point[] coords, int y)
+		protected override void DrawVariableLines(MyPoint[] coords, int y)
 		{
 			throw new NotImplementedException();
 		}

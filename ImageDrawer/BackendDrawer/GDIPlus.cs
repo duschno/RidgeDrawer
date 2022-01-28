@@ -30,23 +30,23 @@ namespace ImageDrawer
 				SmoothingMode.AntiAlias : SmoothingMode.None;
 		}
 
-		protected override void DrawBezier(Point[] coords)
+		protected override void DrawBezier(MyPoint[] coords)
 		{
-			Point[] fin = new Point[(coords.Length - 1) / 3 * 3 + 1];
+			MyPoint[] fin = new MyPoint[(coords.Length - 1) / 3 * 3 + 1];
 			for (int i = 0; i < fin.Length; i++)
 				fin[i] = coords[i];
-			graphics.DrawBeziers(pen, fin);
+			graphics.DrawBeziers(pen, MyPoint.ToPoint(fin));
 		}
 
-		protected override void DrawCurve(Point[] coords)
+		protected override void DrawCurve(MyPoint[] coords)
 		{
 			if (param.FillInside)
 			{
-				graphics.FillClosedCurve(new SolidBrush(GetColor(true)), GetFillCoordinates(coords));
+				graphics.FillClosedCurve(new SolidBrush(GetColor(true)), MyPoint.ToPoint(GetFillCoordinates(coords)));
 			}
 
 			pen.Color = GetColor(false);
-			graphics.DrawCurve(pen, coords, .5f); // TODO: implement tension to manual too
+			graphics.DrawCurve(pen, MyPoint.ToPoint(coords), .5f); // TODO: implement tension to manual too
 		}
 
 		private Color GetColor(bool isFill)
@@ -66,7 +66,7 @@ namespace ImageDrawer
 			return isFill ? Color.White : Color.Black;
 		}
 
-		protected override void DrawDots(Point[] coords)
+		protected override void DrawDots(MyPoint[] coords)
 		{
 			int strokeAmount = param.Stroke;
 			if (param.Debug)
@@ -74,43 +74,43 @@ namespace ImageDrawer
 				brush = new SolidBrush(Color.Red);
 				strokeAmount++;
 			}
-			foreach (Point coord in coords)
+			foreach (MyPoint coord in coords)
 				graphics.FillRectangle(brush, coord.X, coord.Y, strokeAmount, strokeAmount);
 		}
 
-		private Point[] GetFillCoordinates(Point[] coords)
+		private MyPoint[] GetFillCoordinates(MyPoint[] coords)
 		{
 			int addition = 5; // in Curves mode there are pits always before the peak, thus have to compensate this
 			int maxY = coords.Max(p => p.Y);
-			List<Point> fillCoords = new List<Point>();
-			fillCoords.Add(new Point(coords[0].X, coords[0].Y + (maxY - coords[0].Y) + addition));
+			List<MyPoint> fillCoords = new List<MyPoint>();
+			fillCoords.Add(new MyPoint(coords[0].X, coords[0].Y + (maxY - coords[0].Y) + addition));
 			fillCoords.AddRange(coords);
-			fillCoords.Add(new Point(coords[coords.Length - 1].X, coords[coords.Length - 1].Y + (maxY - coords[coords.Length - 1].Y) + addition));
+			fillCoords.Add(new MyPoint(coords[coords.Length - 1].X, coords[coords.Length - 1].Y + (maxY - coords[coords.Length - 1].Y) + addition));
 			return fillCoords.ToArray();
 		}
 
-		protected override void DrawLines(Point[] coords)
+		protected override void DrawLines(MyPoint[] coords)
 		{
 			if (param.FillInside)
 			{
-				graphics.FillPolygon(new SolidBrush(GetColor(true)), GetFillCoordinates(coords));
+				graphics.FillPolygon(new SolidBrush(GetColor(true)), MyPoint.ToPoint(GetFillCoordinates(coords)));
 			}
 
 			if (param.Debug)
 				pen.Color = GetColor(false);
-			graphics.DrawLines(pen, coords);
+			graphics.DrawLines(pen, MyPoint.ToPoint(coords));
 			if (param.Debug)
 				DrawDots(coords);
 			//for (int i = 0; i < coords.Length - 1; i++) // TODO: there are visible breaks if use this way with antialiasing
 			//{
 			//	pen.Color = colors[i % 3];
-			//	Point a = coords[i];
-			//	Point b = coords[i + 1];
+			//	MyPoint a = coords[i];
+			//	MyPoint b = coords[i + 1];
 			//	graphics.DrawLine(pen, a, b);
 			//}
 		}
 
-		protected override void DrawVariableLines(Point[] coords, int y)
+		protected override void DrawVariableLines(MyPoint[] coords, int y)
 		{
 			for (int i = 0; i < coords.Length - 1; i++)
 			{

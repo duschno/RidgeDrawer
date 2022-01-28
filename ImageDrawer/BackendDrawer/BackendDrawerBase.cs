@@ -8,11 +8,11 @@ namespace ImageDrawer // TODO: каждая линия со своими пар�
 	{
 		#region Abstract methods
 
-		protected abstract void DrawLines(Point[] coords);
-		protected abstract void DrawDots(Point[] coords);
-		protected abstract void DrawVariableLines(Point[] coords, int y);
-		protected abstract void DrawCurve(Point[] coords);
-		protected abstract void DrawBezier(Point[] coords);
+		protected abstract void DrawLines(MyPoint[] coords);
+		protected abstract void DrawDots(MyPoint[] coords);
+		protected abstract void DrawVariableLines(MyPoint[] coords, int y);
+		protected abstract void DrawCurve(MyPoint[] coords);
+		protected abstract void DrawBezier(MyPoint[] coords);
 		protected abstract void DrawDebugInfo();
 
 		#endregion
@@ -53,7 +53,7 @@ namespace ImageDrawer // TODO: каждая линия со своими пар�
 			int lineNumber = 0; // сейчас он считает так: насколько относительно серого цвета сместить вверх или вниз линию. надо переделать от белого
 			while (lineNumber < param.LinesCount)
 			{
-				List<Point> coords = new List<Point>();
+				List<MyPoint> coords = new List<MyPoint>();
 				int y = GetLineY(lineNumber);
 
 				for (int x = origBitmap.Width / 2 % param.ChunkSize; x < origBitmap.Width; x += param.ChunkSize) // TODO: чанки распределять на оси Х не равномерно, а без сдвига, что бы при некратных значениях (50 и 51 наприм) не было фликеринга, а просто добавлялась новая координата
@@ -64,18 +64,18 @@ namespace ImageDrawer // TODO: каждая линия со своими пар�
 					coords.Add(CalculatePoint(origBitmap, origBitmap.Width - 1, y, param));
 				}
 
-				foreach (List<Point> coordsPart in GetAffectedPoints(coords, y))
+				foreach (List<MyPoint> coordsPart in GetAffectedPoints(coords, y))
 					RenderLine(coordsPart, param, y);
 				lineNumber++;
 			}
 		}
 
-		private List<List<Point>> GetAffectedPoints(List<Point> coords, int zeroLevel)
+		private List<List<MyPoint>> GetAffectedPoints(List<MyPoint> coords, int zeroLevel)
 		{
 			if (param.PointsAroundPeak == -1) // если -1 - рисовать все, если 0 - не рисовать ничего, если 1 - осавлять 1 грей поинт и т.д.
-				return new List<List<Point>>() { coords };
+				return new List<List<MyPoint>>() { coords };
 
-			List<List<Point>> coordsParts = new List<List<Point>>();
+			List<List<MyPoint>> coordsParts = new List<List<MyPoint>>();
 			int endIndex = 0;
 			int startIndex = 0;
 			while (startIndex != -1 && endIndex != -1)
@@ -112,14 +112,14 @@ namespace ImageDrawer // TODO: каждая линия со своими пар�
 		/// <param name="p1">First point</param>
 		/// <param name="p2">Second point</param>
 		/// <returns></returns>
-		private double Distance(Point p1, Point p2)
+		private double Distance(MyPoint p1, MyPoint p2)
 		{
 			int x = p1.X - p2.X;
 			int y = p1.Y - p2.Y;
 			return Math.Sqrt(x * x + y * y);
 		}
 
-		private Point PullToPoint(Point point, double force)
+		private MyPoint PullToPoint(MyPoint point, double force)
 		{
 			return point;
 
@@ -133,7 +133,7 @@ namespace ImageDrawer // TODO: каждая линия со своими пар�
 			bool mustNotBeLessThanCenterX = point.X > centerX;
 			bool mustNotBeLessThanCenterY = point.Y > centerY;
 
-			double len = Distance(new Point(centerX, centerY), point);
+			double len = Distance(new MyPoint(centerX, centerY), point);
 
 			point.X += (int)((centerX - point.X)/* * force*/ * len * 0.0002);
 			point.Y += (int)((centerY - point.Y)/* * force*/ * len * 0.0002);
@@ -162,7 +162,7 @@ namespace ImageDrawer // TODO: каждая линия со своими пар�
 			return point;
 		}
 
-		private Point CalculatePoint(Bitmap origBitmap, int x, int y, RenderParams param)
+		private MyPoint CalculatePoint(Bitmap origBitmap, int x, int y, RenderParams param)
 		{
 			int greyscaleFactored = (int)Math.Round(CalculateGreyScale(origBitmap, x, y, param) * param.Factor); // round is used because otherwise angle=0 differs from angle=1 for 127 color. ебаное решение, переделывай
 			return CalculateAngle(x, y, greyscaleFactored, greyscaleFactored);
@@ -178,14 +178,14 @@ namespace ImageDrawer // TODO: каждая линия со своими пар�
 			return f / (double)(param.WhitePoint - param.BlackPoint);
 		}
 
-		private Point CalculateAngle(int x, int y, int factorX, int factorY)
+		private MyPoint CalculateAngle(int x, int y, int factorX, int factorY)
 		{
 			double sin = Math.Sin(Math.PI * -param.Angle / 180.0); // param.Angle is negative to rotate it clockwise
 			double cos = Math.Cos(Math.PI * -param.Angle / 180.0);
 			int xAddition = (int)((factorX - param.Factor / 2.0) * sin); // вычитаем param.Factor / 2.0, чтобы линии построенные по серому не сдвигались. но с черным и белым это не работает. мб все таки ввести точку серого?
 			int yAddition = (int)((factorY - param.Factor / 2.0) * cos);
-			double len = Distance(new Point(x, y), new Point(x + xAddition, y + yAddition));
-			return PullToPoint(new Point(x + xAddition, y + yAddition), len);
+			double len = Distance(new MyPoint(x, y), new MyPoint(x + xAddition, y + yAddition));
+			return PullToPoint(new MyPoint(x + xAddition, y + yAddition), len);
 		}
 
 		private int GetLineY(int lineNumber)
@@ -207,7 +207,7 @@ namespace ImageDrawer // TODO: каждая линия со своими пар�
 			int lineNumber = 0;
 			while (lineNumber < param.LinesCount)
 			{
-				List<Point> coords = new List<Point>();
+				List<MyPoint> coords = new List<MyPoint>();
 				int sign = -1;
 				int y = GetLineY(lineNumber);
 				int accumulator = minChunk;
@@ -250,7 +250,7 @@ namespace ImageDrawer // TODO: каждая линия со своими пар�
 						prevStepCorrected = false;
 					}
 
-					Point point = CalculateAngle(x, y, accumulator, (int)(sign * param.Factor * greyscale));
+					MyPoint point = CalculateAngle(x, y, accumulator, (int)(sign * param.Factor * greyscale));
 					point.Y += param.Factor / 2;
 					coords.Add(point);
 					sign *= -1;
@@ -258,24 +258,24 @@ namespace ImageDrawer // TODO: каждая линия со своими пар�
 
 				if (param.DrawOnSides)
 				{
-					Point p1 = coords[0];
-					Point p2 = coords[1];
-					Point pN1 = coords[coords.Count - 1]; // p[N-1]
-					Point pN2 = coords[coords.Count - 2]; // p[N-2]
+					MyPoint p1 = coords[0];
+					MyPoint p2 = coords[1];
+					MyPoint pN1 = coords[coords.Count - 1]; // p[N-1]
+					MyPoint pN2 = coords[coords.Count - 2]; // p[N-2]
 					int stepLeft = p2.X - p1.X;
 					int stepRight = pN1.X - pN2.X;
 
-					coords.Insert(0, new Point(xStart - stepLeft, p2.Y)); // не нужно считать угол, потому что он уже был посчитан для точек, которыми тут оперируем
-					coords.Add(new Point(pN1.X + stepRight, pN2.Y)); // TODO: одной новой точки иногда не хватает, все равно остается пустота
+					coords.Insert(0, new MyPoint(xStart - stepLeft, p2.Y)); // не нужно считать угол, потому что он уже был посчитан для точек, которыми тут оперируем
+					coords.Add(new MyPoint(pN1.X + stepRight, pN2.Y)); // TODO: одной новой точки иногда не хватает, все равно остается пустота
 				}
 
-				foreach (List<Point> coordsPart in GetAffectedPoints(coords, y))
+				foreach (List<MyPoint> coordsPart in GetAffectedPoints(coords, y))
 					RenderLine(coordsPart, param, y);
 				lineNumber++;
 			}
 		}
 
-		private void RenderLine(List<Point> coords, RenderParams param, int y)
+		private void RenderLine(List<MyPoint> coords, RenderParams param, int y)
 		{
 			if (coords.Count < 2)
 				return;
