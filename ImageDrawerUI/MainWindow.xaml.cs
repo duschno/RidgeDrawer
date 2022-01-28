@@ -202,14 +202,14 @@ namespace ImageDrawerUI
 
 		private void PullPointButton_Click(object sender, RoutedEventArgs e)
 		{
-			Image.MouseDown += new MouseButtonEventHandler(image_MouseDown);
+			Image.MouseDown += new MouseButtonEventHandler(Image_MouseDown);
 			gridBorder.BorderThickness = new Thickness(5);
 		}
 
-		private void image_MouseDown(object sender, MouseButtonEventArgs e)
+		private void Image_MouseDown(object sender, MouseButtonEventArgs e)
 		{
 			
-			Image.MouseDown -= new MouseButtonEventHandler(image_MouseDown);
+			Image.MouseDown -= new MouseButtonEventHandler(Image_MouseDown);
 
 			System.Windows.Point point = GetCursorOverImagePosition();
 			PullPointX.Text = point.X.ToString();
@@ -245,7 +245,7 @@ namespace ImageDrawerUI
 			gridBorder.BorderThickness = new Thickness(0);
 			if (e.OriginalSource != Image)
 			{
-				Image.MouseDown -= new MouseButtonEventHandler(image_MouseDown);
+				Image.MouseDown -= new MouseButtonEventHandler(Image_MouseDown);
 				e.Handled = false;
 			}
 		}

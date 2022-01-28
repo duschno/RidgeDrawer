@@ -12,7 +12,7 @@ namespace ImageDrawerUI
 {
 	public partial class MainWindow : Window
 	{
-		private string appName = "Ridge Drawer";
+		private readonly string appName = "Ridge Drawer";
 		private string filename;
 		private RenderParams param;
 		private ImageSource original;
