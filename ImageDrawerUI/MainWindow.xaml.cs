@@ -98,9 +98,9 @@ namespace ImageDrawerUI
 			}
 			else
 			{
-				CursorPosition.Text = $"{point.X}, {point.Y}";
+				CursorPosition.Text = $"{point.X},{point.Y}";
 				System.Drawing.Color color = GetPixelOfOriginal((int)point.X, (int)point.Y);
-				ColorValue.Text = $"{color.R,3}, {color.G,3}, {color.B,3}";
+				ColorValue.Text = $"{color.R,3},{color.G,3},{color.B,3}";
 			}
 
 			if (param.Debug)

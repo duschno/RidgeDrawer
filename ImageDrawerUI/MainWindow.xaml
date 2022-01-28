@@ -216,13 +216,13 @@
             </Grid>
         </Grid>
         <StatusBar Grid.Row="1">
-            <StatusBarItem Width="105">
+            <StatusBarItem Width="210">
                 <TextBlock Name="CursorPosition" Style="{StaticResource StatusBarTextBlock}"/>
             </StatusBarItem>
-            <StatusBarItem Width="105">
+            <StatusBarItem>
                 <TextBlock Name="ColorValue" Style="{StaticResource StatusBarTextBlock}"/>
             </StatusBarItem>
-            <StatusBarItem>
+            <StatusBarItem HorizontalAlignment="Right">
                 <TextBlock Name="Arguments" Style="{StaticResource StatusBarTextBlock}">
                     <TextBlock.ContextMenu>
                         <ContextMenu>
