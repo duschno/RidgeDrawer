@@ -73,6 +73,7 @@ namespace ImageDrawerUI
 			BlackPoint.Text = 0.ToString();
 			WhitePoint.Text = 255.ToString();
 			Angle.Text = 0.ToString();
+			PointsAroundPeak.Text = (-1).ToString();
 			DrawOnSides.IsChecked = false;
 			Backend.SelectedItem = typeof(GDIPlus);
 			Method.SelectedItem = ImageDrawer.MethodType.Squiggle;
@@ -106,15 +107,15 @@ namespace ImageDrawerUI
 				BlackPoint = Convert.ToInt32(BlackPoint.Text),
 				WhitePoint = Convert.ToInt32(WhitePoint.Text),
 				Angle = Convert.ToInt32(Angle.Text),
-				Smoothing = (SmoothingType)Smoothing.Items[Smoothing.SelectedIndex],
-				LineType = (LineType)LineType.Items[LineType.SelectedIndex],
-				Method = (MethodType)Method.Items[Method.SelectedIndex],
+				Smoothing = (SmoothingType)Smoothing.SelectedItem,
+				LineType = (LineType)LineType.SelectedItem,
+				Method = (MethodType)Method.SelectedItem,
 				DrawOnSides = DrawOnSides.IsChecked ?? false,
-				IgnoreNonAffectedPoints = IgnoreNonAffectedPoints.IsChecked ?? false,
+				PointsAroundPeak = Convert.ToInt32(PointsAroundPeak.Text),
 				FillInside = FillInside.IsChecked ?? false,
 				Invert = Invert.IsChecked ?? false,
 				Debug = Debug.IsChecked ?? false,
-				Backend = (Type)Backend.Items[Backend.SelectedIndex],
+				Backend = (Type)Backend.SelectedItem,
 				PullPointX = Convert.ToInt32(PullPointX.Text),
 				PullPointY = Convert.ToInt32(PullPointY.Text)
 			};

@@ -135,7 +135,7 @@ namespace ImageDrawer
 				LineType = LineType.Line,
 				Method = MethodType.Ridge,
 				DrawOnSides = false,
-				IgnoreNonAffectedPoints = false,
+				PointsAroundPeak = -1,
 				FillInside = false,
 				Invert = false,
 				Debug = false,

@@ -63,8 +63,8 @@ namespace ImageDrawer
 		[ConsoleArgument("dos")]
 		public bool DrawOnSides;
 
-		[ConsoleArgument("ina")]
-		public bool IgnoreNonAffectedPoints;
+		[ConsoleArgument("pap")]
+		public int PointsAroundPeak;
 
 		[ConsoleArgument("fi")]
 		public bool FillInside;

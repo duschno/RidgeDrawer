@@ -72,7 +72,7 @@ namespace ImageDrawer // TODO: каждая линия со своими пар�
 
 		private List<List<Point>> GetAffectedPoints(List<Point> coords, int zeroLevel)
 		{
-			if (!param.IgnoreNonAffectedPoints)
+			if (param.PointsAroundPeak == -1) // если -1 - рисовать все, если 0 - не рисовать ничего, если 1 - осавлять 1 грей поинт и т.д.
 				return new List<List<Point>>() { coords };
 
 			List<List<Point>> coordsParts = new List<List<Point>>();
