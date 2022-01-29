@@ -69,10 +69,10 @@ namespace ImageDrawer
 		protected override void DrawDots(MyPoint[] coords)
 		{
 			int strokeAmount = param.Stroke;
-			if (param.Debug)
+			if (param.Debug && param.LineType != LineType.Dot)
 			{
 				brush = new SolidBrush(Color.Red);
-				strokeAmount++;
+				strokeAmount = 2;
 			}
 			foreach (MyPoint coord in coords)
 				graphics.FillRectangle(brush, coord.X, coord.Y, strokeAmount, strokeAmount);
@@ -80,12 +80,10 @@ namespace ImageDrawer
 
 		private MyPoint[] GetFillCoordinates(MyPoint[] coords)
 		{
-			int addition = 5; // in Curves mode there are pits always before the peak, thus have to compensate this
-			int maxY = coords.Max(p => p.Y);
 			List<MyPoint> fillCoords = new List<MyPoint>();
-			fillCoords.Add(new MyPoint(coords[0].X, coords[0].Y + (maxY - coords[0].Y) + addition));
+			fillCoords.Add(new MyPoint(coords[0].X, newBitmap.Height));
 			fillCoords.AddRange(coords);
-			fillCoords.Add(new MyPoint(coords[coords.Length - 1].X, coords[coords.Length - 1].Y + (maxY - coords[coords.Length - 1].Y) + addition));
+			fillCoords.Add(new MyPoint(coords[coords.Length - 1].X, newBitmap.Height));
 			return fillCoords.ToArray();
 		}
 
