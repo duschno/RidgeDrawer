@@ -25,6 +25,13 @@ namespace ImageDrawer
 		// TODO: коэф стягивания к указанной точке (типа как блюр по z индексу в афтере)
 	}
 
+	public class LogicParams
+	{
+		public string InputFilename;
+		public string OutputFilename;
+		public RenderParams RenderParams;
+	}
+
 	public struct RenderParams
 	{
 		[ConsoleArgument("l")]

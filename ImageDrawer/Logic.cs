@@ -63,9 +63,9 @@ namespace ImageDrawer
 			return newBitmap;
 		}
 
-		public static Bitmap ProcessByFilename(string inputFileName, RenderParams param)
+		public static Bitmap ProcessByFilename(string inputFilename, RenderParams param)
 		{
-			Bitmap bmp = new Bitmap(inputFileName);
+			Bitmap bmp = new Bitmap(inputFilename);
 			return RenderImage(bmp, param);
 		}
 
@@ -73,10 +73,10 @@ namespace ImageDrawer
 		/// Saves BitmapSource by given filename
 		/// </summary>
 		/// <param name="bmp">Bitmap to save</param>
-		/// <param name="outputFileName">Name of the file to use</param>
-		public static void Save(BitmapSource bmp, string outputFileName)
+		/// <param name="outputFilename">Name of the file to use</param>
+		public static void SaveAsPng(BitmapSource bmp, string outputFilename)
 		{
-			using (var fileStream = new FileStream(outputFileName, FileMode.Create))
+			using (var fileStream = new FileStream(outputFilename, FileMode.Create))
 			{
 				BitmapEncoder encoder = new PngBitmapEncoder();
 				encoder.Frames.Add(BitmapFrame.Create(bmp));
@@ -121,74 +121,83 @@ namespace ImageDrawer
 		/// <param name="args">Command line arguments</param>
 		private static void Main(string[] args)
 		{
-			string inputFileName = null;
-			string outputFileName = null;
-			RenderParams param = new RenderParams
+			// default values
+			LogicParams logicParam = new LogicParams
 			{
-				LinesCount = 1,
-				Stroke = 1,
-				Factor = 0,
-				ChunkSize = 1,
-				GreyPoint = 127,
-				BlackPoint = 0,
-				WhitePoint = 255,
-				Smoothing = SmoothingType.None,
-				LineType = LineType.Line,
-				Method = MethodType.Ridge,
-				DrawOnSides = false,
-				PointsAroundPeak = -1,
-				FillInside = false,
-				Invert = false,
-				Debug = false,
-				Backend = typeof(GDIPlus),
-				PullPointX = 960,
-				PullPointY = 540
+				InputFilename = null,
+				OutputFilename = null,
+				RenderParams = new RenderParams
+				{
+					LinesCount = 1,
+					Stroke = 1,
+					Factor = 0,
+					ChunkSize = 1,
+					GreyPoint = 127,
+					BlackPoint = 0,
+					WhitePoint = 255,
+					Smoothing = SmoothingType.None,
+					LineType = LineType.Line,
+					Method = MethodType.Ridge,
+					DrawOnSides = false,
+					PointsAroundPeak = -1,
+					FillInside = false,
+					Invert = false,
+					Debug = false,
+					Backend = typeof(GDIPlus),
+					PullPointX = 960,
+					PullPointY = 540
+				}
 			};
 
 #if DEBUG
-			//inputFileName = @"..\Rachel-Carson.jpg";
-			//outputFileName = @"..\Rachel-Carson_proc.jpg";
-			//param = new RenderParams
+			//// debug values
+			//logicParam = new LogicParams
 			//{
-			//	LinesCount = 80,
-			//	Stroke = 1,
-			//	Factor = 5,
-			//	ChunkSize = 5,
-			//	BlackPoint = 0,
-			//	WhitePoint = 255,
-			//	Smoothing = SmoothingType.Antialias,
-			//	LineType = LineType.Curve,
-			//	Method = MethodType.Squiggle,
-			//	DrawOnSides = true,
-			//	FillInside = true,
-			//	Invert = false,
-			//	Debug = false,
-			//	Backend = typeof(GDIPlus)
+			//	InputFilename = @"..\Rachel-Carson.jpg",
+			//	OutputFilename = @"..\Rachel-Carson_proc.jpg",
+			//	RenderParams = new RenderParams
+			//	{
+			//		LinesCount = 80,
+			//		Stroke = 1,
+			//		Factor = 5,
+			//		ChunkSize = 5,
+			//		BlackPoint = 0,
+			//		WhitePoint = 255,
+			//		Smoothing = SmoothingType.Antialias,
+			//		LineType = LineType.Curve,
+			//		Method = MethodType.Squiggle,
+			//		DrawOnSides = true,
+			//		FillInside = true,
+			//		Invert = false,
+			//		Debug = false,
+			//		Backend = typeof(GDIPlus)
+			//	}
 			//};
 #endif
 
-			ParseArgs(ref inputFileName, ref outputFileName, ref param, args);
-			Bitmap bmp = ProcessByFilename(inputFileName, param);
-			bmp.Save(outputFileName, ImageFormat.Bmp);
+			logicParam = ParseArgs(logicParam, args);
+			Bitmap bmp = ProcessByFilename(logicParam.InputFilename, logicParam.RenderParams);
+			SaveAsPng(BitmapToBitmapSource(bmp), logicParam.OutputFilename);
 		}
 
-		private static void ParseArgs(ref string inputFileName, ref string outputFileName, ref RenderParams param, string[] args)
+		private static LogicParams ParseArgs(LogicParams defaultLogicParam, string[] args)
 		{
-			if (inputFileName == null && args.Length == 0)
+			LogicParams logicParam = defaultLogicParam;
+			if (logicParam.InputFilename == null && args.Length == 0)
 				throw new ArgumentException("Image filename not specified");
 			if (args.Length == 0)
-				return;
+				return logicParam;
 
-			inputFileName = args[0];
+			logicParam.InputFilename = args[0];
 
 			if (args.Length > 1 && !args[1].StartsWith("-"))
-				outputFileName = args[1];
+				logicParam.OutputFilename = args[1];
 			else
-				outputFileName = AddPostfix(inputFileName);
+				logicParam.OutputFilename = AddPostfix(logicParam.InputFilename);
 
-			FieldInfo[] fields = param.GetType().GetFields();
+			FieldInfo[] fields = logicParam.RenderParams.GetType().GetFields();
 			Regex r = new Regex(@"-(?'name'\w+)(?'value':.+)?");
-			object paramObj = param;
+			object renderParamObj = logicParam.RenderParams;
 			foreach (string arg in args)
 			{
 				Match match = r.Match(arg);
@@ -212,13 +221,14 @@ namespace ImageDrawer
 						else
 							obj = Convert.ChangeType(value, field.FieldType);
 
-						field.SetValue(paramObj, obj);
+						field.SetValue(renderParamObj, obj);
 					}
 				}
 
 			}
 
-			param = (RenderParams)paramObj;
+			logicParam.RenderParams = (RenderParams)renderParamObj;
+			return logicParam;
 		}
 
 		public static string CopyArgs(string filename, RenderParams param)
@@ -253,13 +263,14 @@ namespace ImageDrawer
 		/// <summary>
 		/// Adds postfix to the name of processed image
 		/// </summary>
-		/// <param name="imageName">Original image name</param>
+		/// <param name="imagePath">Original image name</param>
 		/// <returns>Name with postfix</returns>
-		private static string AddPostfix(string imageName)
+		private static string AddPostfix(string imagePath)
 		{
-			string filename = Path.GetFileNameWithoutExtension(imageName);
-			string outputExt = ImageFormat.Bmp.ToString().ToLower();
-			return filename + "_processed." + outputExt; 
+			string directory = Path.GetDirectoryName(imagePath);
+			string filename = Path.GetFileNameWithoutExtension(imagePath);
+			string extension = ImageFormat.Png.ToString().ToLower();
+			return Path.Combine(directory, $"{filename}_processed.{extension}");
 		}
 
 #endregion

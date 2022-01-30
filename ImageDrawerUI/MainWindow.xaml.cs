@@ -38,7 +38,7 @@ namespace ImageDrawerUI
 
 			bool? result = dlg.ShowDialog();
 			if (result == true)
-				Logic.Save(processed as BitmapSource, dlg.FileName);
+				Logic.SaveAsPng(processed as BitmapSource, dlg.FileName);
 		}
 
 		private void ParametersChanged(object sender, SelectionChangedEventArgs e)
