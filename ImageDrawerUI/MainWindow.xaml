@@ -32,8 +32,6 @@
                 <Setter Property="HorizontalAlignment" Value="Left" />
                 <Setter Property="VerticalAlignment" Value="Top" />
                 <Setter Property="Margin" Value="15,5,0,0" />
-                <EventSetter Event="Checked" Handler="ParametersChanged"/>
-                <EventSetter Event="Unchecked" Handler="ParametersChanged"/>
             </Style>
             <Style TargetType="{x:Type ComboBox}" x:Key="ComboBoxBaseStyle">
                 <Setter Property="Width" Value="100" />
@@ -41,7 +39,6 @@
                 <Setter Property="HorizontalAlignment" Value="Left" />
                 <Setter Property="VerticalAlignment" Value="Top" />
                 <Setter Property="Margin" Value="84,-22,0,0" />
-                <EventSetter Event="SelectionChanged" Handler="ParametersChanged"/>
             </Style>
             <Style TargetType="{x:Type TextBlock}">
                 <Setter Property="HorizontalAlignment" Value="Left" />
@@ -99,39 +96,39 @@
                     <!--#region Text boxes-->
                     <TextBlock Text="Lines count" />
                     <TextBox x:Name="LinesCount" PreviewTextInput="PositiveNumberValidation"
-                                 TabIndex="0" />
+                                 TabIndex="0" Text="{Binding Path=LinesCount,UpdateSourceTrigger=Explicit}"/>
 
                     <TextBlock Text="Stroke"/>
                     <TextBox x:Name="Stroke" PreviewTextInput="PositiveNumberValidation"
-                                 TabIndex="1" />
+                                 TabIndex="1" Text="{Binding Path=Stroke,UpdateSourceTrigger=Explicit}"/>
 
                     <TextBlock Text="Factor" />
                     <TextBox x:Name="Factor" PreviewTextInput="PositiveNumberValidation"
-                                 TabIndex="2" />
+                                 TabIndex="2" Text="{Binding Path=Factor,UpdateSourceTrigger=Explicit}"/>
 
                     <TextBlock Text="Chunk size" />
                     <TextBox x:Name="ChunkSize" PreviewTextInput="PositiveNumberValidation"
-                                 TabIndex="3" />
+                                 TabIndex="3" Text="{Binding Path=ChunkSize,UpdateSourceTrigger=Explicit}"/>
 
                     <TextBlock Text="Angle" />
                     <TextBox x:Name="Angle" PreviewTextInput="AngleValidation"
-                                 TabIndex="4" />
+                                 TabIndex="4" Text="{Binding Path=Angle,UpdateSourceTrigger=Explicit}"/>
                     
                     <TextBlock Text="Grey point" />
                     <TextBox x:Name="GreyPoint" PreviewTextInput="ColorRangeValidation"
-                                 TabIndex="5" />
+                                 TabIndex="5" Text="{Binding Path=GreyPoint,UpdateSourceTrigger=Explicit}"/>
                     
                     <TextBlock Text="Black point" />
                     <TextBox x:Name="BlackPoint" PreviewTextInput="ColorRangeValidation"
-                                 TabIndex="6" />
+                                 TabIndex="6" Text="{Binding Path=BlackPoint,UpdateSourceTrigger=Explicit}"/>
 
                     <TextBlock Text="White point" />
                     <TextBox x:Name="WhitePoint" PreviewTextInput="ColorRangeValidation"
-                                 TabIndex="7" />
+                                 TabIndex="7" Text="{Binding Path=WhitePoint,UpdateSourceTrigger=Explicit}"/>
                     
                     <TextBlock Text="Points around peak" TextWrapping="Wrap" Width="70"/>
                     <TextBox x:Name="PointsAroundPeak"
-                                 TabIndex="8" />
+                                 TabIndex="8" Text="{Binding Path=PointsAroundPeak,UpdateSourceTrigger=Explicit}"/>
                     <!--#endregion-->
 
                     <Separator Height="8" Visibility="Hidden"/>
@@ -139,19 +136,19 @@
                     <!--#region Combo boxes-->
                     <TextBlock Text="Smoothing" />
                     <ComboBox x:Name="Smoothing" TabIndex="9" 
-                              Style="{StaticResource ComboBoxEnumStyle}"/>
+                              Style="{StaticResource ComboBoxEnumStyle}" SelectedItem="{Binding Path=Smoothing}"/>
 
                     <TextBlock Text="LineType"  />
                     <ComboBox x:Name="LineType" TabIndex="10" 
-                              Style="{StaticResource ComboBoxEnumStyle}"/>
+                              Style="{StaticResource ComboBoxEnumStyle}" SelectedItem="{Binding Path=LineType}"/>
 
                     <TextBlock Text="Method"/>
                     <ComboBox x:Name="Method" TabIndex="11" 
-                              Style="{StaticResource ComboBoxEnumStyle}" />
+                              Style="{StaticResource ComboBoxEnumStyle}" SelectedItem="{Binding Path=Method}"/>
 
                     <TextBlock Text="Backend"/>
                     <ComboBox x:Name="Backend" TabIndex="12"
-                              Style="{StaticResource ComboBoxBaseStyle}"
+                              Style="{StaticResource ComboBoxBaseStyle}" SelectedItem="{Binding Path=Backend}"
                               DisplayMemberPath="Name"/>
                     <!--#endregion-->
 
@@ -159,15 +156,15 @@
 
                     <!--#region Check boxes-->
                     <CheckBox x:Name="DrawOnSides" Content="Draw on sides"
-                                  TabIndex="13" />
+                                  TabIndex="13" IsChecked="{Binding Path=DrawOnSides}"/>
                     <CheckBox x:Name="FillInside" Content="Fill inside"
-                                  TabIndex="14" />
+                                  TabIndex="14" IsChecked="{Binding Path=FillInside}"/>
                     <CheckBox x:Name="Invert" Content="Invert"
-                                  TabIndex="15" />
+                                  TabIndex="15" IsChecked="{Binding Path=Invert}"/>
                     <CheckBox x:Name="Debug" Content="Debug (D)"
-                                  TabIndex="16" />
+                                  TabIndex="16" IsChecked="{Binding Path=Debug}"/>
                     <StackPanel Margin="15,0,0,0" Visibility="{Binding IsChecked, ElementName=Debug,
-                                                                   Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                               Converter={StaticResource BooleanToVisibilityConverter}}">
                         <CheckBox x:Name="DebugSpecificOption" Content="Not in use" TabIndex="17" />
                     </StackPanel>
 
@@ -180,10 +177,10 @@
                     <TextBlock Text="Pull to" />
                     <TextBlock Text="X" Margin="67,-26,0,0"/>
                     <TextBox x:Name="PullPointX" PreviewTextInput="PositiveNumberValidation"
-                                 TabIndex="18" Margin="84,-22,0,0" Width="40" />
+                                 TabIndex="18" Margin="84,-22,0,0" Width="40" Text="{Binding Path=PullPointX}"/>
                     <TextBlock Text="Y" Margin="127,-26,0,0"/>
                     <TextBox x:Name="PullPointY" PreviewTextInput="PositiveNumberValidation"
-                                 TabIndex="19" Margin="144,-22,0,0" Width="40" />
+                                 TabIndex="19" Margin="144,-22,0,0" Width="40" Text="{Binding Path=PullPointY}"/>
                     <Button x:Name="PullPointButton" Content="Point by click"
                                 Margin="84,5,0,0" Click="PullPointButton_Click"
                                 HorizontalAlignment="Left" />

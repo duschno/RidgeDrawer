@@ -21,14 +21,14 @@ namespace ImageDrawerUI
 
 		private void Compare_Click(object sender, RoutedEventArgs e)
 		{
-			ImageSource temp = original;
-			original = Image.Source;
+			ImageSource temp = model.Original;
+			model.Original = Image.Source;
 			Image.Source = temp;
 		}
 
 		private void Save_Click(object sender, RoutedEventArgs e)
 		{
-			if (processed == null)
+			if (model.Processed == null)
 				return;
 
 			Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog
@@ -38,35 +38,7 @@ namespace ImageDrawerUI
 
 			bool? result = dlg.ShowDialog();
 			if (result == true)
-				Logic.SaveAsPng(processed as BitmapSource, dlg.FileName);
-		}
-
-		private void ParametersChanged(object sender, SelectionChangedEventArgs e)
-		{
-			LockUnusedParams();
-
-			if (filename != null)
-				Render(filename);
-		}
-
-		private void LockUnusedParams()
-		{
-			if (Method.SelectedItem != null)
-			{
-				switch ((MethodType)Method.SelectedItem)
-				{
-					case MethodType.Ridge:
-						WhitePoint.IsEnabled = true;
-						BlackPoint.IsEnabled = true;
-						break;
-					case MethodType.Squiggle:
-						WhitePoint.IsEnabled = true;
-						BlackPoint.IsEnabled = true;
-						break;
-					default:
-						break;
-				}
-			}
+				Logic.SaveAsPng(model.Processed as BitmapSource, dlg.FileName);
 		}
 
 		private void ImageGrid_MouseWheel(object sender, MouseWheelEventArgs e)
@@ -103,7 +75,7 @@ namespace ImageDrawerUI
 				ColorValue.Text = $"{color.R,3},{color.G,3},{color.B,3}";
 			}
 
-			if (param.Debug)
+			if (model.Debug)
 			{
 				point = Mouse.GetPosition(ImageGrid);
 				DebugPousePositionX.Margin = new Thickness(point.X, 0, 0, 0);
@@ -143,7 +115,7 @@ namespace ImageDrawerUI
 			if (e.Key == Key.Subtract || e.Key == Key.OemMinus)
 				ChangeZoom(false);
 			if (e.Key == Key.D)
-				Debug.IsChecked = !(Debug.IsChecked ?? false);
+				model.Debug = !model.Debug;
 		}
 
 		private void ImageGrid_Loaded(object sender, RoutedEventArgs e)
@@ -173,8 +145,12 @@ namespace ImageDrawerUI
 			if (string.IsNullOrWhiteSpace(((TextBox)e.Source).Text) ||
 				!int.TryParse(((TextBox)e.Source).Text, out _))
 				return;
-			if (filename != null)
-				Render(filename);
+
+			TextBox tBox = (TextBox)sender;
+			DependencyProperty prop = TextBox.TextProperty;
+			BindingExpression binding = BindingOperations.GetBindingExpression(tBox, prop);
+			if (binding != null)
+				binding.UpdateSource();
 		}
 		private void Open_Click(object sender, RoutedEventArgs e)
 		{
@@ -187,14 +163,9 @@ namespace ImageDrawerUI
 
 			if (result == true)
 			{
-				filename = dlg.FileName;
-				Render(filename);
+				model.Filename = dlg.FileName;
+				Render();
 			}
-		}
-
-		private void ParametersChanged(object sender, RoutedEventArgs e)
-		{
-			ParametersChanged(null, null);
 		}
 
 		private void ParamChange_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -213,13 +184,11 @@ namespace ImageDrawerUI
 
 		private void Image_MouseDown(object sender, MouseButtonEventArgs e)
 		{
-			
 			Image.MouseDown -= new MouseButtonEventHandler(Image_MouseDown);
 
 			System.Windows.Point point = GetCursorOverImagePosition();
-			PullPointX.Text = point.X.ToString();
-			PullPointY.Text = point.Y.ToString();
-			ParametersChanged(null, null);
+			model.PullPointX = (int)point.X;
+			model.PullPointY = (int)point.Y;
 		}
 
 		private System.Windows.Point GetCursorOverImagePosition()
@@ -242,7 +211,7 @@ namespace ImageDrawerUI
 
 		private void CopyArgs_Click(object sender, RoutedEventArgs e)
 		{
-			Clipboard.SetText(Logic.CopyArgs(filename, param));
+			Clipboard.SetText(Arguments.Text);
 		}
 
 		private void Window_MouseDown(object sender, MouseButtonEventArgs e)
@@ -265,8 +234,8 @@ namespace ImageDrawerUI
 
 		private void ImageGrid_MouseEnter(object sender, MouseEventArgs e)
 		{
-			DebugPousePositionX.Visibility = param.Debug ? Visibility.Visible : Visibility.Collapsed;
-			DebugPousePositionY.Visibility = param.Debug ? Visibility.Visible : Visibility.Collapsed;
+			DebugPousePositionX.Visibility = model.Debug ? Visibility.Visible : Visibility.Collapsed;
+			DebugPousePositionY.Visibility = model.Debug ? Visibility.Visible : Visibility.Collapsed;
 		}
 	}
 
@@ -285,7 +254,6 @@ namespace ImageDrawerUI
 			throw new NotImplementedException();
 		}
 	}
-
 	public class EnumToStringConverter : IValueConverter
 	{
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

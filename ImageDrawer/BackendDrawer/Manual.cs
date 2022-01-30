@@ -91,8 +91,6 @@ namespace ImageDrawer
 
 		protected override void DrawLines(MyPoint[] coords)
 		{
-			Color[] colors = new Color[] { Color.Black, Color.Black, Color.Black };
-
 			for (int i = 0; i < coords.Length - 1; i++)
 				if (param.Smoothing == SmoothingType.Antialias)
 					DrawAALine(coords[i].X, coords[i].Y, coords[i + 1].X, coords[i + 1].Y);

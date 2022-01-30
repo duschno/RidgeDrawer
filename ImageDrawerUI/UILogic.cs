@@ -13,11 +13,7 @@ namespace ImageDrawerUI
 	public partial class MainWindow : Window
 	{
 		private readonly string appName = "Ridge Drawer";
-		private string filename;
-		private RenderParams param;
-		private Bitmap originalBitmap;
-		private ImageSource original;
-		private ImageSource processed;
+		private RenderParamsModel model;
 		private int scaleFactor = 1;
 		private readonly int maxScaleFactor = 8;
 		private System.Windows.Point startPos;
@@ -67,30 +63,37 @@ namespace ImageDrawerUI
 			FillComboBox(LineType, typeof(LineType));
 			FillComboBox(Method, typeof(MethodType));
 			FillComboBox(Backend, typeof(BackendDrawerBase));
-			LinesCount.Text = 50.ToString();
-			Stroke.Text = 1.ToString();
-			Factor.Text = 30.ToString();
-			ChunkSize.Text = 5.ToString();
-			GreyPoint.Text = 127.ToString();
-			BlackPoint.Text = 0.ToString();
-			WhitePoint.Text = 255.ToString();
-			Angle.Text = 0.ToString();
-			PointsAroundPeak.Text = (-1).ToString();
-			DrawOnSides.IsChecked = false;
-			Backend.SelectedItem = typeof(GDIPlus);
-			Method.SelectedItem = ImageDrawer.MethodType.Squiggle;
-			LineType.SelectedItem = ImageDrawer.LineType.Line;
-			PullPointX.Text = 960.ToString();
-			PullPointY.Text = 540.ToString();
-
-			filename = @"..\soldier.png";
-			if (!string.IsNullOrEmpty(filename))
-				Render(filename);
+			model = new RenderParamsModel(
+				new RenderParams
+				{
+					LinesCount = 50,
+					Stroke = 1,
+					Factor = 30,
+					ChunkSize = 5,
+					GreyPoint = 127,
+					BlackPoint = 0,
+					WhitePoint = 255,
+					Angle = 0,
+					Smoothing = SmoothingType.None,
+					LineType = ImageDrawer.LineType.Line,
+					Method = ImageDrawer.MethodType.Squiggle,
+					Backend = typeof(GDIPlus),
+					DrawOnSides = false,
+					PointsAroundPeak = -1,
+					FillInside = false,
+					Invert = false,
+					Debug = false,
+					PullPointX = 960,
+					PullPointY = 540
+				},
+				@"..\soldier.png", Render);
+			DataContext = model;
+			Render();
 		}
 
 		public System.Drawing.Color GetPixelOfOriginal(int x, int y)
 		{
-			return originalBitmap.GetPixel(x, y);
+			return model.OriginalBitmap.GetPixel(x, y);
 		}
 
 		private void FillComboBox(ComboBox comboBox, Type type)
@@ -99,43 +102,39 @@ namespace ImageDrawerUI
 				comboBox.ItemsSource = Enum.GetValues(type);
 			if (type.IsAbstract)
 				comboBox.ItemsSource = Logic.GetImplementations(type);
-			comboBox.SelectedItem = comboBox.Items[0];
+		}
+		private void LockUnusedParams()
+		{
+			switch (model.Method)
+			{
+				case MethodType.Ridge:
+					WhitePoint.IsEnabled = true;
+					BlackPoint.IsEnabled = true;
+					break;
+				case MethodType.Squiggle:
+					WhitePoint.IsEnabled = true;
+					BlackPoint.IsEnabled = true;
+					break;
+				default:
+					break;
+			}
 		}
 
-		private void Render(string filename)
+		private void Render()
 		{
-			NotImplementedLabel.Visibility = Visibility.Collapsed;
-			param = new RenderParams
-			{
-				LinesCount = Convert.ToInt32(LinesCount.Text),
-				Stroke = Convert.ToInt32(Stroke.Text),
-				Factor = Convert.ToInt32(Factor.Text),
-				ChunkSize = Convert.ToInt32(ChunkSize.Text),
-				GreyPoint = Convert.ToInt32(GreyPoint.Text),
-				BlackPoint = Convert.ToInt32(BlackPoint.Text),
-				WhitePoint = Convert.ToInt32(WhitePoint.Text),
-				Angle = Convert.ToInt32(Angle.Text),
-				Smoothing = (SmoothingType)Smoothing.SelectedItem,
-				LineType = (LineType)LineType.SelectedItem,
-				Method = (MethodType)Method.SelectedItem,
-				DrawOnSides = DrawOnSides.IsChecked ?? false,
-				PointsAroundPeak = Convert.ToInt32(PointsAroundPeak.Text),
-				FillInside = FillInside.IsChecked ?? false,
-				Invert = Invert.IsChecked ?? false,
-				Debug = Debug.IsChecked ?? false,
-				Backend = (Type)Backend.SelectedItem,
-				PullPointX = Convert.ToInt32(PullPointX.Text),
-				PullPointY = Convert.ToInt32(PullPointY.Text)
-			};
+			if (!File.Exists(model.Filename))
+				return;
 
+			LockUnusedParams();
+			NotImplementedLabel.Visibility = Visibility.Collapsed;
 			Cursor = Cursors.Wait;
-			Arguments.Text = Logic.CopyArgs(filename, param);
-			Window.Title = $"{Path.GetFileName(filename)} - {appName}";
-			originalBitmap = new Bitmap(filename);
-			original = ConvertToNativeDpi(originalBitmap);
+			Arguments.Text = Logic.CopyArgs(model.Filename, model.Param);
+			Window.Title = $"{Path.GetFileName(model.Filename)} - {appName}";
+			model.OriginalBitmap = new Bitmap(model.Filename);
+			model.Original = ConvertToNativeDpi(model.OriginalBitmap);
 			try
 			{
-				processed = ConvertToNativeDpi(Logic.ProcessByFilename(filename, param));
+				model.Processed = ConvertToNativeDpi(Logic.ProcessByFilename(model.Filename, model.Param));
 			}
 			catch (NotImplementedException e)
 			{
@@ -144,7 +143,7 @@ namespace ImageDrawerUI
 				Arguments.Text = string.Empty;
 			}
 
-			Image.Source = processed;
+			Image.Source = model.Processed;
 			Image.MaxWidth = OriginalWidth * maxScaleFactor;
 			Image.MaxHeight = OriginalHeight * maxScaleFactor;
 			Cursor = Cursors.Arrow;
