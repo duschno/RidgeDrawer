@@ -60,25 +60,24 @@ namespace ImageDrawerUI
 				Image.Margin = CheckBoundaries(margin);
 			}
 
-			System.Windows.Point point = GetCursorOverImagePosition();
-			if (point.X < 0 || point.X > OriginalWidth - 1 ||
-				point.Y < 0 || point.Y > OriginalHeight - 1)
+			System.Windows.Point? point = GetCursorOverImagePosition();
+			if (!point.HasValue)
 			{
 				CursorPosition.Text = string.Empty;
 				ColorValue.Text = string.Empty;
 			}
 			else
 			{
-				CursorPosition.Text = $"{point.X},{point.Y}";
-				System.Drawing.Color color = GetPixelOfOriginal((int)point.X, (int)point.Y);
+				CursorPosition.Text = $"{point.Value.X},{point.Value.Y}";
+				System.Drawing.Color color = GetPixelOfOriginal((int)point.Value.X, (int)point.Value.Y);
 				ColorValue.Text = $"{color.R,3},{color.G,3},{color.B,3}";
 			}
 
 			if (Model.Param.Debug)
 			{
 				point = Mouse.GetPosition(ImageGrid);
-				DebugPousePositionX.Margin = new Thickness(point.X, 0, 0, 0);
-				DebugPousePositionY.Margin = new Thickness(0, point.Y, 0, 0);
+				DebugPousePositionX.Margin = new Thickness(point.Value.X, 0, 0, 0);
+				DebugPousePositionY.Margin = new Thickness(0, point.Value.Y, 0, 0);
 			}
 		}
 
@@ -180,23 +179,29 @@ namespace ImageDrawerUI
 
 		private void PullPointButton_Click(object sender, RoutedEventArgs e)
 		{
-			Image.MouseDown += new MouseButtonEventHandler(Image_MouseDown);
-			gridBorder.BorderThickness = new Thickness(5);
+			ImageGrid.PreviewMouseDown += new MouseButtonEventHandler(ImageGrid_PreviewMouseDown);
+			gridBorder.BorderThickness = new Thickness(3);
 		}
 
-		private void Image_MouseDown(object sender, MouseButtonEventArgs e)
+		private void ImageGrid_PreviewMouseDown(object sender, MouseButtonEventArgs e)
 		{
-			Image.MouseDown -= new MouseButtonEventHandler(Image_MouseDown);
+			ImageGrid.PreviewMouseDown -= new MouseButtonEventHandler(ImageGrid_PreviewMouseDown);
 
-			System.Windows.Point point = GetCursorOverImagePosition();
-			Model.Param.PullPointX = (int)point.X;
-			Model.Param.PullPointY = (int)point.Y;
-			Model.UpdateView();
+			System.Windows.Point? point = GetCursorOverImagePosition();
+			if (point.HasValue)
+			{
+				Model.Param.PullPointX = (int)point.Value.X;
+				Model.Param.PullPointY = (int)point.Value.Y;
+				Model.UpdateView();
+			}
 		}
-
-		private System.Windows.Point GetCursorOverImagePosition()
+		private System.Windows.Point? GetCursorOverImagePosition()
 		{
 			System.Windows.Point point = Mouse.GetPosition(Image);
+			if (point.X < 0 || point.X > OriginalWidth - 1 ||
+				point.Y < 0 || point.Y > OriginalHeight - 1)
+				return null;
+
 			System.Windows.Point resPoint = new System.Windows.Point();
 			if (double.IsNaN(Image.Width))
 			{
@@ -219,7 +224,7 @@ namespace ImageDrawerUI
 
 		private void PasteArgs_Click(object sender, RoutedEventArgs e)
 		{
-			LogicParams parsedParams = Logic.ParseArgs(new LogicParams { }, Clipboard.GetText().Split());
+			LogicParams parsedParams = Logic.ParseArgs((LogicParams)Model, Clipboard.GetText().Split());
 			Model.Param = parsedParams.RenderParams;
 			Model.Filename = parsedParams.InputFilename;
 			Arguments.Text = Logic.CopyArgs(Model.Filename, Model.Param);
@@ -231,7 +236,7 @@ namespace ImageDrawerUI
 			gridBorder.BorderThickness = new Thickness(0);
 			if (e.OriginalSource != Image)
 			{
-				Image.MouseDown -= new MouseButtonEventHandler(Image_MouseDown);
+				ImageGrid.PreviewMouseDown -= new MouseButtonEventHandler(ImageGrid_PreviewMouseDown);
 				e.Handled = false;
 			}
 		}

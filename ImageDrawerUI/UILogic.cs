@@ -88,31 +88,33 @@ namespace ImageDrawerUI
 				},
 				@"..\soldier.png",
 				() => {
-					if (!File.Exists(Model.Filename))
-						return;
-
-					LockUnusedParams();
-					NotImplementedLabel.Visibility = Visibility.Collapsed;
-					Cursor = Cursors.Wait;
-					Arguments.Text = Logic.CopyArgs(Model.Filename, Model.Param);
-					Window.Title = $"{Path.GetFileName(Model.Filename)} - {appName}";
-					Model.OriginalBitmap = new Bitmap(Model.Filename);
-					Model.Original = ConvertToNativeDpi(Model.OriginalBitmap);
 					try
 					{
+						if (!File.Exists(Model.Filename))
+							throw new ArgumentException($"'{Model.Filename}' could not be found");
+
+						LockUnusedParams();
+						NotImplementedLabel.Visibility = Visibility.Collapsed;
+						Cursor = Cursors.Wait;
+						Arguments.Text = Logic.CopyArgs(Model.Filename, Model.Param);
+						Window.Title = $"{Path.GetFileName(Model.Filename)} - {appName}";
+						Model.OriginalBitmap = new Bitmap(Model.Filename);
+						Model.Original = ConvertToNativeDpi(Model.OriginalBitmap);
 						Model.Processed = ConvertToNativeDpi(Logic.ProcessByFilename(Model.Filename, Model.Param));
+						Image.Source = Model.Processed;
+						Image.MaxWidth = OriginalWidth * maxScaleFactor;
+						Image.MaxHeight = OriginalHeight * maxScaleFactor;
 					}
-					catch (NotImplementedException e)
+					catch (Exception e)
 					{
 						NotImplementedLabel.Content = $"{e.Message}:\n{e.StackTrace}";
 						NotImplementedLabel.Visibility = Visibility.Visible;
 						Arguments.Text = string.Empty;
 					}
-
-					Image.Source = Model.Processed;
-					Image.MaxWidth = OriginalWidth * maxScaleFactor;
-					Image.MaxHeight = OriginalHeight * maxScaleFactor;
-					Cursor = Cursors.Arrow;
+					finally
+					{
+						Cursor = Cursors.Arrow;
+					}
 				});
 			DataContext = Model;
 			Model.UpdateView();
