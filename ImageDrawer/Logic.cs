@@ -180,7 +180,7 @@ namespace ImageDrawer
 			SaveAsPng(BitmapToBitmapSource(bmp), logicParam.OutputFilename);
 		}
 
-		private static LogicParams ParseArgs(LogicParams defaultLogicParam, string[] args)
+		public static LogicParams ParseArgs(LogicParams defaultLogicParam, string[] args)
 		{
 			LogicParams logicParam = defaultLogicParam;
 			if (logicParam.InputFilename == null && args.Length == 0)
@@ -195,7 +195,10 @@ namespace ImageDrawer
 			else
 				logicParam.OutputFilename = AddPostfix(logicParam.InputFilename);
 
-			FieldInfo[] fields = logicParam.RenderParams.GetType().GetFields();
+			if (logicParam.RenderParams == null)
+				logicParam.RenderParams = new RenderParams();
+
+			PropertyInfo[] props = typeof(RenderParams).GetProperties();
 			Regex r = new Regex(@"-(?'name'\w+)(?'value':.+)?");
 			object renderParamObj = logicParam.RenderParams;
 			foreach (string arg in args)
@@ -206,22 +209,22 @@ namespace ImageDrawer
 					string name = match.Groups["name"].Value;
 					string value = match.Groups["value"].Value;
 					value = string.IsNullOrEmpty(value) ? null : value.Substring(1);
-					FieldInfo field = fields.FirstOrDefault(
-						f => (string)f.CustomAttributes.FirstOrDefault().ConstructorArguments[0].Value == name);
+					PropertyInfo prop = props.FirstOrDefault(
+						p => (string)p.CustomAttributes.FirstOrDefault().ConstructorArguments[0].Value == name);
 
-					if (field != null)
+					if (prop != null)
 					{
 						object obj = null;
-						if (field.FieldType == typeof(bool))
+						if (prop.PropertyType == typeof(bool))
 							obj = bool.Parse((value ?? "true").Replace("1", "true").Replace("0", "false"));
-						else if (field.FieldType.IsEnum)
-							obj = Enum.Parse(field.FieldType, value, true);
-						else if (field.FieldType == typeof(Type))
+						else if (prop.PropertyType.IsEnum)
+							obj = Enum.Parse(prop.PropertyType, value, true);
+						else if (prop.PropertyType == typeof(Type))
 							obj = Type.GetType($"{Assembly.GetExecutingAssembly().GetName().Name}.{value}", true, true);
 						else
-							obj = Convert.ChangeType(value, field.FieldType);
+							obj = Convert.ChangeType(value, prop.PropertyType);
 
-						field.SetValue(renderParamObj, obj);
+						prop.SetValue(renderParamObj, obj);
 					}
 				}
 
@@ -237,20 +240,20 @@ namespace ImageDrawer
 				return string.Empty;
 
 			string result = filename.Contains(" ") ? $"\"{filename}\"" : filename;
-			FieldInfo[] fields = param.GetType().GetFields();
-			foreach (FieldInfo field in fields)
+			PropertyInfo[] props = param.GetType().GetProperties();
+			foreach (PropertyInfo prop in props)
 			{
-				string name = (string)field.CustomAttributes.FirstOrDefault().ConstructorArguments[0].Value;
-				object fieldValue = field.GetValue(param);
+				string name = (string)prop.CustomAttributes.FirstOrDefault().ConstructorArguments[0].Value;
+				object fieldValue = prop.GetValue(param);
 				if (fieldValue == null)
 					continue;
 				string value = fieldValue.ToString();
-				if (field.FieldType == typeof(Type))
+				if (prop.PropertyType == typeof(Type))
 					value = value.Substring(value.LastIndexOf('.') + 1);
 
-				if (field.FieldType == typeof(bool))
+				if (prop.PropertyType == typeof(bool))
 				{
-					if ((bool)field.GetValue(param))
+					if ((bool)prop.GetValue(param))
 						result += $" -{name}";
 				}
 				else

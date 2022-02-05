@@ -32,6 +32,8 @@
                 <Setter Property="HorizontalAlignment" Value="Left" />
                 <Setter Property="VerticalAlignment" Value="Top" />
                 <Setter Property="Margin" Value="15,5,0,0" />
+                <EventSetter Event="Checked" Handler="Control_ValueChanged"/>
+                <EventSetter Event="Unchecked" Handler="Control_ValueChanged"/>
             </Style>
             <Style TargetType="{x:Type ComboBox}" x:Key="ComboBoxBaseStyle">
                 <Setter Property="Width" Value="100" />
@@ -39,6 +41,7 @@
                 <Setter Property="HorizontalAlignment" Value="Left" />
                 <Setter Property="VerticalAlignment" Value="Top" />
                 <Setter Property="Margin" Value="84,-22,0,0" />
+                <EventSetter Event="SelectionChanged" Handler="Control_ValueChanged"/>
             </Style>
             <Style TargetType="{x:Type TextBlock}">
                 <Setter Property="HorizontalAlignment" Value="Left" />
@@ -95,40 +98,40 @@
 
                     <!--#region Text boxes-->
                     <TextBlock Text="Lines count" />
-                    <TextBox x:Name="LinesCount" PreviewTextInput="PositiveNumberValidation"
-                                 TabIndex="0" Text="{Binding Path=LinesCount,UpdateSourceTrigger=Explicit}"/>
+                    <TextBox x:Name="LinesCount" PreviewTextInput="PositiveNumberValidation" 
+                                 TabIndex="0" Text="{Binding Param.LinesCount,UpdateSourceTrigger=Explicit}"/>
 
                     <TextBlock Text="Stroke"/>
                     <TextBox x:Name="Stroke" PreviewTextInput="PositiveNumberValidation"
-                                 TabIndex="1" Text="{Binding Path=Stroke,UpdateSourceTrigger=Explicit}"/>
+                                 TabIndex="1" Text="{Binding Param.Stroke,UpdateSourceTrigger=Explicit}"/>
 
                     <TextBlock Text="Factor" />
                     <TextBox x:Name="Factor" PreviewTextInput="PositiveNumberValidation"
-                                 TabIndex="2" Text="{Binding Path=Factor,UpdateSourceTrigger=Explicit}"/>
+                                 TabIndex="2" Text="{Binding Param.Factor,UpdateSourceTrigger=Explicit}"/>
 
                     <TextBlock Text="Chunk size" />
                     <TextBox x:Name="ChunkSize" PreviewTextInput="PositiveNumberValidation"
-                                 TabIndex="3" Text="{Binding Path=ChunkSize,UpdateSourceTrigger=Explicit}"/>
+                                 TabIndex="3" Text="{Binding Param.ChunkSize,UpdateSourceTrigger=Explicit}"/>
 
                     <TextBlock Text="Angle" />
                     <TextBox x:Name="Angle" PreviewTextInput="AngleValidation"
-                                 TabIndex="4" Text="{Binding Path=Angle,UpdateSourceTrigger=Explicit}"/>
+                                 TabIndex="4" Text="{Binding Param.Angle,UpdateSourceTrigger=Explicit}"/>
                     
                     <TextBlock Text="Grey point" />
                     <TextBox x:Name="GreyPoint" PreviewTextInput="ColorRangeValidation"
-                                 TabIndex="5" Text="{Binding Path=GreyPoint,UpdateSourceTrigger=Explicit}"/>
+                                 TabIndex="5" Text="{Binding Param.GreyPoint,UpdateSourceTrigger=Explicit}"/>
                     
                     <TextBlock Text="Black point" />
                     <TextBox x:Name="BlackPoint" PreviewTextInput="ColorRangeValidation"
-                                 TabIndex="6" Text="{Binding Path=BlackPoint,UpdateSourceTrigger=Explicit}"/>
+                                 TabIndex="6" Text="{Binding Param.BlackPoint,UpdateSourceTrigger=Explicit}"/>
 
                     <TextBlock Text="White point" />
                     <TextBox x:Name="WhitePoint" PreviewTextInput="ColorRangeValidation"
-                                 TabIndex="7" Text="{Binding Path=WhitePoint,UpdateSourceTrigger=Explicit}"/>
+                                 TabIndex="7" Text="{Binding Param.WhitePoint,UpdateSourceTrigger=Explicit}"/>
                     
                     <TextBlock Text="Points around peak" TextWrapping="Wrap" Width="70"/>
                     <TextBox x:Name="PointsAroundPeak"
-                                 TabIndex="8" Text="{Binding Path=PointsAroundPeak,UpdateSourceTrigger=Explicit}"/>
+                                 TabIndex="8" Text="{Binding Param.PointsAroundPeak,UpdateSourceTrigger=Explicit}"/>
                     <!--#endregion-->
 
                     <Separator Height="8" Visibility="Hidden"/>
@@ -136,19 +139,19 @@
                     <!--#region Combo boxes-->
                     <TextBlock Text="Smoothing" />
                     <ComboBox x:Name="Smoothing" TabIndex="9" 
-                              Style="{StaticResource ComboBoxEnumStyle}" SelectedItem="{Binding Path=Smoothing}"/>
+                              Style="{StaticResource ComboBoxEnumStyle}" SelectedItem="{Binding Param.Smoothing}"/>
 
                     <TextBlock Text="LineType"  />
                     <ComboBox x:Name="LineType" TabIndex="10" 
-                              Style="{StaticResource ComboBoxEnumStyle}" SelectedItem="{Binding Path=LineType}"/>
+                              Style="{StaticResource ComboBoxEnumStyle}" SelectedItem="{Binding Param.LineType}"/>
 
                     <TextBlock Text="Method"/>
                     <ComboBox x:Name="Method" TabIndex="11" 
-                              Style="{StaticResource ComboBoxEnumStyle}" SelectedItem="{Binding Path=Method}"/>
+                              Style="{StaticResource ComboBoxEnumStyle}" SelectedItem="{Binding Param.Method}"/>
 
                     <TextBlock Text="Backend"/>
                     <ComboBox x:Name="Backend" TabIndex="12"
-                              Style="{StaticResource ComboBoxBaseStyle}" SelectedItem="{Binding Path=Backend}"
+                              Style="{StaticResource ComboBoxBaseStyle}" SelectedItem="{Binding Param.Backend}"
                               DisplayMemberPath="Name"/>
                     <!--#endregion-->
 
@@ -156,13 +159,13 @@
 
                     <!--#region Check boxes-->
                     <CheckBox x:Name="DrawOnSides" Content="Draw on sides"
-                                  TabIndex="13" IsChecked="{Binding Path=DrawOnSides}"/>
+                                  TabIndex="13" IsChecked="{Binding Param.DrawOnSides}"/>
                     <CheckBox x:Name="FillInside" Content="Fill inside"
-                                  TabIndex="14" IsChecked="{Binding Path=FillInside}"/>
+                                  TabIndex="14" IsChecked="{Binding Param.FillInside}"/>
                     <CheckBox x:Name="Invert" Content="Invert"
-                                  TabIndex="15" IsChecked="{Binding Path=Invert}"/>
+                                  TabIndex="15" IsChecked="{Binding Param.Invert}"/>
                     <CheckBox x:Name="Debug" Content="Debug (D)"
-                                  TabIndex="16" IsChecked="{Binding Path=Debug}"/>
+                                  TabIndex="16" IsChecked="{Binding Param.Debug}"/>
                     <StackPanel Margin="15,0,0,0" Visibility="{Binding IsChecked, ElementName=Debug,
                                                                Converter={StaticResource BooleanToVisibilityConverter}}">
                         <CheckBox x:Name="DebugSpecificOption" Content="Not in use" TabIndex="17" />
@@ -177,10 +180,12 @@
                     <TextBlock Text="Pull to" />
                     <TextBlock Text="X" Margin="67,-26,0,0"/>
                     <TextBox x:Name="PullPointX" PreviewTextInput="PositiveNumberValidation"
-                                 TabIndex="18" Margin="84,-22,0,0" Width="40" Text="{Binding Path=PullPointX}"/>
+                             TabIndex="18" Margin="84,-22,0,0" Width="40"
+                             Text="{Binding Param.PullPointX,UpdateSourceTrigger=Explicit}"/>
                     <TextBlock Text="Y" Margin="127,-26,0,0"/>
                     <TextBox x:Name="PullPointY" PreviewTextInput="PositiveNumberValidation"
-                                 TabIndex="19" Margin="144,-22,0,0" Width="40" Text="{Binding Path=PullPointY}"/>
+                             TabIndex="19" Margin="144,-22,0,0" Width="40"
+                             Text="{Binding Param.PullPointY,UpdateSourceTrigger=Explicit}"/>
                     <Button x:Name="PullPointButton" Content="Point by click"
                                 Margin="84,5,0,0" Click="PullPointButton_Click"
                                 HorizontalAlignment="Left" />
@@ -224,6 +229,7 @@
                     <TextBlock.ContextMenu>
                         <ContextMenu>
                             <MenuItem x:Name="CopyArgs" Header="Copy" Click="CopyArgs_Click" />
+                            <MenuItem x:Name="PasteArgs" Header="Paste" Click="PasteArgs_Click" />
                         </ContextMenu>
                     </TextBlock.ContextMenu>
                 </TextBlock>

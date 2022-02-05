@@ -6,7 +6,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Drawing;
-using System.Text.RegularExpressions;
 using System.Windows.Data;
 using System.Globalization;
 
@@ -21,14 +20,14 @@ namespace ImageDrawerUI
 
 		private void Compare_Click(object sender, RoutedEventArgs e)
 		{
-			ImageSource temp = model.Original;
-			model.Original = Image.Source;
+			ImageSource temp = Model.Original;
+			Model.Original = Image.Source;
 			Image.Source = temp;
 		}
 
 		private void Save_Click(object sender, RoutedEventArgs e)
 		{
-			if (model.Processed == null)
+			if (Model.Processed == null)
 				return;
 
 			Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog
@@ -38,7 +37,7 @@ namespace ImageDrawerUI
 
 			bool? result = dlg.ShowDialog();
 			if (result == true)
-				Logic.SaveAsPng(model.Processed as BitmapSource, dlg.FileName);
+				Logic.SaveAsPng(Model.Processed as BitmapSource, dlg.FileName);
 		}
 
 		private void ImageGrid_MouseWheel(object sender, MouseWheelEventArgs e)
@@ -75,7 +74,7 @@ namespace ImageDrawerUI
 				ColorValue.Text = $"{color.R,3},{color.G,3},{color.B,3}";
 			}
 
-			if (model.Debug)
+			if (Model.Param.Debug)
 			{
 				point = Mouse.GetPosition(ImageGrid);
 				DebugPousePositionX.Margin = new Thickness(point.X, 0, 0, 0);
@@ -115,7 +114,7 @@ namespace ImageDrawerUI
 			if (e.Key == Key.Subtract || e.Key == Key.OemMinus)
 				ChangeZoom(false);
 			if (e.Key == Key.D)
-				model.Debug = !model.Debug;
+				Model.Param.Debug = !Model.Param.Debug;
 		}
 
 		private void ImageGrid_Loaded(object sender, RoutedEventArgs e)
@@ -146,11 +145,11 @@ namespace ImageDrawerUI
 				!int.TryParse(((TextBox)e.Source).Text, out _))
 				return;
 
-			TextBox tBox = (TextBox)sender;
-			DependencyProperty prop = TextBox.TextProperty;
-			BindingExpression binding = BindingOperations.GetBindingExpression(tBox, prop);
+			BindingExpression binding = BindingOperations.GetBindingExpression((TextBox)sender,
+				TextBox.TextProperty);
 			if (binding != null)
-				binding.UpdateSource();
+				binding.UpdateSource(); // manually update value in source
+			Model.UpdateView();
 		}
 		private void Open_Click(object sender, RoutedEventArgs e)
 		{
@@ -163,7 +162,7 @@ namespace ImageDrawerUI
 
 			if (result == true)
 			{
-				model.Filename = dlg.FileName;
+				Model.Filename = dlg.FileName;
 				Render();
 			}
 		}
@@ -187,8 +186,9 @@ namespace ImageDrawerUI
 			Image.MouseDown -= new MouseButtonEventHandler(Image_MouseDown);
 
 			System.Windows.Point point = GetCursorOverImagePosition();
-			model.PullPointX = (int)point.X;
-			model.PullPointY = (int)point.Y;
+			Model.Param.PullPointX = (int)point.X;
+			Model.Param.PullPointY = (int)point.Y;
+			Model.UpdateView();
 		}
 
 		private System.Windows.Point GetCursorOverImagePosition()
@@ -214,6 +214,15 @@ namespace ImageDrawerUI
 			Clipboard.SetText(Arguments.Text);
 		}
 
+		private void PasteArgs_Click(object sender, RoutedEventArgs e)
+		{
+			LogicParams parsedParams = Logic.ParseArgs(new LogicParams { }, Clipboard.GetText().Split());
+			Model.Param = parsedParams.RenderParams;
+			Model.Filename = parsedParams.InputFilename;
+			Arguments.Text = Logic.CopyArgs(Model.Filename, Model.Param);
+			Model.UpdateView();
+		}
+
 		private void Window_MouseDown(object sender, MouseButtonEventArgs e)
 		{
 			gridBorder.BorderThickness = new Thickness(0);
@@ -234,8 +243,13 @@ namespace ImageDrawerUI
 
 		private void ImageGrid_MouseEnter(object sender, MouseEventArgs e)
 		{
-			DebugPousePositionX.Visibility = model.Debug ? Visibility.Visible : Visibility.Collapsed;
-			DebugPousePositionY.Visibility = model.Debug ? Visibility.Visible : Visibility.Collapsed;
+			DebugPousePositionX.Visibility = Model.Param.Debug ? Visibility.Visible : Visibility.Collapsed;
+			DebugPousePositionY.Visibility = Model.Param.Debug ? Visibility.Visible : Visibility.Collapsed;
+		}
+
+		private void Control_ValueChanged(object sender, RoutedEventArgs e)
+		{
+			Model.UpdateView();
 		}
 	}
 

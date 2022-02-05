@@ -32,69 +32,69 @@ namespace ImageDrawer
 		public RenderParams RenderParams;
 	}
 
-	public struct RenderParams
+	public class RenderParams
 	{
 		[ConsoleArgument("l")]
-		public int LinesCount;
+		public int LinesCount { get; set; }
 
 		[ConsoleArgument("s")]
-		public int Stroke; // в конце прямо перед отрисовкой
+		public int Stroke { get; set; } // в конце прямо перед отрисовкой
 
 		[ConsoleArgument("f")]
-		public int Factor;
+		public int Factor { get; set; }
 
 		[ConsoleArgument("c")]
-		public int ChunkSize;
+		public int ChunkSize { get; set; }
 
 		[ConsoleArgument("g")]
-		public int GreyPoint;
+		public int GreyPoint { get; set; }
 
 		[ConsoleArgument("b")]
-		public int BlackPoint;
+		public int BlackPoint { get; set; }
 
 		[ConsoleArgument("w")]
-		public int WhitePoint;
+		public int WhitePoint { get; set; }
 
 		[ConsoleArgument("a")]
-		public int Angle;
+		public int Angle { get; set; }
 
 		[ConsoleArgument("st")]
-		public SmoothingType Smoothing; // в начале
+		public SmoothingType Smoothing { get; set; } // в начале
 
 		[ConsoleArgument("lt")]
-		public LineType LineType; // в конце
+		public LineType LineType { get; set; } // в конце
 
 		[ConsoleArgument("mt")]
-		public MethodType Method; // в начале
+		public MethodType Method { get; set; } // в начале
 
 		[ConsoleArgument("bt")]
-		public Type Backend;
+		public Type Backend { get; set; }
 
 		[ConsoleArgument("dos")]
-		public bool DrawOnSides;
+		public bool DrawOnSides { get; set; }
 
 		[ConsoleArgument("pap")]
-		public int PointsAroundPeak;
+		public int PointsAroundPeak { get; set; }
 
 		[ConsoleArgument("fi")]
-		public bool FillInside;
+		public bool FillInside { get; set; }
 
 		[ConsoleArgument("inv")]
-		public bool Invert;
+		public bool Invert { get; set; }
 
 		[ConsoleArgument("d")]
-		public bool Debug;
+		public bool Debug { get; set; }
 
 		[ConsoleArgument("ptx")]
-		public int PullPointX;
+		public int PullPointX { get; set; }
 
 		[ConsoleArgument("pty")]
-		public int PullPointY;
+		public int PullPointY { get; set; }
 
 		//TODO: рендерится не все сразу, а можно отрендерить лишь одну вертиальную линию например, чтобы можно было это анимировать. ниче не понял
 	}
 
-	[AttributeUsage(AttributeTargets.Field)]
+	[AttributeUsage(AttributeTargets.Property)]
 	public class ConsoleArgumentAttribute : Attribute
 	{
 		public ConsoleArgumentAttribute(string name)

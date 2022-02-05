@@ -13,7 +13,7 @@ namespace ImageDrawerUI
 	public partial class MainWindow : Window
 	{
 		private readonly string appName = "Ridge Drawer";
-		private RenderParamsModel model;
+		private RenderParamsModel Model { get; set; }
 		private int scaleFactor = 1;
 		private readonly int maxScaleFactor = 8;
 		private System.Windows.Point startPos;
@@ -63,7 +63,7 @@ namespace ImageDrawerUI
 			FillComboBox(LineType, typeof(LineType));
 			FillComboBox(Method, typeof(MethodType));
 			FillComboBox(Backend, typeof(BackendDrawerBase));
-			model = new RenderParamsModel(
+			Model = new RenderParamsModel(
 				new RenderParams
 				{
 					LinesCount = 50,
@@ -87,13 +87,13 @@ namespace ImageDrawerUI
 					PullPointY = 540
 				},
 				@"..\soldier.png", Render);
-			DataContext = model;
+			DataContext = Model;
 			Render();
 		}
 
 		public System.Drawing.Color GetPixelOfOriginal(int x, int y)
 		{
-			return model.OriginalBitmap.GetPixel(x, y);
+			return Model.OriginalBitmap.GetPixel(x, y);
 		}
 
 		private void FillComboBox(ComboBox comboBox, Type type)
@@ -105,7 +105,7 @@ namespace ImageDrawerUI
 		}
 		private void LockUnusedParams()
 		{
-			switch (model.Method)
+			switch (Model.Param.Method)
 			{
 				case MethodType.Ridge:
 					WhitePoint.IsEnabled = true;
@@ -122,19 +122,19 @@ namespace ImageDrawerUI
 
 		private void Render()
 		{
-			if (!File.Exists(model.Filename))
+			if (!File.Exists(Model.Filename))
 				return;
 
 			LockUnusedParams();
 			NotImplementedLabel.Visibility = Visibility.Collapsed;
 			Cursor = Cursors.Wait;
-			Arguments.Text = Logic.CopyArgs(model.Filename, model.Param);
-			Window.Title = $"{Path.GetFileName(model.Filename)} - {appName}";
-			model.OriginalBitmap = new Bitmap(model.Filename);
-			model.Original = ConvertToNativeDpi(model.OriginalBitmap);
+			Arguments.Text = Logic.CopyArgs(Model.Filename, Model.Param);
+			Window.Title = $"{Path.GetFileName(Model.Filename)} - {appName}";
+			Model.OriginalBitmap = new Bitmap(Model.Filename);
+			Model.Original = ConvertToNativeDpi(Model.OriginalBitmap);
 			try
 			{
-				model.Processed = ConvertToNativeDpi(Logic.ProcessByFilename(model.Filename, model.Param));
+				Model.Processed = ConvertToNativeDpi(Logic.ProcessByFilename(Model.Filename, Model.Param));
 			}
 			catch (NotImplementedException e)
 			{
@@ -143,7 +143,7 @@ namespace ImageDrawerUI
 				Arguments.Text = string.Empty;
 			}
 
-			Image.Source = model.Processed;
+			Image.Source = Model.Processed;
 			Image.MaxWidth = OriginalWidth * maxScaleFactor;
 			Image.MaxHeight = OriginalHeight * maxScaleFactor;
 			Cursor = Cursors.Arrow;
