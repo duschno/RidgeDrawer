@@ -45,10 +45,5 @@ namespace ImageDrawerUI
 			OnPropertyChanged(nameof(Param));
 			render?.Invoke();
 		}
-
-		public static explicit operator LogicParams(RenderParamsModel model)
-		{
-			return new LogicParams { InputFilename = model.Filename, RenderParams = model.Param };
-		}
 	}
 }

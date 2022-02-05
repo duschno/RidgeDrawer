@@ -224,9 +224,14 @@ namespace ImageDrawerUI
 
 		private void PasteArgs_Click(object sender, RoutedEventArgs e)
 		{
-			LogicParams parsedParams = Logic.ParseArgs((LogicParams)Model, Clipboard.GetText().Split());
-			Model.Param = parsedParams.RenderParams;
-			Model.Filename = parsedParams.InputFilename;
+			LogicParams logicParams = new LogicParams()
+			{
+				InputFilename = Model.Filename,
+				RenderParams = Model.Param
+			};
+			logicParams = Logic.ParseArgs(logicParams, Clipboard.GetText().Split());
+			Model.Filename = logicParams.InputFilename;
+			Model.Param = logicParams.RenderParams;
 			Arguments.Text = Logic.CopyArgs(Model.Filename, Model.Param);
 			Model.UpdateView();
 		}
