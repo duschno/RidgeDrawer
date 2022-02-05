@@ -114,7 +114,10 @@ namespace ImageDrawerUI
 			if (e.Key == Key.Subtract || e.Key == Key.OemMinus)
 				ChangeZoom(false);
 			if (e.Key == Key.D)
+			{
 				Model.Param.Debug = !Model.Param.Debug;
+				Model.UpdateView();
+			}
 		}
 
 		private void ImageGrid_Loaded(object sender, RoutedEventArgs e)
@@ -163,7 +166,7 @@ namespace ImageDrawerUI
 			if (result == true)
 			{
 				Model.Filename = dlg.FileName;
-				Render();
+				Model.UpdateView();
 			}
 		}
 

@@ -86,9 +86,36 @@ namespace ImageDrawerUI
 					PullPointX = 960,
 					PullPointY = 540
 				},
-				@"..\soldier.png", Render);
+				@"..\soldier.png",
+				() => {
+					if (!File.Exists(Model.Filename))
+						return;
+
+					LockUnusedParams();
+					NotImplementedLabel.Visibility = Visibility.Collapsed;
+					Cursor = Cursors.Wait;
+					Arguments.Text = Logic.CopyArgs(Model.Filename, Model.Param);
+					Window.Title = $"{Path.GetFileName(Model.Filename)} - {appName}";
+					Model.OriginalBitmap = new Bitmap(Model.Filename);
+					Model.Original = ConvertToNativeDpi(Model.OriginalBitmap);
+					try
+					{
+						Model.Processed = ConvertToNativeDpi(Logic.ProcessByFilename(Model.Filename, Model.Param));
+					}
+					catch (NotImplementedException e)
+					{
+						NotImplementedLabel.Content = $"{e.Message}:\n{e.StackTrace}";
+						NotImplementedLabel.Visibility = Visibility.Visible;
+						Arguments.Text = string.Empty;
+					}
+
+					Image.Source = Model.Processed;
+					Image.MaxWidth = OriginalWidth * maxScaleFactor;
+					Image.MaxHeight = OriginalHeight * maxScaleFactor;
+					Cursor = Cursors.Arrow;
+				});
 			DataContext = Model;
-			Render();
+			Model.UpdateView();
 		}
 
 		public System.Drawing.Color GetPixelOfOriginal(int x, int y)
@@ -118,35 +145,6 @@ namespace ImageDrawerUI
 				default:
 					break;
 			}
-		}
-
-		private void Render()
-		{
-			if (!File.Exists(Model.Filename))
-				return;
-
-			LockUnusedParams();
-			NotImplementedLabel.Visibility = Visibility.Collapsed;
-			Cursor = Cursors.Wait;
-			Arguments.Text = Logic.CopyArgs(Model.Filename, Model.Param);
-			Window.Title = $"{Path.GetFileName(Model.Filename)} - {appName}";
-			Model.OriginalBitmap = new Bitmap(Model.Filename);
-			Model.Original = ConvertToNativeDpi(Model.OriginalBitmap);
-			try
-			{
-				Model.Processed = ConvertToNativeDpi(Logic.ProcessByFilename(Model.Filename, Model.Param));
-			}
-			catch (NotImplementedException e)
-			{
-				NotImplementedLabel.Content = $"{e.Message}:\n{e.StackTrace}";
-				NotImplementedLabel.Visibility = Visibility.Visible;
-				Arguments.Text = string.Empty;
-			}
-
-			Image.Source = Model.Processed;
-			Image.MaxWidth = OriginalWidth * maxScaleFactor;
-			Image.MaxHeight = OriginalHeight * maxScaleFactor;
-			Cursor = Cursors.Arrow;
 		}
 
 		private BitmapSource ConvertToNativeDpi(Bitmap bitmap)
