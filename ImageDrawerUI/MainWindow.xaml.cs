@@ -198,8 +198,8 @@ namespace ImageDrawerUI
 		private System.Windows.Point? GetCursorOverImagePosition()
 		{
 			System.Windows.Point point = Mouse.GetPosition(Image);
-			if (point.X < 0 || point.X > OriginalWidth - 1 ||
-				point.Y < 0 || point.Y > OriginalHeight - 1)
+			if (point.X < 0 || point.X >= Image.ActualWidth ||
+				point.Y < 0 || point.Y >= Image.ActualHeight)
 				return null;
 
 			System.Windows.Point resPoint = new System.Windows.Point();
