@@ -88,7 +88,7 @@
                           Background="White">
                 <StackPanel Width="200" HorizontalAlignment="Left" Grid.Row="0">
                     <!--#region Buttons-->
-                    <Button Content="Open (O)" Margin="15,20,0,0" Click="Open_Click" HorizontalAlignment="Left"/>
+                    <Button Content="Open (O)" Margin="15,10,0,0" Click="Open_Click" HorizontalAlignment="Left"/>
                     <Button Content="Compare (C)" Margin="0,-20,16,0" Click="Compare_Click" HorizontalAlignment="Right"/>
                     <Button Content="Save (S)" Margin="15,10,0,0" Click="Save_Click" HorizontalAlignment="Left"/>
                     <Button Content="Reset (R)" Margin="0,-20,16,0" Click="Reset_Click" HorizontalAlignment="Right"/>
@@ -209,7 +209,7 @@
                 <Rectangle x:Name="DebugPousePositionY" VerticalAlignment="Top" Fill="DarkOrange"
                            Panel.ZIndex="4" Height="1" Visibility="Collapsed" />
                 <Button x:Name="FullsizeButton" Content="Fullsize (0/F)" Style="{StaticResource FullsizeButtonStyle}"
-                        HorizontalAlignment="Left" Margin="5,5,0,0" VerticalAlignment="Top"
+                        HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"
                         Panel.ZIndex="2" Width="80" Height="20" Click="FullsizeButton_Click"/>
                 <Label x:Name="NotImplementedLabel" Panel.ZIndex="3"
                        VerticalAlignment="Center" HorizontalAlignment="Center"
