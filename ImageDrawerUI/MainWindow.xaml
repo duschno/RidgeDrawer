@@ -214,7 +214,13 @@
                 <Label x:Name="NotImplementedLabel" Panel.ZIndex="3"
                        VerticalAlignment="Center" HorizontalAlignment="Center"
                        Foreground="#E6E4E1" Visibility="Hidden" FontFamily="Consolas" Background="#1E1E1E"/>
-                <Image x:Name="Image" Stretch="None" Panel.ZIndex="1"/>
+                <Image x:Name="Image" Stretch="None" Panel.ZIndex="1">
+                    <Image.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem x:Name="CopyImage" Header="Copy" Click="CopyImage_Click" />
+                        </ContextMenu>
+                    </Image.ContextMenu>
+                </Image>
                 <Rectangle Fill="Gray"/>
             </Grid>
         </Grid>

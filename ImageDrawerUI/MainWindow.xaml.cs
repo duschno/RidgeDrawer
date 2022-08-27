@@ -225,6 +225,11 @@ namespace ImageDrawerUI
 			return resPoint;
 		}
 
+		private void CopyImage_Click(object sender, RoutedEventArgs e)
+		{
+			Clipboard.SetImage(Model.Processed as BitmapSource);
+		}
+
 		private void CopyArgs_Click(object sender, RoutedEventArgs e)
 		{
 			Clipboard.SetText(Arguments.Text);
