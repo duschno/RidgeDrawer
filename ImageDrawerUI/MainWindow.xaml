@@ -7,7 +7,8 @@
         mc:Ignorable="d"
         x:Name="Window"
         Height="800" Width="1000" MinWidth="640" MinHeight="480"
-        KeyDown="Window_KeyDown" WindowStartupLocation="CenterScreen" PreviewMouseDown="Window_MouseDown">
+        KeyDown="Window_KeyDown" WindowStartupLocation="CenterScreen" PreviewMouseDown="Window_MouseDown"
+        ResizeMode="CanResizeWithGrip">
     <Window.Resources>
         <ResourceDictionary>
             <local:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
@@ -224,7 +225,7 @@
             <StatusBarItem>
                 <TextBlock Name="ColorValue" Style="{StaticResource StatusBarTextBlock}"/>
             </StatusBarItem>
-            <StatusBarItem HorizontalAlignment="Right">
+            <StatusBarItem HorizontalAlignment="Right" Margin="0,0,17,0">
                 <TextBlock Name="Arguments" Style="{StaticResource StatusBarTextBlock}">
                     <TextBlock.ContextMenu>
                         <ContextMenu>
