@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Reflection;
 
 namespace ImageDrawer
 {
-
 	public enum SmoothingType
 	{
 		None,
@@ -90,6 +90,14 @@ namespace ImageDrawer
 
 		[ConsoleArgument("pty")]
 		public int PullPointY { get; set; }
+
+		public RenderParams Clone()
+		{
+			RenderParams clone = new RenderParams();
+			foreach (PropertyInfo prop in typeof(RenderParams).GetProperties())
+				prop.SetValue(clone, prop.GetValue(this));
+			return clone;
+		}
 
 		//TODO: рендерится не все сразу, а можно отрендерить лишь одну вертиальную линию например, чтобы можно было это анимировать. ниче не понял
 	}

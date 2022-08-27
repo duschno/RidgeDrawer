@@ -14,10 +14,8 @@
             <local:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
             <local:EnumToStringConverter x:Key="EnumToStringConverter" />
             <Style TargetType="{x:Type Button}">
-                <Setter Property="Width" Value="100" />
+                <Setter Property="Width" Value="80" />
                 <Setter Property="Height" Value="20" />
-                <Setter Property="HorizontalAlignment" Value="Center" />
-                <Setter Property="VerticalAlignment" Value="Top" />
             </Style>
             <Style TargetType="{x:Type TextBox}">
                 <Setter Property="Width" Value="100" />
@@ -90,9 +88,10 @@
                           Background="White">
                 <StackPanel Width="200" HorizontalAlignment="Left" Grid.Row="0">
                     <!--#region Buttons-->
-                    <Button Content="Open image (O)" Margin="0,20,0,0" Click="Open_Click"/>
-                    <Button Content="Compare (C)" Margin="0,20,0,0" Click="Compare_Click"/>
-                    <Button Content="Save (S)" Margin="0,20,0,0" Click="Save_Click"/>
+                    <Button Content="Open (O)" Margin="15,20,0,0" Click="Open_Click" HorizontalAlignment="Left"/>
+                    <Button Content="Compare (C)" Margin="0,-20,16,0" Click="Compare_Click" HorizontalAlignment="Right"/>
+                    <Button Content="Save (S)" Margin="15,10,0,0" Click="Save_Click" HorizontalAlignment="Left"/>
+                    <Button Content="Reset (R)" Margin="0,-20,16,0" Click="Reset_Click" HorizontalAlignment="Right"/>
                     <!--#endregion-->
 
                     <Separator Height="8" Visibility="Hidden"/>
@@ -189,7 +188,8 @@
                              Text="{Binding Param.PullPointY,UpdateSourceTrigger=Explicit}"/>
                     <Button x:Name="PullPointButton" Content="Point by click"
                                 Margin="84,5,0,0" Click="PullPointButton_Click"
-                                HorizontalAlignment="Left" />
+                                HorizontalAlignment="Left"
+                                Width="100"/>
                     <!--#endregion-->
                 </StackPanel>
             </ScrollViewer>

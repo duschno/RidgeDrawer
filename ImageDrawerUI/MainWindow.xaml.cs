@@ -40,6 +40,12 @@ namespace ImageDrawerUI
 				Logic.SaveAsPng(Model.Processed as BitmapSource, dlg.FileName);
 		}
 
+		private void Reset_Click(object sender, RoutedEventArgs e)
+		{
+			Model.Param = Model.DefaultParam.Clone();
+			Model.UpdateView();
+		}
+
 		private void ImageGrid_MouseWheel(object sender, MouseWheelEventArgs e)
 		{
 			ChangeZoom(e.Delta > 0);
@@ -106,6 +112,8 @@ namespace ImageDrawerUI
 				Compare_Click(null, null);
 			if (e.Key == Key.S)
 				Save_Click(null, null);
+			if (e.Key == Key.R)
+				Reset_Click(null, null);
 			if (e.Key == Key.D0 || e.Key == Key.NumPad0 || e.Key == Key.F)
 				SetOriginalSize();
 			if (e.Key == Key.Add || e.Key == Key.OemPlus)

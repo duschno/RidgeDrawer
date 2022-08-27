@@ -11,12 +11,14 @@ namespace ImageDrawerUI
 		public RenderParamsModel(RenderParams param, string filename, Action renderAction)
 		{
 			Param = param;
+			DefaultParam = param.Clone();
 			Filename = filename;
 			render = renderAction;
 		}
 
 		private Action render;
 		public RenderParams Param { get; set; }
+		public RenderParams DefaultParam { get; set; }
 		public string Filename { get; set; }
 		public Bitmap OriginalBitmap { get; set; }
 		public ImageSource Original { get; set; }
