@@ -227,7 +227,7 @@ namespace ImageDrawerUI
 
 		private void CopyImage_Click(object sender, RoutedEventArgs e)
 		{
-			Clipboard.SetImage(Model.Processed as BitmapSource);
+			Clipboard.SetImage(Image.Source as BitmapSource);
 		}
 
 		private void CopyArgs_Click(object sender, RoutedEventArgs e)
