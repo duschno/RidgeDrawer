@@ -39,8 +39,8 @@ namespace ImageDrawerUI
 		{
 			get
 			{
-				return Image.ActualWidth <= ImageGrid.ActualWidth &&
-					Image.ActualHeight <= ImageGrid.ActualHeight;
+				return Image.ActualWidth <= Viewport.ActualWidth &&
+					Image.ActualHeight <= Viewport.ActualHeight;
 			}
 		}
 
@@ -234,30 +234,30 @@ namespace ImageDrawerUI
 
 			if (IsOriginalSize)
 			{
-				if (OriginalWidth < ImageGrid.ActualWidth &&
-					OriginalHeight < ImageGrid.ActualHeight)
+				if (OriginalWidth < Viewport.ActualWidth &&
+					OriginalHeight < Viewport.ActualHeight)
 					Image.Stretch = Stretch.None;
 				else
 					Image.Stretch = Stretch.Uniform;
 
-				ImageGrid.Cursor = Cursors.Arrow;
+				Viewport.Cursor = Cursors.Arrow;
 				RenderOptions.SetBitmapScalingMode(Image, BitmapScalingMode.Linear);
 				Image.Margin = new Thickness();
 				oldMargin = new Thickness();
 			}
 			else
 			{
-				if (Image.Width <= ImageGrid.ActualWidth &&
-					Image.Height <= ImageGrid.ActualHeight)
+				if (Image.Width <= Viewport.ActualWidth &&
+					Image.Height <= Viewport.ActualHeight)
 				{
 					Image.Margin = new Thickness();
 					oldMargin = new Thickness();
-					ImageGrid.Cursor = Cursors.Arrow;
+					Viewport.Cursor = Cursors.Arrow;
 					Image.Stretch = Stretch.Uniform;
 				}
 				else
 				{
-					ImageGrid.Cursor = Cursors.SizeAll;
+					Viewport.Cursor = Cursors.SizeAll;
 					Image.Stretch = Stretch.Uniform;
 				}
 
@@ -267,8 +267,8 @@ namespace ImageDrawerUI
 
 		private Thickness CheckBoundaries(Thickness margin)
 		{
-			double widthOver = ImageGrid.ActualWidth - Image.Width;
-			double heightOver = ImageGrid.ActualHeight - Image.Height;
+			double widthOver = Viewport.ActualWidth - Image.Width;
+			double heightOver = Viewport.ActualHeight - Image.Height;
 
 			if (widthOver >= 0 || margin.Left > 0)
 				margin.Left = 0;

@@ -195,15 +195,15 @@
             </ScrollViewer>
 
             <Border x:Name="gridBorder" BorderBrush="DarkOrange" Grid.Column="1" />
-            <Grid Name="ImageGrid" SnapsToDevicePixels="True" UseLayoutRounding="True" Grid.Column="1" Panel.ZIndex="-1"
-                  Loaded="ImageGrid_Loaded"
-                  SizeChanged="ImageGrid_SizeChanged"
-                  MouseWheel="ImageGrid_MouseWheel"
-                  MouseMove="ImageGrid_MouseMove"
-                  MouseLeftButtonDown="ImageGrid_MouseLeftButtonDown"
-                  MouseLeftButtonUp="ImageGrid_MouseLeftButtonUp"
-                  MouseEnter="ImageGrid_MouseEnter"
-                  MouseLeave="ImageGrid_MouseLeave" Focusable="True">
+            <Grid Name="Viewport" SnapsToDevicePixels="True" UseLayoutRounding="True" Grid.Column="1" Panel.ZIndex="-1"
+                  Loaded="Viewport_Loaded"
+                  SizeChanged="Viewport_SizeChanged"
+                  MouseWheel="Viewport_MouseWheel"
+                  MouseMove="Viewport_MouseMove"
+                  MouseLeftButtonDown="Viewport_MouseLeftButtonDown"
+                  MouseLeftButtonUp="Viewport_MouseLeftButtonUp"
+                  MouseEnter="Viewport_MouseEnter"
+                  MouseLeave="Viewport_MouseLeave" Focusable="True">
                 <Rectangle x:Name="DebugPousePositionX" HorizontalAlignment="Left" Fill="DarkOrange"
                            Panel.ZIndex="4" Width="1" Visibility="Collapsed"/>
                 <Rectangle x:Name="DebugPousePositionY" VerticalAlignment="Top" Fill="DarkOrange"

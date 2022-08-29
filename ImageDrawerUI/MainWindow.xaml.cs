@@ -46,21 +46,21 @@ namespace ImageDrawerUI
 			Model.UpdateView();
 		}
 
-		private void ImageGrid_MouseWheel(object sender, MouseWheelEventArgs e)
+		private void Viewport_MouseWheel(object sender, MouseWheelEventArgs e)
 		{
 			ChangeZoom(e.Delta > 0);
 		}
 
-		private void ImageGrid_MouseMove(object sender, MouseEventArgs e)
+		private void Viewport_MouseMove(object sender, MouseEventArgs e)
 		{
 			if ((e.LeftButton == MouseButtonState.Pressed || e.MiddleButton == MouseButtonState.Pressed) && 
 				Image.Stretch != Stretch.None)
 			{
 				System.Windows.Point newPos = Mouse.GetPosition(Window);
 				Thickness margin = Image.Margin;
-				if (ImageGrid.ActualHeight < Image.ActualHeight)
+				if (Viewport.ActualHeight < Image.ActualHeight)
 					margin.Top = oldMargin.Top - (startPos - newPos).Y;
-				if (ImageGrid.ActualWidth < Image.ActualWidth)
+				if (Viewport.ActualWidth < Image.ActualWidth)
 					margin.Left = oldMargin.Left - (startPos - newPos).X;
 
 				Image.Margin = CheckBoundaries(margin);
@@ -81,20 +81,20 @@ namespace ImageDrawerUI
 
 			if (Model.Param.Debug)
 			{
-				point = Mouse.GetPosition(ImageGrid);
+				point = Mouse.GetPosition(Viewport);
 				DebugPousePositionX.Margin = new Thickness(point.Value.X, 0, 0, 0);
 				DebugPousePositionY.Margin = new Thickness(0, point.Value.Y, 0, 0);
 			}
 		}
 
-		private void ImageGrid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		private void Viewport_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
-			ImageGrid.Focus();
+			Viewport.Focus();
 			startPos = Mouse.GetPosition(Window);
 			Mouse.Capture(Image);
 		}
 
-		private void ImageGrid_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+		private void Viewport_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
 		{
 			oldMargin = Image.Margin;
 			Mouse.Capture(null);
@@ -127,7 +127,7 @@ namespace ImageDrawerUI
 			}
 		}
 
-		private void ImageGrid_Loaded(object sender, RoutedEventArgs e)
+		private void Viewport_Loaded(object sender, RoutedEventArgs e)
 		{
 			if (!IsFittingGrid)
 			{
@@ -136,9 +136,9 @@ namespace ImageDrawerUI
 			}
 		}
 
-		private void ImageGrid_SizeChanged(object sender, SizeChangedEventArgs e)
+		private void Viewport_SizeChanged(object sender, SizeChangedEventArgs e)
 		{
-			if (ImageGrid.IsLoaded)
+			if (Viewport.IsLoaded)
 				ChangeUIProps();
 		}
 
@@ -187,13 +187,13 @@ namespace ImageDrawerUI
 
 		private void PullPointButton_Click(object sender, RoutedEventArgs e)
 		{
-			ImageGrid.PreviewMouseDown += new MouseButtonEventHandler(ImageGrid_PreviewMouseDown);
+			Viewport.PreviewMouseDown += new MouseButtonEventHandler(Viewport_PreviewMouseDown);
 			gridBorder.BorderThickness = new Thickness(3);
 		}
 
-		private void ImageGrid_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+		private void Viewport_PreviewMouseDown(object sender, MouseButtonEventArgs e)
 		{
-			ImageGrid.PreviewMouseDown -= new MouseButtonEventHandler(ImageGrid_PreviewMouseDown);
+			Viewport.PreviewMouseDown -= new MouseButtonEventHandler(Viewport_PreviewMouseDown);
 
 			System.Windows.Point? point = GetCursorOverImagePosition();
 			if (point.HasValue)
@@ -254,12 +254,12 @@ namespace ImageDrawerUI
 			gridBorder.BorderThickness = new Thickness(0);
 			if (e.OriginalSource != Image)
 			{
-				ImageGrid.PreviewMouseDown -= new MouseButtonEventHandler(ImageGrid_PreviewMouseDown);
+				Viewport.PreviewMouseDown -= new MouseButtonEventHandler(Viewport_PreviewMouseDown);
 				e.Handled = false;
 			}
 		}
 
-		private void ImageGrid_MouseLeave(object sender, MouseEventArgs e)
+		private void Viewport_MouseLeave(object sender, MouseEventArgs e)
 		{
 			CursorPosition.Text = string.Empty;
 			ColorValue.Text = string.Empty;
@@ -267,7 +267,7 @@ namespace ImageDrawerUI
 			DebugPousePositionY.Visibility = Visibility.Collapsed;
 		}
 
-		private void ImageGrid_MouseEnter(object sender, MouseEventArgs e)
+		private void Viewport_MouseEnter(object sender, MouseEventArgs e)
 		{
 			DebugPousePositionX.Visibility = Model.Param.Debug ? Visibility.Visible : Visibility.Collapsed;
 			DebugPousePositionY.Visibility = Model.Param.Debug ? Visibility.Visible : Visibility.Collapsed;
