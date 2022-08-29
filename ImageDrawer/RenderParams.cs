@@ -91,6 +91,8 @@ namespace ImageDrawer
 		[ConsoleArgument("pty")]
 		public int PullPointY { get; set; }
 
+		//добавить еще 2 паарметра - сколько процентов от общего надо рисовать. если 0 и 100, то рисовать все, если 10 и 90, то с боков не будет
+
 		public RenderParams Clone()
 		{
 			RenderParams clone = new RenderParams();
