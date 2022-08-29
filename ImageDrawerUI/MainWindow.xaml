@@ -11,11 +11,11 @@
         ResizeMode="CanResizeWithGrip">
     <Window.Resources>
         <ResourceDictionary>
-            <local:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-            <local:EnumToStringConverter x:Key="EnumToStringConverter" />
+            <local:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+            <local:EnumToStringConverter x:Key="EnumToStringConverter"/>
             <Style TargetType="{x:Type Button}">
-                <Setter Property="Width" Value="80" />
-                <Setter Property="Height" Value="20" />
+                <Setter Property="Width" Value="80"/>
+                <Setter Property="Height" Value="20"/>
             </Style>
             <Style TargetType="{x:Type Button}" x:Key="FullsizeButtonStyle">
                 <Style.Triggers>
@@ -29,37 +29,37 @@
                 </Style.Triggers>
             </Style>
             <Style TargetType="{x:Type TextBox}">
-                <Setter Property="Width" Value="100" />
-                <Setter Property="Height" Value="20" />
-                <Setter Property="HorizontalAlignment" Value="Left" />
-                <Setter Property="VerticalAlignment" Value="Top" />
-                <Setter Property="TextWrapping" Value="Wrap" />
-                <Setter Property="Margin" Value="84,-22,0,0" />
+                <Setter Property="Width" Value="100"/>
+                <Setter Property="Height" Value="20"/>
+                <Setter Property="HorizontalAlignment" Value="Left"/>
+                <Setter Property="VerticalAlignment" Value="Top"/>
+                <Setter Property="TextWrapping" Value="Wrap"/>
+                <Setter Property="Margin" Value="84,-22,0,0"/>
                 <EventSetter Event="KeyDown" Handler="ParamChange_KeyDown"/>
                 <EventSetter Event="PreviewKeyDown" Handler="ParamChange_PreviewKeyDown"/>
             </Style>
             <Style TargetType="{x:Type CheckBox}">
-                <Setter Property="HorizontalAlignment" Value="Left" />
-                <Setter Property="VerticalAlignment" Value="Top" />
-                <Setter Property="Margin" Value="15,5,0,0" />
+                <Setter Property="HorizontalAlignment" Value="Left"/>
+                <Setter Property="VerticalAlignment" Value="Top"/>
+                <Setter Property="Margin" Value="15,5,0,0"/>
                 <EventSetter Event="Checked" Handler="Control_ValueChanged"/>
                 <EventSetter Event="Unchecked" Handler="Control_ValueChanged"/>
             </Style>
             <Style TargetType="{x:Type TextBlock}">
-                <Setter Property="HorizontalAlignment" Value="Left" />
-                <Setter Property="VerticalAlignment" Value="Top" />
-                <Setter Property="Padding" Value="5" />
-                <Setter Property="Margin" Value="10,4,0,0" />
+                <Setter Property="HorizontalAlignment" Value="Left"/>
+                <Setter Property="VerticalAlignment" Value="Top"/>
+                <Setter Property="Padding" Value="5"/>
+                <Setter Property="Margin" Value="10,4,0,0"/>
             </Style>
             <Style TargetType="{x:Type TextBlock}" x:Key="StatusBarTextBlock">
-                <Setter Property="FontFamily" Value="Consolas" />
+                <Setter Property="FontFamily" Value="Consolas"/>
             </Style>
             <Style TargetType="{x:Type ComboBox}" x:Key="ComboBoxBaseStyle">
-                <Setter Property="Width" Value="100" />
-                <Setter Property="Height" Value="20" />
-                <Setter Property="HorizontalAlignment" Value="Left" />
-                <Setter Property="VerticalAlignment" Value="Top" />
-                <Setter Property="Margin" Value="84,-22,0,0" />
+                <Setter Property="Width" Value="100"/>
+                <Setter Property="Height" Value="20"/>
+                <Setter Property="HorizontalAlignment" Value="Left"/>
+                <Setter Property="VerticalAlignment" Value="Top"/>
+                <Setter Property="Margin" Value="84,-22,0,0"/>
                 <EventSetter Event="SelectionChanged" Handler="Control_ValueChanged"/>
             </Style>
             <Style TargetType="{x:Type ComboBox}" x:Key="ComboBoxEnumStyle" 
@@ -67,7 +67,7 @@
                 <Setter Property="ItemTemplate">
                     <Setter.Value>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Converter={StaticResource EnumToStringConverter}}" />
+                            <TextBlock Text="{Binding Converter={StaticResource EnumToStringConverter}}"/>
                         </DataTemplate>
                     </Setter.Value>
                 </Setter>
@@ -97,7 +97,7 @@
                     <Separator Height="8" Visibility="Hidden"/>
 
                     <!--#region Text boxes-->
-                    <TextBlock Text="Lines count" />
+                    <TextBlock Text="Lines count"/>
                     <TextBox x:Name="LinesCount" PreviewTextInput="PositiveNumberValidation" 
                                  TabIndex="0" Text="{Binding Param.LinesCount,UpdateSourceTrigger=Explicit}"/>
 
@@ -105,27 +105,27 @@
                     <TextBox x:Name="Stroke" PreviewTextInput="PositiveNumberValidation"
                                  TabIndex="1" Text="{Binding Param.Stroke,UpdateSourceTrigger=Explicit}"/>
 
-                    <TextBlock Text="Factor" />
+                    <TextBlock Text="Factor"/>
                     <TextBox x:Name="Factor" PreviewTextInput="PositiveNumberValidation"
                                  TabIndex="2" Text="{Binding Param.Factor,UpdateSourceTrigger=Explicit}"/>
 
-                    <TextBlock Text="Chunk size" />
+                    <TextBlock Text="Chunk size"/>
                     <TextBox x:Name="ChunkSize" PreviewTextInput="PositiveNumberValidation"
                                  TabIndex="3" Text="{Binding Param.ChunkSize,UpdateSourceTrigger=Explicit}"/>
 
-                    <TextBlock Text="Angle" />
+                    <TextBlock Text="Angle"/>
                     <TextBox x:Name="Angle" PreviewTextInput="AngleValidation"
                                  TabIndex="4" Text="{Binding Param.Angle,UpdateSourceTrigger=Explicit}"/>
                     
-                    <TextBlock Text="Grey point" />
+                    <TextBlock Text="Grey point"/>
                     <TextBox x:Name="GreyPoint" PreviewTextInput="ColorRangeValidation"
                                  TabIndex="5" Text="{Binding Param.GreyPoint,UpdateSourceTrigger=Explicit}"/>
                     
-                    <TextBlock Text="Black point" />
+                    <TextBlock Text="Black point"/>
                     <TextBox x:Name="BlackPoint" PreviewTextInput="ColorRangeValidation"
                                  TabIndex="6" Text="{Binding Param.BlackPoint,UpdateSourceTrigger=Explicit}"/>
 
-                    <TextBlock Text="White point" />
+                    <TextBlock Text="White point"/>
                     <TextBox x:Name="WhitePoint" PreviewTextInput="ColorRangeValidation"
                                  TabIndex="7" Text="{Binding Param.WhitePoint,UpdateSourceTrigger=Explicit}"/>
                     
@@ -137,11 +137,11 @@
                     <Separator Height="8" Visibility="Hidden"/>
 
                     <!--#region Combo boxes-->
-                    <TextBlock Text="Smoothing" />
+                    <TextBlock Text="Smoothing"/>
                     <ComboBox x:Name="Smoothing" TabIndex="9" 
                               Style="{StaticResource ComboBoxEnumStyle}" SelectedItem="{Binding Param.Smoothing}"/>
 
-                    <TextBlock Text="LineType"  />
+                    <TextBlock Text="LineType" />
                     <ComboBox x:Name="LineType" TabIndex="10" 
                               Style="{StaticResource ComboBoxEnumStyle}" SelectedItem="{Binding Param.LineType}"/>
 
@@ -168,7 +168,7 @@
                                   TabIndex="16" IsChecked="{Binding Param.Debug}"/>
                     <StackPanel Margin="15,0,0,0" Visibility="{Binding IsChecked, ElementName=Debug,
                                                                Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <CheckBox x:Name="DebugSpecificOption" Content="Not in use" TabIndex="17" />
+                        <CheckBox x:Name="DebugSpecificOption" Content="Not in use" TabIndex="17"/>
                     </StackPanel>
 
                     <!--#endregion-->
@@ -176,8 +176,8 @@
                     <Separator Height="7" Visibility="Hidden"/>
 
                     <!--#region Specific params-->
-                    <TextBlock Text="Specific parameters:" />
-                    <TextBlock Text="Pull to" />
+                    <TextBlock Text="Specific parameters:"/>
+                    <TextBlock Text="Pull to"/>
                     <TextBlock Text="X" Margin="67,-26,0,0"/>
                     <TextBox x:Name="PullPointX" PreviewTextInput="PositiveNumberValidation"
                              TabIndex="18" Margin="84,-22,0,0" Width="40"
@@ -194,7 +194,7 @@
                 </StackPanel>
             </ScrollViewer>
 
-            <Border x:Name="ViewportBorder" BorderBrush="DarkOrange" Grid.Column="1" />
+            <Border x:Name="ViewportBorder" BorderBrush="DarkOrange" Grid.Column="1"/>
             <Grid Name="Viewport" SnapsToDevicePixels="True" UseLayoutRounding="True" Grid.Column="1" Panel.ZIndex="-1"
                   Loaded="Viewport_Loaded"
                   SizeChanged="Viewport_SizeChanged"
@@ -207,7 +207,7 @@
                 <Rectangle x:Name="DebugPousePositionX" HorizontalAlignment="Left" Fill="DarkOrange"
                            Panel.ZIndex="4" Width="1" Visibility="Collapsed"/>
                 <Rectangle x:Name="DebugPousePositionY" VerticalAlignment="Top" Fill="DarkOrange"
-                           Panel.ZIndex="4" Height="1" Visibility="Collapsed" />
+                           Panel.ZIndex="4" Height="1" Visibility="Collapsed"/>
                 <Button x:Name="FullsizeButton" Content="Fullsize (0/F)" Style="{StaticResource FullsizeButtonStyle}"
                         HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"
                         Panel.ZIndex="2" Width="80" Height="20" Click="FullsizeButton_Click"/>
@@ -217,7 +217,7 @@
                 <Image x:Name="Image" Stretch="None" Panel.ZIndex="1">
                     <Image.ContextMenu>
                         <ContextMenu>
-                            <MenuItem x:Name="CopyImage" Header="Copy" Click="CopyImage_Click" />
+                            <MenuItem x:Name="CopyImage" Header="Copy" Click="CopyImage_Click"/>
                         </ContextMenu>
                     </Image.ContextMenu>
                 </Image>
@@ -226,7 +226,7 @@
         </Grid>
         <StatusBar Grid.Row="1">
             <StatusBarItem Width="210">
-                <TextBlock Name="CursorPosition" Style="{StaticResource StatusBarTextBlock}" />
+                <TextBlock Name="CursorPosition" Style="{StaticResource StatusBarTextBlock}"/>
             </StatusBarItem>
             <StatusBarItem>
                 <TextBlock Name="ColorValue" Style="{StaticResource StatusBarTextBlock}"/>
@@ -235,8 +235,8 @@
                 <TextBlock Name="Arguments" Style="{StaticResource StatusBarTextBlock}">
                     <TextBlock.ContextMenu>
                         <ContextMenu>
-                            <MenuItem x:Name="CopyArgs" Header="Copy" Click="CopyArgs_Click" />
-                            <MenuItem x:Name="PasteArgs" Header="Paste" Click="PasteArgs_Click" />
+                            <MenuItem x:Name="CopyArgs" Header="Copy" Click="CopyArgs_Click"/>
+                            <MenuItem x:Name="PasteArgs" Header="Paste" Click="PasteArgs_Click"/>
                         </ContextMenu>
                     </TextBlock.ContextMenu>
                 </TextBlock>
