@@ -33,6 +33,11 @@ namespace ImageDrawer
 			}
 		}
 
+		/// <summary>
+		/// Gets all possible implementations
+		/// </summary>
+		/// <param name="interfaceType"></param>
+		/// <returns></returns>
 		public static IEnumerable<Type> GetImplementations(Type interfaceType)
 		{
 			return AppDomain.CurrentDomain.GetAssemblies()

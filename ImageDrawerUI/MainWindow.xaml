@@ -17,6 +17,17 @@
                 <Setter Property="Width" Value="80" />
                 <Setter Property="Height" Value="20" />
             </Style>
+            <Style TargetType="{x:Type Button}" x:Key="FullsizeButtonStyle">
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Opacity" Value="1"/>
+                        <Setter Property="Cursor" Value="Arrow"/>
+                    </Trigger>
+                    <Trigger Property="IsMouseOver" Value="False">
+                        <Setter Property="Opacity" Value="0.5"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
             <Style TargetType="{x:Type TextBox}">
                 <Setter Property="Width" Value="100" />
                 <Setter Property="Height" Value="20" />
@@ -34,6 +45,15 @@
                 <EventSetter Event="Checked" Handler="Control_ValueChanged"/>
                 <EventSetter Event="Unchecked" Handler="Control_ValueChanged"/>
             </Style>
+            <Style TargetType="{x:Type TextBlock}">
+                <Setter Property="HorizontalAlignment" Value="Left" />
+                <Setter Property="VerticalAlignment" Value="Top" />
+                <Setter Property="Padding" Value="5" />
+                <Setter Property="Margin" Value="10,4,0,0" />
+            </Style>
+            <Style TargetType="{x:Type TextBlock}" x:Key="StatusBarTextBlock">
+                <Setter Property="FontFamily" Value="Consolas" />
+            </Style>
             <Style TargetType="{x:Type ComboBox}" x:Key="ComboBoxBaseStyle">
                 <Setter Property="Width" Value="100" />
                 <Setter Property="Height" Value="20" />
@@ -41,23 +61,6 @@
                 <Setter Property="VerticalAlignment" Value="Top" />
                 <Setter Property="Margin" Value="84,-22,0,0" />
                 <EventSetter Event="SelectionChanged" Handler="Control_ValueChanged"/>
-            </Style>
-            <Style TargetType="{x:Type TextBlock}">
-                <Setter Property="HorizontalAlignment" Value="Left" />
-                <Setter Property="VerticalAlignment" Value="Top" />
-                <Setter Property="Padding" Value="5" />
-                <Setter Property="Margin" Value="10,4,0,0" />
-            </Style>
-            <Style TargetType="{x:Type Button}" x:Key="FullsizeButtonStyle">
-                <Style.Triggers>
-                    <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Opacity" Value="1"/>
-                        <Setter Property="Cursor" Value="Arrow"/>
-                    </Trigger>
-                    <Trigger Property="IsMouseOver" Value="False">
-                        <Setter Property="Opacity" Value="0.5"/>
-                    </Trigger>
-                </Style.Triggers>
             </Style>
             <Style TargetType="{x:Type ComboBox}" x:Key="ComboBoxEnumStyle" 
                    BasedOn="{StaticResource ComboBoxBaseStyle}">
@@ -68,9 +71,6 @@
                         </DataTemplate>
                     </Setter.Value>
                 </Setter>
-            </Style>
-            <Style TargetType="{x:Type TextBlock}" x:Key="StatusBarTextBlock">
-                <Setter Property="FontFamily" Value="Consolas" />
             </Style>
         </ResourceDictionary>
     </Window.Resources>
@@ -194,7 +194,7 @@
                 </StackPanel>
             </ScrollViewer>
 
-            <Border x:Name="gridBorder" BorderBrush="DarkOrange" Grid.Column="1" />
+            <Border x:Name="ViewportBorder" BorderBrush="DarkOrange" Grid.Column="1" />
             <Grid Name="Viewport" SnapsToDevicePixels="True" UseLayoutRounding="True" Grid.Column="1" Panel.ZIndex="-1"
                   Loaded="Viewport_Loaded"
                   SizeChanged="Viewport_SizeChanged"
@@ -226,7 +226,7 @@
         </Grid>
         <StatusBar Grid.Row="1">
             <StatusBarItem Width="210">
-                <TextBlock Name="CursorPosition" Style="{StaticResource StatusBarTextBlock}"/>
+                <TextBlock Name="CursorPosition" Style="{StaticResource StatusBarTextBlock}" />
             </StatusBarItem>
             <StatusBarItem>
                 <TextBlock Name="ColorValue" Style="{StaticResource StatusBarTextBlock}"/>

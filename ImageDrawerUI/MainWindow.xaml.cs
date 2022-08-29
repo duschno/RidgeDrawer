@@ -53,7 +53,7 @@ namespace ImageDrawerUI
 
 		private void Viewport_MouseMove(object sender, MouseEventArgs e)
 		{
-			if ((e.LeftButton == MouseButtonState.Pressed || e.MiddleButton == MouseButtonState.Pressed) && 
+			if ((e.LeftButton == MouseButtonState.Pressed || e.MiddleButton == MouseButtonState.Pressed) &&
 				Image.Stretch != Stretch.None)
 			{
 				System.Windows.Point newPos = Mouse.GetPosition(Window);
@@ -188,7 +188,7 @@ namespace ImageDrawerUI
 		private void PullPointButton_Click(object sender, RoutedEventArgs e)
 		{
 			Viewport.PreviewMouseDown += new MouseButtonEventHandler(Viewport_PreviewMouseDown);
-			gridBorder.BorderThickness = new Thickness(3);
+			ViewportBorder.BorderThickness = new Thickness(3);
 		}
 
 		private void Viewport_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -251,7 +251,7 @@ namespace ImageDrawerUI
 
 		private void Window_MouseDown(object sender, MouseButtonEventArgs e)
 		{
-			gridBorder.BorderThickness = new Thickness(0);
+			ViewportBorder.BorderThickness = new Thickness(0);
 			if (e.OriginalSource != Image)
 			{
 				Viewport.PreviewMouseDown -= new MouseButtonEventHandler(Viewport_PreviewMouseDown);
