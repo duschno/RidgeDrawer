@@ -1,5 +1,4 @@
 ﻿using RidgeDrawer;
-using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -7,7 +6,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Drawing;
 using System.Windows.Data;
-using System.Globalization;
 
 namespace RidgeDrawerUI
 {
@@ -16,13 +14,29 @@ namespace RidgeDrawerUI
 	/// </summary>
 	public partial class MainWindow : Window
 	{
-#region Event handlers
+#region Main buttons Event handlers
 
 		private void Compare_Click(object sender, RoutedEventArgs e)
 		{
 			ImageSource temp = Model.Original;
 			Model.Original = Image.Source;
 			Image.Source = temp;
+		}
+
+		private void Open_Click(object sender, RoutedEventArgs e)
+		{
+			Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog
+			{
+				Filter = "Image files (*.jpg, *.jpeg, *.jpe, *.jfif, *.png, *.bmp) | *.jpg; *.jpeg; *.jpe; *.jfif; *.png; *.bmp"
+			};
+
+			bool? result = dlg.ShowDialog();
+
+			if (result == true)
+			{
+				Model.Filename = dlg.FileName;
+				Model.UpdateView();
+			}
 		}
 
 		private void Save_Click(object sender, RoutedEventArgs e)
@@ -45,6 +59,10 @@ namespace RidgeDrawerUI
 			Model.Param = Model.DefaultParam.Clone();
 			Model.UpdateView();
 		}
+
+		#endregion
+
+		#region Other event handlers
 
 		private void Viewport_MouseWheel(object sender, MouseWheelEventArgs e)
 		{
@@ -161,21 +179,6 @@ namespace RidgeDrawerUI
 				binding.UpdateSource(); // manually update value in source
 			Model.UpdateView();
 		}
-		private void Open_Click(object sender, RoutedEventArgs e)
-		{
-			Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog
-			{
-				Filter = "Image files (*.jpg, *.jpeg, *.jpe, *.jfif, *.png, *.bmp) | *.jpg; *.jpeg; *.jpe; *.jfif; *.png; *.bmp"
-			};
-
-			bool? result = dlg.ShowDialog();
-
-			if (result == true)
-			{
-				Model.Filename = dlg.FileName;
-				Model.UpdateView();
-			}
-		}
 
 		private void ParamChange_PreviewKeyDown(object sender, KeyEventArgs e)
 		{
@@ -203,6 +206,7 @@ namespace RidgeDrawerUI
 				Model.UpdateView();
 			}
 		}
+
 		private System.Windows.Point? GetCursorOverImagePosition()
 		{
 			System.Windows.Point point = Mouse.GetPosition(Image);
@@ -278,34 +282,6 @@ namespace RidgeDrawerUI
 		private void Control_ValueChanged(object sender, RoutedEventArgs e)
 		{
 			Model.UpdateView();
-		}
-	}
-
-	public class BooleanToVisibilityConverter : IValueConverter
-	{
-
-		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-		{
-			bool visible = System.Convert.ToBoolean(value, culture);
-			return visible ? Visibility.Visible : Visibility.Collapsed;
-		}
-
-
-		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-		{
-			throw new NotImplementedException();
-		}
-	}
-	public class EnumToStringConverter : IValueConverter
-	{
-		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-		{
-			return value.ToString();
-		}
-
-		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-		{
-			throw new NotImplementedException();
 		}
 	}
 }
