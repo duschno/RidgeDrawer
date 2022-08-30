@@ -166,51 +166,15 @@ namespace RidgeDrawerUI
 				pixelData, stride);
 		}
 
-		private void SetToFitGrid()
-		{
-			scaler.CurrentFactor = 1;
-			Image.Width = Image.Height = double.NaN;
-		}
-
 		private void ChangeScale(bool zoomIn)
 		{
-
 			if (Image.Source == null)
 				return;
 
-			if (zoomIn)
-			{
-				if (Image.ActualWidth < OriginalWidth)
-				{
-					Image.Width = OriginalWidth;
-					Image.Height = OriginalHeight;
-				}
-				else
-				{
-					scaler.SetNextFactor(zoomIn);
-					Image.Width = OriginalWidth * scaler.CurrentFactor;
-					Image.Height = OriginalHeight * scaler.CurrentFactor;
-				}
-			}
-			else
-			{
-				if (Image.Stretch == Stretch.None)
-					return;
+			scaler.ChangeScale(Image, zoomIn);
 
-				if (Image.Width <= OriginalWidth)
-					SetToFitGrid();
-				else
-				{
-					scaler.SetNextFactor(zoomIn);
-					Image.Width = OriginalWidth * scaler.CurrentFactor;
-					Image.Height = OriginalHeight * scaler.CurrentFactor;
-					if (Image.Width < OriginalWidth)
-						SetToFitGrid();
-				}
-
-				if (!IsOriginalSize)
-					Image.Margin = CheckBoundaries(Image.Margin);
-			}
+			if (!zoomIn && !IsOriginalSize)
+				Image.Margin = CheckBoundaries(Image.Margin);
 		}
 
 		private void ChangeZoom(bool zoomIn)
@@ -224,16 +188,10 @@ namespace RidgeDrawerUI
 			if (Image.Source == null)
 				return;
 
+			scaler.ChangeUIProps(Image, Viewport);
 			if (IsOriginalSize)
 			{
-				if (OriginalWidth < Viewport.ActualWidth &&
-					OriginalHeight < Viewport.ActualHeight)
-					Image.Stretch = Stretch.None;
-				else
-					Image.Stretch = Stretch.Uniform;
-
 				Viewport.Cursor = Cursors.Arrow;
-				RenderOptions.SetBitmapScalingMode(Image, BitmapScalingMode.Linear);
 				Image.Margin = new Thickness();
 				oldMargin = new Thickness();
 			}
@@ -245,15 +203,11 @@ namespace RidgeDrawerUI
 					Image.Margin = new Thickness();
 					oldMargin = new Thickness();
 					Viewport.Cursor = Cursors.Arrow;
-					Image.Stretch = Stretch.Uniform;
 				}
 				else
 				{
 					Viewport.Cursor = Cursors.SizeAll;
-					Image.Stretch = Stretch.Uniform;
 				}
-
-				RenderOptions.SetBitmapScalingMode(Image, BitmapScalingMode.NearestNeighbor);
 			}
 		}
 
@@ -279,9 +233,7 @@ namespace RidgeDrawerUI
 			if (Image.Source == null)
 				return;
 
-			scaler.CurrentFactor = 1;
-			Image.Width = OriginalWidth;
-			Image.Height = OriginalHeight;
+			scaler.SetOriginalSize(Image);
 			ChangeUIProps();
 		}
 	}
