@@ -218,8 +218,8 @@ namespace RidgeDrawerUI
 			}
 			else
 			{
-				resPoint.X = (int)point.X / scaleFactor;
-				resPoint.Y = (int)point.Y / scaleFactor;
+				resPoint.X = (int)point.X / scaler.CurrentFactor;
+				resPoint.Y = (int)point.Y / scaler.CurrentFactor;
 			}
 
 			return resPoint;

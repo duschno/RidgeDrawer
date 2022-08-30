@@ -14,8 +14,7 @@ namespace RidgeDrawerUI
 	{
 		private readonly string appName = "Ridge Drawer";
 		private RenderParamsModel Model { get; set; }
-		private int scaleFactor = 1;
-		private readonly int maxScaleFactor = 8;
+		private ViewportScaler scaler;
 		private System.Windows.Point startPos;
 		private Thickness oldMargin;
 
@@ -63,6 +62,7 @@ namespace RidgeDrawerUI
 			FillComboBox(LineType, typeof(LineType));
 			FillComboBox(Method, typeof(MethodType));
 			FillComboBox(Backend, typeof(BackendDrawerBase));
+			scaler = new ViewportScaler(maxFactor: 8);
 			Model = new RenderParamsModel(
 				new RenderParams
 				{
@@ -102,8 +102,8 @@ namespace RidgeDrawerUI
 						Model.Original = ConvertToNativeDpi(Model.OriginalBitmap);
 						Model.Processed = ConvertToNativeDpi(Logic.ProcessByFilename(Model.Filename, Model.Param));
 						Image.Source = Model.Processed;
-						Image.MaxWidth = OriginalWidth * maxScaleFactor;
-						Image.MaxHeight = OriginalHeight * maxScaleFactor;
+						Image.MaxWidth = OriginalWidth * scaler.MaxFactor;
+						Image.MaxHeight = OriginalHeight * scaler.MaxFactor;
 					}
 					catch (Exception e)
 					{
@@ -166,17 +166,9 @@ namespace RidgeDrawerUI
 				pixelData, stride);
 		}
 
-		private int GetNextScaleFactor(bool zoomIn, int oldScaleFactor)
-		{
-			if ((zoomIn && oldScaleFactor == maxScaleFactor) || (!zoomIn && oldScaleFactor == 1))
-				return oldScaleFactor;
-
-			return oldScaleFactor + (zoomIn ? 1 : -1);
-		}
-
 		private void SetToFitGrid()
 		{
-			scaleFactor = 1;
+			scaler.CurrentFactor = 1;
 			Image.Width = Image.Height = double.NaN;
 		}
 
@@ -195,9 +187,9 @@ namespace RidgeDrawerUI
 				}
 				else
 				{
-					scaleFactor = GetNextScaleFactor(zoomIn, scaleFactor);
-					Image.Width = OriginalWidth * scaleFactor;
-					Image.Height = OriginalHeight * scaleFactor;
+					scaler.SetNextFactor(zoomIn);
+					Image.Width = OriginalWidth * scaler.CurrentFactor;
+					Image.Height = OriginalHeight * scaler.CurrentFactor;
 				}
 			}
 			else
@@ -209,9 +201,9 @@ namespace RidgeDrawerUI
 					SetToFitGrid();
 				else
 				{
-					scaleFactor = GetNextScaleFactor(zoomIn, scaleFactor);
-					Image.Width = OriginalWidth * scaleFactor;
-					Image.Height = OriginalHeight * scaleFactor;
+					scaler.SetNextFactor(zoomIn);
+					Image.Width = OriginalWidth * scaler.CurrentFactor;
+					Image.Height = OriginalHeight * scaler.CurrentFactor;
 					if (Image.Width < OriginalWidth)
 						SetToFitGrid();
 				}
@@ -287,7 +279,7 @@ namespace RidgeDrawerUI
 			if (Image.Source == null)
 				return;
 
-			scaleFactor = 1;
+			scaler.CurrentFactor = 1;
 			Image.Width = OriginalWidth;
 			Image.Height = OriginalHeight;
 			ChangeUIProps();

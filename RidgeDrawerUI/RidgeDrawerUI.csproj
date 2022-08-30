@@ -59,6 +59,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ViewportScaler.cs" />
     <Compile Include="RenderParamsModel.cs" />
     <Compile Include="UILogic.cs" />
     <Compile Include="ControlValidators.cs" />
