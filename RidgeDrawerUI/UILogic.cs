@@ -197,8 +197,8 @@ namespace RidgeDrawerUI
 		private System.Windows.Point? GetCursorPositionOver(FrameworkElement element)
 		{
 			System.Windows.Point point = Mouse.GetPosition(element);
-			if (point.X < 0 || point.X >= Viewport.ActualWidth ||
-				point.Y < 0 || point.Y >= Viewport.ActualHeight)
+			if (point.X < 0 || point.X >= element.ActualWidth ||
+				point.Y < 0 || point.Y >= element.ActualHeight)
 			{
 				return null;
 			}
