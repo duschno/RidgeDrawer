@@ -142,10 +142,10 @@ namespace RidgeDrawerUI
 							scaler.CurrentScaleType == ScaleType.OriginalBiggerThanViewport))
 				Image.Margin = CheckBoundaries(Image.Margin);
 
-			ChangeUIProps();
+			UpdateUIProps();
 		}
 
-		private void ChangeUIProps()
+		private void UpdateUIProps()
 		{
 			if (scaler.CurrentScaleType == ScaleType.OriginalBiggerThanViewport ||
 				scaler.CurrentScaleType == ScaleType.EnlargedBiggerThanViewport)
@@ -204,6 +204,26 @@ namespace RidgeDrawerUI
 			}
 
 			return point;
+		}
+
+		private void UpdateDebugLines(bool isVisible)
+		{
+			if (isVisible)
+			{
+				System.Windows.Point? point = GetCursorPositionOver(Viewport);
+				if (point.HasValue)
+				{
+					DebugPousePositionX.Margin = new Thickness(point.Value.X, 0, 0, 0);
+					DebugPousePositionY.Margin = new Thickness(0, point.Value.Y, 0, 0);
+				}
+				else
+				{
+					isVisible = false;
+				}
+			}
+
+			DebugPousePositionX.Visibility = isVisible ? Visibility.Visible : Visibility.Collapsed;
+			DebugPousePositionY.Visibility = isVisible ? Visibility.Visible : Visibility.Collapsed;
 		}
 	}
 }

@@ -139,29 +139,8 @@ namespace RidgeDrawerUI
 			{
 				Model.Param.Debug = !Model.Param.Debug;
 				UpdateDebugLines(Model.Param.Debug);
-
 				Model.UpdateView();
 			}
-		}
-
-		private void UpdateDebugLines(bool isVisible)
-		{
-			if (isVisible)
-			{
-				System.Windows.Point? point = GetCursorPositionOver(Viewport);
-				if (point.HasValue)
-				{
-					DebugPousePositionX.Margin = new Thickness(point.Value.X, 0, 0, 0);
-					DebugPousePositionY.Margin = new Thickness(0, point.Value.Y, 0, 0);
-				}
-				else
-				{
-					isVisible = false;
-				}
-			}
-
-			DebugPousePositionX.Visibility = isVisible ? Visibility.Visible : Visibility.Collapsed;
-			DebugPousePositionY.Visibility = isVisible ? Visibility.Visible : Visibility.Collapsed;
 		}
 
 		private void Viewport_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -172,7 +151,7 @@ namespace RidgeDrawerUI
 			if (Viewport.IsLoaded)
 			{
 				scaler.CheckScale();
-				ChangeUIProps();
+				UpdateUIProps();
 			}
 		}
 
@@ -182,7 +161,7 @@ namespace RidgeDrawerUI
 				return;
 
 			scaler.SetOriginalSize();
-			ChangeUIProps();
+			UpdateUIProps();
 		}
 
 		private void ParamChange_KeyDown(object sender, KeyEventArgs e)
