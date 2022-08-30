@@ -66,17 +66,21 @@ namespace RidgeDrawerUI
 
 		private void Viewport_MouseMove(object sender, MouseEventArgs e)
 		{
-			if ((e.LeftButton == MouseButtonState.Pressed || e.MiddleButton == MouseButtonState.Pressed) &&
-				scaler.CurrentScaleType != ScaleType.NonScaledSmallerThanViewport)
+			if (e.LeftButton == MouseButtonState.Pressed ||
+				e.MiddleButton == MouseButtonState.Pressed)
 			{
-				System.Windows.Point newPos = Mouse.GetPosition(Window);
-				Thickness margin = Image.Margin;
-				if (Viewport.ActualHeight < Image.ActualHeight)
-					margin.Top = oldMargin.Top - (startPos - newPos).Y;
-				if (Viewport.ActualWidth < Image.ActualWidth)
-					margin.Left = oldMargin.Left - (startPos - newPos).X;
+				if (scaler.CurrentScaleType == ScaleType.NonScaledBiggerThanViewport ||
+					scaler.CurrentScaleType == ScaleType.FactorScaledBiggerThanViewport)
+				{
+					System.Windows.Point newPos = Mouse.GetPosition(Window);
+					Thickness margin = Image.Margin;
+					if (Viewport.ActualHeight < Image.ActualHeight)
+						margin.Top = oldMargin.Top - (startPos - newPos).Y;
+					if (Viewport.ActualWidth < Image.ActualWidth)
+						margin.Left = oldMargin.Left - (startPos - newPos).X;
 
-				Image.Margin = CheckBoundaries(margin);
+					Image.Margin = CheckBoundaries(margin);
+				}
 			}
 
 			System.Windows.Point? point = GetCursorOverImagePosition();

@@ -40,8 +40,9 @@ namespace RidgeDrawerUI
 
 	public class ViewportScaler
 	{
-		public int CurrentFactor { get; private set; }
-		private int MaxFactor { get; set; }
+		private readonly int maxFactor;
+
+		private int currentFactor;
 
 		private ScaleType currentScaleType;
 
@@ -63,21 +64,21 @@ namespace RidgeDrawerUI
 				switch (value)
 				{
 					case ScaleType.FitToViewport:
-						CurrentFactor = 1;
+						currentFactor = 1;
 						Image.Width = double.NaN;
 						Image.Height = double.NaN;
 						Image.Stretch = Stretch.Uniform;
 						RenderOptions.SetBitmapScalingMode(Image, BitmapScalingMode.Linear);
 						break;
 					case ScaleType.NonScaledSmallerThanViewport:
-						CurrentFactor = 1;
+						currentFactor = 1;
 						Image.Width = Image.Source.Width;
 						Image.Height = Image.Source.Height;
 						Image.Stretch = Stretch.None;
 						RenderOptions.SetBitmapScalingMode(Image, BitmapScalingMode.Linear);
 						break;
 					case ScaleType.NonScaledBiggerThanViewport:
-						CurrentFactor = 1;
+						currentFactor = 1;
 						Image.Width = Image.Source.Width;
 						Image.Height = Image.Source.Height;
 						Image.Stretch = Stretch.Uniform;
@@ -85,8 +86,8 @@ namespace RidgeDrawerUI
 						break;
 					case ScaleType.FactorSmallerThanViewport:
 					case ScaleType.FactorScaledBiggerThanViewport:
-						Image.Width = Image.Source.Width * CurrentFactor;
-						Image.Height = Image.Source.Height * CurrentFactor;
+						Image.Width = Image.Source.Width * currentFactor;
+						Image.Height = Image.Source.Height * currentFactor;
 						Image.Stretch = Stretch.Uniform;
 						RenderOptions.SetBitmapScalingMode(Image, BitmapScalingMode.NearestNeighbor);
 						break;
@@ -94,7 +95,7 @@ namespace RidgeDrawerUI
 						break;
 				}
 
-				Debug.WriteLine($"{CurrentScaleType}, scale={CurrentFactor}");
+				Debug.WriteLine($"{CurrentScaleType}, scale={currentFactor}");
 			}
 		}
 
@@ -105,25 +106,25 @@ namespace RidgeDrawerUI
 		{
 			Image = image;
 			Viewport = viewport;
-			CurrentFactor = 1;
-			MaxFactor = maxFactor;
+			currentFactor = 1;
+			this.maxFactor = maxFactor;
 		}
 
 		public void ChangeFactor(bool zoomIn)
 		{
-			if (zoomIn && CurrentFactor == MaxFactor)
+			if (zoomIn && currentFactor == maxFactor)
 				return;
-			if (!zoomIn && CurrentFactor == 1)
+			if (!zoomIn && currentFactor == 1)
 				return;
 
-			CurrentFactor += zoomIn ? 1 : -1;
+			currentFactor += zoomIn ? 1 : -1;
 
-			if (CurrentFactor == 1)
+			if (currentFactor == 1)
 				SetOriginalSize();
 			else
 			{
-				if (Image.Source.Width * CurrentFactor < Viewport.ActualWidth &&
-					Image.Source.Height * CurrentFactor < Viewport.ActualHeight)
+				if (Image.Source.Width * currentFactor < Viewport.ActualWidth &&
+					Image.Source.Height * currentFactor < Viewport.ActualHeight)
 					CurrentScaleType = ScaleType.FactorSmallerThanViewport;
 				else
 					CurrentScaleType = ScaleType.FactorScaledBiggerThanViewport;
