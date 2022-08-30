@@ -14,7 +14,6 @@ namespace RidgeDrawerUI
 	/// </summary>
 	public partial class MainWindow : Window
 	{
-#region Main buttons Event handlers
 
 		private void Compare_Click(object sender, RoutedEventArgs e)
 		{
@@ -59,10 +58,6 @@ namespace RidgeDrawerUI
 			Model.Param = Model.DefaultParam.Clone();
 			Model.UpdateView();
 		}
-
-		#endregion
-
-		#region Other event handlers
 
 		private void Viewport_MouseWheel(object sender, MouseWheelEventArgs e)
 		{
@@ -122,7 +117,9 @@ namespace RidgeDrawerUI
 		{
 			if (e.OriginalSource is TextBox &&
 				!(e.Key == Key.O || e.Key == Key.C || e.Key == Key.S))
+			{
 				return;
+			}
 
 			if (e.Key == Key.O)
 				Open_Click(null, null);
@@ -171,7 +168,9 @@ namespace RidgeDrawerUI
 				return;
 			if (string.IsNullOrWhiteSpace(((TextBox)e.Source).Text) ||
 				!int.TryParse(((TextBox)e.Source).Text, out _))
+			{
 				return;
+			}
 
 			BindingExpression binding = BindingOperations.GetBindingExpression((TextBox)sender,
 				TextBox.TextProperty);
@@ -185,8 +184,6 @@ namespace RidgeDrawerUI
 			if (e.Key == Key.Space)
 				e.Handled = true;
 		}
-
-		#endregion
 
 		private void PullPointButton_Click(object sender, RoutedEventArgs e)
 		{
@@ -205,30 +202,6 @@ namespace RidgeDrawerUI
 				Model.Param.PullPointY = (int)point.Value.Y;
 				Model.UpdateView();
 			}
-		}
-
-		private System.Windows.Point? GetCursorOverImagePosition()
-		{
-			System.Windows.Point point = Mouse.GetPosition(Image);
-			if (point.X < 0 || point.X >= Image.ActualWidth ||
-				point.Y < 0 || point.Y >= Image.ActualHeight)
-			{
-				return null;
-			}
-
-			System.Windows.Point resPoint = new System.Windows.Point();
-			if (double.IsNaN(Image.Width))
-			{
-				resPoint.X = (int)(point.X * scaler.OriginalWidth / Image.ActualWidth);
-				resPoint.Y = (int)(point.Y * scaler.OriginalHeight / Image.ActualHeight);
-			}
-			else
-			{
-				resPoint.X = (int)point.X / scaler.CurrentFactor;
-				resPoint.Y = (int)point.Y / scaler.CurrentFactor;
-			}
-
-			return resPoint;
 		}
 
 		private void CopyImage_Click(object sender, RoutedEventArgs e)
