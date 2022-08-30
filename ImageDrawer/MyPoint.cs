@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Diagnostics;
 
-namespace ImageDrawer
+namespace RidgeDrawer
 {
 	[DebuggerDisplay("X = {X} Y = {Y}")]
 	public class MyPoint

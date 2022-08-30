@@ -5,7 +5,7 @@ using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Runtime.InteropServices;
 
-namespace ImageDrawer
+namespace RidgeDrawer
 {
 	public class Cairo : BackendDrawerBase
 	{

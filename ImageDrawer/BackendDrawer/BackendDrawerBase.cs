@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 
-namespace ImageDrawer // TODO: каждая линия со своими параматрами, но это уже в афтере - типа рандом такой
+namespace RidgeDrawer // TODO: каждая линия со своими параматрами, но это уже в афтере - типа рандом такой
 {
 	public abstract class BackendDrawerBase
 	{

@@ -1,10 +1,10 @@
-﻿using ImageDrawer;
+﻿using RidgeDrawer;
 using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Media;
 
-namespace ImageDrawerUI
+namespace RidgeDrawerUI
 {
 	public class RenderParamsModel : INotifyPropertyChanged
 	{

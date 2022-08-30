@@ -1,4 +1,4 @@
-﻿using ImageDrawer;
+﻿using RidgeDrawer;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -9,7 +9,7 @@ using System.Drawing;
 using System.Windows.Data;
 using System.Globalization;
 
-namespace ImageDrawerUI
+namespace RidgeDrawerUI
 {
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml

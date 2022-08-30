@@ -1,4 +1,4 @@
-﻿using ImageDrawer;
+﻿using RidgeDrawer;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -8,7 +8,7 @@ using System.Windows.Media.Imaging;
 using System.Drawing;
 using System.IO;
 
-namespace ImageDrawerUI
+namespace RidgeDrawerUI
 {
 	public partial class MainWindow : Window
 	{
@@ -75,8 +75,8 @@ namespace ImageDrawerUI
 					WhitePoint = 255,
 					Angle = 0,
 					Smoothing = SmoothingType.None,
-					LineType = ImageDrawer.LineType.Line,
-					Method = ImageDrawer.MethodType.Squiggle,
+					LineType = RidgeDrawer.LineType.Line,
+					Method = RidgeDrawer.MethodType.Squiggle,
 					Backend = typeof(GDIPlus),
 					DrawOnSides = false,
 					PointsAroundPeak = -1,

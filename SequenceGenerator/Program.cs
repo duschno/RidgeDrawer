@@ -1,4 +1,4 @@
-﻿using ImageDrawer;
+﻿using RidgeDrawer;
 using System;
 using System.IO;
 

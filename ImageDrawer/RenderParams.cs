@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace ImageDrawer
+namespace RidgeDrawer
 {
 	public enum SmoothingType
 	{

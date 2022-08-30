@@ -11,7 +11,7 @@ using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 using System.Text.RegularExpressions;
 
-namespace ImageDrawer
+namespace RidgeDrawer
 {
 	[Guid("1A91BC9C-09A1-4817-9C71-4D91A674AAF1")]
 	public class Logic
