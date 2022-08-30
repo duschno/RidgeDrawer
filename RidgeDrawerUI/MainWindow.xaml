@@ -201,7 +201,6 @@
                   MouseMove="Viewport_MouseMove"
                   MouseLeftButtonDown="Viewport_MouseLeftButtonDown"
                   MouseLeftButtonUp="Viewport_MouseLeftButtonUp"
-                  MouseEnter="Viewport_MouseEnter"
                   MouseLeave="Viewport_MouseLeave" Focusable="True">
                 <Rectangle x:Name="DebugPousePositionX" HorizontalAlignment="Left" Fill="DarkOrange"
                            Panel.ZIndex="4" Width="1" Visibility="Collapsed"/>

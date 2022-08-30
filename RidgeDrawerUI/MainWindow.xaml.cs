@@ -83,7 +83,7 @@ namespace RidgeDrawerUI
 				}
 			}
 
-			System.Windows.Point? point = GetCursorOverImagePosition();
+			System.Windows.Point? point = GetCursorPositionOverImage();
 			if (!point.HasValue)
 			{
 				CursorPosition.Text = string.Empty;
@@ -97,11 +97,7 @@ namespace RidgeDrawerUI
 			}
 
 			if (Model.Param.Debug)
-			{
-				point = Mouse.GetPosition(Viewport);
-				DebugPousePositionX.Margin = new Thickness(point.Value.X, 0, 0, 0);
-				DebugPousePositionY.Margin = new Thickness(0, point.Value.Y, 0, 0);
-			}
+				UpdateDebugLines(true);
 		}
 
 		private void Viewport_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -142,8 +138,30 @@ namespace RidgeDrawerUI
 			if (e.Key == Key.D)
 			{
 				Model.Param.Debug = !Model.Param.Debug;
+				UpdateDebugLines(Model.Param.Debug);
+
 				Model.UpdateView();
 			}
+		}
+
+		private void UpdateDebugLines(bool isVisible)
+		{
+			if (isVisible)
+			{
+				System.Windows.Point? point = GetCursorPositionOver(Viewport);
+				if (point.HasValue)
+				{
+					DebugPousePositionX.Margin = new Thickness(point.Value.X, 0, 0, 0);
+					DebugPousePositionY.Margin = new Thickness(0, point.Value.Y, 0, 0);
+				}
+				else
+				{
+					isVisible = false;
+				}
+			}
+
+			DebugPousePositionX.Visibility = isVisible ? Visibility.Visible : Visibility.Collapsed;
+			DebugPousePositionY.Visibility = isVisible ? Visibility.Visible : Visibility.Collapsed;
 		}
 
 		private void Viewport_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -200,7 +218,7 @@ namespace RidgeDrawerUI
 		{
 			Viewport.PreviewMouseDown -= new MouseButtonEventHandler(Viewport_PreviewMouseDown);
 
-			System.Windows.Point? point = GetCursorOverImagePosition();
+			System.Windows.Point? point = GetCursorPositionOverImage();
 			if (point.HasValue)
 			{
 				Model.Param.PullPointX = (int)point.Value.X;
@@ -247,14 +265,8 @@ namespace RidgeDrawerUI
 		{
 			CursorPosition.Text = string.Empty;
 			ColorValue.Text = string.Empty;
-			DebugPousePositionX.Visibility = Visibility.Collapsed;
-			DebugPousePositionY.Visibility = Visibility.Collapsed;
-		}
 
-		private void Viewport_MouseEnter(object sender, MouseEventArgs e)
-		{
-			DebugPousePositionX.Visibility = Model.Param.Debug ? Visibility.Visible : Visibility.Collapsed;
-			DebugPousePositionY.Visibility = Model.Param.Debug ? Visibility.Visible : Visibility.Collapsed;
+			UpdateDebugLines(false);
 		}
 
 		private void Control_ValueChanged(object sender, RoutedEventArgs e)

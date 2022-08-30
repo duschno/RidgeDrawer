@@ -177,22 +177,33 @@ namespace RidgeDrawerUI
 			return margin;
 		}
 
-		private System.Windows.Point? GetCursorOverImagePosition()
+		private System.Windows.Point? GetCursorPositionOverImage()
 		{
-			System.Windows.Point point = Mouse.GetPosition(Image);
-			if (point.X < 0 || point.X >= Image.ActualWidth ||
-				point.Y < 0 || point.Y >= Image.ActualHeight)
+			System.Windows.Point? point = GetCursorPositionOver(Image);
+			if (!point.HasValue)
+				return null;
+			else
+			{
+				System.Windows.Point resPoint = new System.Windows.Point
+				{
+					X = (int)(point.Value.X * Image.Source.Width / Image.ActualWidth),
+					Y = (int)(point.Value.Y * Image.Source.Height / Image.ActualHeight)
+				};
+
+				return resPoint;
+			}
+		}
+
+		private System.Windows.Point? GetCursorPositionOver(FrameworkElement element)
+		{
+			System.Windows.Point point = Mouse.GetPosition(element);
+			if (point.X < 0 || point.X >= Viewport.ActualWidth ||
+				point.Y < 0 || point.Y >= Viewport.ActualHeight)
 			{
 				return null;
 			}
 
-			System.Windows.Point resPoint = new System.Windows.Point
-			{
-				X = (int)(point.X * Image.Source.Width / Image.ActualWidth),
-				Y = (int)(point.Y * Image.Source.Height / Image.ActualHeight)
-			};
-
-			return resPoint;
+			return point;
 		}
 	}
 }
