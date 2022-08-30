@@ -194,14 +194,5 @@ namespace RidgeDrawerUI
 
 			return margin;
 		}
-
-		private void SetOriginalSize()
-		{
-			if (Image.Source == null)
-				return;
-
-			scaler.SetOriginalSize();
-			ChangeUIProps();
-		}
 	}
 }

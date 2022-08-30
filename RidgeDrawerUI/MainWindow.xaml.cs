@@ -115,7 +115,7 @@ namespace RidgeDrawerUI
 			if (e.Key == Key.R)
 				Reset_Click(null, null);
 			if (e.Key == Key.D0 || e.Key == Key.NumPad0 || e.Key == Key.F)
-				SetOriginalSize();
+				FullsizeButton_Click(null, null);
 			if (e.Key == Key.Add || e.Key == Key.OemPlus)
 				ChangeZoom(true);
 			if (e.Key == Key.Subtract || e.Key == Key.OemMinus)
@@ -140,7 +140,11 @@ namespace RidgeDrawerUI
 
 		private void FullsizeButton_Click(object sender, RoutedEventArgs e)
 		{
-			SetOriginalSize();
+			if (Image.Source == null)
+				return;
+
+			scaler.SetOriginalSize();
+			ChangeUIProps();
 		}
 
 		private void ParamChange_KeyDown(object sender, KeyEventArgs e)
