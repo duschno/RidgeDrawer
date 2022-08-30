@@ -196,6 +196,7 @@ namespace RidgeDrawerUI
 
 		internal void Initialize()
 		{
+			// есть баг, что когда картинка была увеличена в 2 или 3 раза и откравется другая, то она имеет неправильный скейлинг
 			image.Width = image.Source.Width;
 			image.Height = image.Source.Height;
 
