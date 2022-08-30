@@ -1,13 +1,9 @@
-﻿
-using System;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
+﻿using System.Windows.Controls;
 using System.Windows.Media;
 
 namespace RidgeDrawerUI
 {
-	enum ViewportScale
+	public enum ScaleType
 	{
 		/// <summary>
 		/// Scale is less than 100%, image is fit to viewport
@@ -35,7 +31,7 @@ namespace RidgeDrawerUI
 		public int CurrentFactor { get; private set; }
 		private int MaxFactor { get; set; }
 
-		public int CurrentScaleType { get; private set; }
+		public ScaleType CurrentScaleType { get; private set; }
 
 		private Image Image { get; set; }
 
@@ -44,6 +40,11 @@ namespace RidgeDrawerUI
 			Image = image;
 			CurrentFactor = 1;
 			MaxFactor = maxFactor;
+		}
+
+		private void ChangeScaleType(ScaleType scaleType)
+		{
+			CurrentScaleType = scaleType;
 		}
 
 		public void SetNextFactor(bool zoomIn)
