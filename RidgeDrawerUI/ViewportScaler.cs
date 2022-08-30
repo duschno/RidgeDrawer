@@ -40,10 +40,10 @@ namespace RidgeDrawerUI
 
 	public class ViewportScaler
 	{
-		private readonly int maxFactor;
-
 		private int currentFactor;
-
+		private int maxFactor;
+		private Image image;
+		private Grid viewport;
 		private ScaleType currentScaleType;
 
 		public ScaleType CurrentScaleType
@@ -65,49 +65,44 @@ namespace RidgeDrawerUI
 				{
 					case ScaleType.FitToViewport:
 						currentFactor = 1;
-						Image.Width = double.NaN;
-						Image.Height = double.NaN;
-						Image.Stretch = Stretch.Uniform;
-						RenderOptions.SetBitmapScalingMode(Image, BitmapScalingMode.Linear);
+						image.Width = double.NaN;
+						image.Height = double.NaN;
+						image.Stretch = Stretch.Uniform;
+						RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.Linear);
 						break;
 					case ScaleType.NonScaledSmallerThanViewport:
 						currentFactor = 1;
-						Image.Width = Image.Source.Width;
-						Image.Height = Image.Source.Height;
-						Image.Stretch = Stretch.None;
-						RenderOptions.SetBitmapScalingMode(Image, BitmapScalingMode.Linear);
+						image.Width = image.Source.Width;
+						image.Height = image.Source.Height;
+						image.Stretch = Stretch.None;
+						RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.Linear);
 						break;
 					case ScaleType.NonScaledBiggerThanViewport:
 						currentFactor = 1;
-						Image.Width = Image.Source.Width;
-						Image.Height = Image.Source.Height;
-						Image.Stretch = Stretch.Uniform;
-						RenderOptions.SetBitmapScalingMode(Image, BitmapScalingMode.Linear);
+						image.Width = image.Source.Width;
+						image.Height = image.Source.Height;
+						image.Stretch = Stretch.Uniform;
+						RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.Linear);
 						break;
 					case ScaleType.FactorSmallerThanViewport:
 					case ScaleType.FactorScaledBiggerThanViewport:
-						Image.Width = Image.Source.Width * currentFactor;
-						Image.Height = Image.Source.Height * currentFactor;
-						Image.Stretch = Stretch.Uniform;
-						RenderOptions.SetBitmapScalingMode(Image, BitmapScalingMode.NearestNeighbor);
+						image.Width = image.Source.Width * currentFactor;
+						image.Height = image.Source.Height * currentFactor;
+						image.Stretch = Stretch.Uniform;
+						RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.NearestNeighbor);
 						break;
 					default:
 						break;
 				}
-
-				Debug.WriteLine($"{CurrentScaleType}, scale={currentFactor}");
 			}
 		}
 
-		private Image Image { get; set; }
-		private Grid Viewport { get; set; }
-
 		public ViewportScaler(Image image, Grid viewport, int maxFactor)
 		{
-			Image = image;
-			Viewport = viewport;
-			currentFactor = 1;
+			this.image = image;
+			this.viewport = viewport;
 			this.maxFactor = maxFactor;
+			currentFactor = 1;
 		}
 
 		public void ChangeFactor(bool zoomIn)
@@ -123,8 +118,8 @@ namespace RidgeDrawerUI
 				SetOriginalSize();
 			else
 			{
-				if (Image.Source.Width * currentFactor < Viewport.ActualWidth &&
-					Image.Source.Height * currentFactor < Viewport.ActualHeight)
+				if (image.Source.Width * currentFactor < viewport.ActualWidth &&
+					image.Source.Height * currentFactor < viewport.ActualHeight)
 					CurrentScaleType = ScaleType.FactorSmallerThanViewport;
 				else
 					CurrentScaleType = ScaleType.FactorScaledBiggerThanViewport;
@@ -152,12 +147,12 @@ namespace RidgeDrawerUI
 					return;
 				}
 
-				if (Image.Width <= Image.Source.Width)
+				if (image.Width <= image.Source.Width)
 					CurrentScaleType = ScaleType.FitToViewport;
 				else
 				{
 					ChangeFactor(zoomIn);
-					if (Image.Width < Image.Source.Width)
+					if (image.Width < image.Source.Width)
 						CurrentScaleType = ScaleType.FitToViewport;
 				}
 			}
@@ -194,8 +189,8 @@ namespace RidgeDrawerUI
 		{
 			get
 			{
-				return Image.Source.Width < Viewport.ActualWidth &&
-					Image.Source.Height < Viewport.ActualHeight;
+				return image.Source.Width < viewport.ActualWidth &&
+					image.Source.Height < viewport.ActualHeight;
 			}
 		}
 
@@ -203,18 +198,18 @@ namespace RidgeDrawerUI
 		{
 			get
 			{
-				return Image.Width < Viewport.ActualWidth &&
-					Image.Height < Viewport.ActualHeight;
+				return image.Width < viewport.ActualWidth &&
+					image.Height < viewport.ActualHeight;
 			}
 		}
 
 		internal void Initialize()
 		{
-			Image.Width = Image.Source.Width;
-			Image.Height = Image.Source.Height;
+			image.Width = image.Source.Width;
+			image.Height = image.Source.Height;
 
-			if (Image.ActualWidth > Viewport.ActualWidth ||
-				Image.ActualHeight > Viewport.ActualHeight)
+			if (image.ActualWidth > viewport.ActualWidth ||
+				image.ActualHeight > viewport.ActualHeight)
 			{
 				CurrentScaleType = ScaleType.FitToViewport;
 			}
