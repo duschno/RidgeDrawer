@@ -199,8 +199,8 @@ namespace RidgeDrawerUI
 			image.Width = image.Source.Width;
 			image.Height = image.Source.Height;
 
-			if (image.ActualWidth > viewport.ActualWidth ||
-				image.ActualHeight > viewport.ActualHeight)
+			if (image.Width > viewport.ActualWidth ||
+				image.Height > viewport.ActualHeight)
 			{
 				CurrentScaleType = ScaleType.Reduced;
 			}
