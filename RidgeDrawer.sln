@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30517.126
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RidgeDrawer", "ImageDrawer\RidgeDrawer.csproj", "{22543895-C4ED-401B-A4EF-529AE17C6BFC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RidgeDrawer", "RidgeDrawer\RidgeDrawer.csproj", "{22543895-C4ED-401B-A4EF-529AE17C6BFC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RidgeDrawerUI", "ImageDrawerUI\RidgeDrawerUI.csproj", "{A4338D41-F4A7-4127-B2C1-2AF47A94CDBA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RidgeDrawerUI", "RidgeDrawerUI\RidgeDrawerUI.csproj", "{A4338D41-F4A7-4127-B2C1-2AF47A94CDBA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "preview_test", "preview_test\preview_test.csproj", "{203BB8FF-6CBF-49F5-9006-C21C1074EF77}"
 EndProject
