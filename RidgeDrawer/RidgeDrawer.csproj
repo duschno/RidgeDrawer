@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{22543895-C4ED-401B-A4EF-529AE17C6BFC}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>ImageDrawer</RootNamespace>
-    <AssemblyName>ImageDrawer</AssemblyName>
+    <RootNamespace>RidgeDrawer</RootNamespace>
+    <AssemblyName>RidgeDrawer</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
