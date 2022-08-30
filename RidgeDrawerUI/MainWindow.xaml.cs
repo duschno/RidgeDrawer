@@ -67,7 +67,7 @@ namespace RidgeDrawerUI
 		private void Viewport_MouseMove(object sender, MouseEventArgs e)
 		{
 			if ((e.LeftButton == MouseButtonState.Pressed || e.MiddleButton == MouseButtonState.Pressed) &&
-				scaler.CurrentScaleType != ScaleType.NoScaleSmallerThanViewport)
+				scaler.CurrentScaleType != ScaleType.NonScaledSmallerThanViewport)
 			{
 				System.Windows.Point newPos = Mouse.GetPosition(Window);
 				Thickness margin = Image.Margin;
@@ -144,7 +144,7 @@ namespace RidgeDrawerUI
 
 		private void Viewport_Loaded(object sender, RoutedEventArgs e)
 		{
-			scaler.Initialize(Viewport);
+			//scaler.Initialize();
 		}
 
 		private void Viewport_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -153,7 +153,10 @@ namespace RidgeDrawerUI
 				return;
 
 			if (Viewport.IsLoaded)
+			{
+				scaler.CheckScale();
 				ChangeUIProps();
+			}
 		}
 
 		private void FullsizeButton_Click(object sender, RoutedEventArgs e)

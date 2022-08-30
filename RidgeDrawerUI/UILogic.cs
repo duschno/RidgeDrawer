@@ -68,6 +68,7 @@ namespace RidgeDrawerUI
 						Model.Original = ConvertToNativeDpi(Model.OriginalBitmap);
 						Model.Processed = ConvertToNativeDpi(Logic.ProcessByFilename(Model.Filename, Model.Param));
 						Image.Source = Model.Processed;
+						scaler.Initialize();
 					}
 					catch (Exception e)
 					{
@@ -81,7 +82,7 @@ namespace RidgeDrawerUI
 					}
 				});
 			DataContext = Model;
-			scaler = new ViewportScaler(Image, maxFactor: 8);
+			scaler = new ViewportScaler(Image, Viewport, maxFactor: 8);
 			Model.UpdateView();
 		}
 
@@ -137,7 +138,8 @@ namespace RidgeDrawerUI
 				return;
 
 			scaler.ChangeScale(zoomIn);
-			if (!zoomIn && !scaler.IsOriginalSize)
+			if (!zoomIn && (scaler.CurrentScaleType == ScaleType.FactorScaledBiggerThanViewport ||
+							scaler.CurrentScaleType == ScaleType.NonScaledBiggerThanViewport))
 				Image.Margin = CheckBoundaries(Image.Margin);
 
 			ChangeUIProps();
@@ -145,26 +147,16 @@ namespace RidgeDrawerUI
 
 		private void ChangeUIProps()
 		{
-			scaler.ChangeUIProps(Viewport);
-			if (scaler.IsOriginalSize)
+			if (scaler.CurrentScaleType == ScaleType.NonScaledBiggerThanViewport ||
+				scaler.CurrentScaleType == ScaleType.FactorScaledBiggerThanViewport)
 			{
-				Viewport.Cursor = Cursors.Arrow;
-				Image.Margin = new Thickness();
-				oldMargin = new Thickness();
+				Viewport.Cursor = Cursors.SizeAll;
 			}
 			else
 			{
-				if (Image.Width <= Viewport.ActualWidth &&
-					Image.Height <= Viewport.ActualHeight)
-				{
-					Image.Margin = new Thickness();
-					oldMargin = new Thickness();
-					Viewport.Cursor = Cursors.Arrow;
-				}
-				else
-				{
-					Viewport.Cursor = Cursors.SizeAll;
-				}
+				Image.Margin = new Thickness();
+				oldMargin = new Thickness();
+				Viewport.Cursor = Cursors.Arrow;
 			}
 		}
 
@@ -194,17 +186,11 @@ namespace RidgeDrawerUI
 				return null;
 			}
 
-			System.Windows.Point resPoint = new System.Windows.Point();
-			if (double.IsNaN(Image.Width))
+			System.Windows.Point resPoint = new System.Windows.Point
 			{
-				resPoint.X = (int)(point.X * Image.Source.Width / Image.ActualWidth);
-				resPoint.Y = (int)(point.Y * Image.Source.Height / Image.ActualHeight);
-			}
-			else
-			{
-				resPoint.X = (int)point.X / scaler.CurrentFactor;
-				resPoint.Y = (int)point.Y / scaler.CurrentFactor;
-			}
+				X = (int)(point.X * Image.Source.Width / Image.ActualWidth),
+				Y = (int)(point.Y * Image.Source.Height / Image.ActualHeight)
+			};
 
 			return resPoint;
 		}
