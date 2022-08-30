@@ -32,14 +32,16 @@ namespace RidgeDrawerUI
 
 	public class ViewportScaler
 	{
-		public int CurrentFactor { get; set; }
-		public int MaxFactor { get; private set; }
+		public int CurrentFactor { get; private set; }
+		private int MaxFactor { get; set; }
 
-		private Image image;
+		public int CurrentScaleType { get; private set; }
+
+		private Image Image { get; set; }
 
 		public ViewportScaler(Image image, int maxFactor)
 		{
-			this.image = image;
+			Image = image;
 			CurrentFactor = 1;
 			MaxFactor = maxFactor;
 		}
@@ -57,41 +59,41 @@ namespace RidgeDrawerUI
 		private void SetToFitGrid()
 		{
 			CurrentFactor = 1;
-			image.Width = image.Height = double.NaN;
+			Image.Width = Image.Height = double.NaN;
 		}
 
 		internal void ChangeScale(bool zoomIn)
 		{
-			if (image.Source == null)
+			if (Image.Source == null)
 				return;
 
 			if (zoomIn)
 			{
-				if (image.ActualWidth < image.Source.Width)
+				if (Image.ActualWidth < Image.Source.Width)
 				{
-					image.Width = image.Source.Width;
-					image.Height = image.Source.Height;
+					Image.Width = Image.Source.Width;
+					Image.Height = Image.Source.Height;
 				}
 				else
 				{
 					SetNextFactor(zoomIn);
-					image.Width = image.Source.Width * CurrentFactor;
-					image.Height = image.Source.Height * CurrentFactor;
+					Image.Width = Image.Source.Width * CurrentFactor;
+					Image.Height = Image.Source.Height * CurrentFactor;
 				}
 			}
 			else
 			{
-				if (image.Stretch == Stretch.None)
+				if (Image.Stretch == Stretch.None)
 					return;
 
-				if (image.Width <= image.Source.Width)
+				if (Image.Width <= Image.Source.Width)
 					SetToFitGrid();
 				else
 				{
 					SetNextFactor(zoomIn);
-					image.Width = image.Source.Width * CurrentFactor;
-					image.Height = image.Source.Height * CurrentFactor;
-					if (image.Width < image.Source.Width)
+					Image.Width = Image.Source.Width * CurrentFactor;
+					Image.Height = Image.Source.Height * CurrentFactor;
+					if (Image.Width < Image.Source.Width)
 						SetToFitGrid();
 				}
 			}
@@ -100,34 +102,36 @@ namespace RidgeDrawerUI
 		internal void SetOriginalSize()
 		{
 			CurrentFactor = 1;
-			image.Width = image.Source.Width;
-			image.Height = image.Source.Height;
+			Image.Width = Image.Source.Width;
+			Image.Height = Image.Source.Height;
 		}
 
 		internal void ChangeUIProps(Grid viewport)
 		{
 			if (IsOriginalSize)
 			{
-				if (image.Source.Width < viewport.ActualWidth &&
-					image.Source.Height < viewport.ActualHeight)
-					image.Stretch = Stretch.None;
+				if (Image.Source.Width < viewport.ActualWidth &&
+					Image.Source.Height < viewport.ActualHeight)
+					Image.Stretch = Stretch.None;
 				else
-					image.Stretch = Stretch.Uniform;
+					Image.Stretch = Stretch.Uniform;
 
-				RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.Linear);
+				RenderOptions.SetBitmapScalingMode(Image, BitmapScalingMode.Linear);
 			}
 			else
 			{
-				image.Stretch = Stretch.Uniform;
-				RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.NearestNeighbor);
+				Image.Stretch = Stretch.Uniform;
+				RenderOptions.SetBitmapScalingMode(Image, BitmapScalingMode.NearestNeighbor);
 			}
 		}
+
+
 
 		public double OriginalHeight
 		{
 			get
 			{
-				return image.Source.Height;
+				return Image.Source.Height;
 			}
 		}
 
@@ -135,7 +139,7 @@ namespace RidgeDrawerUI
 		{
 			get
 			{
-				return image.Source.Width;
+				return Image.Source.Width;
 			}
 		}
 
@@ -143,22 +147,22 @@ namespace RidgeDrawerUI
 		{
 			get
 			{
-				return double.IsNaN(image.Width) || image.Width == image.Source.Width;
+				return double.IsNaN(Image.Width) || Image.Width == Image.Source.Width;
 			}
 		}
 
 		internal bool IsFittingGrid(Grid viewport)
 		{
-			return image.ActualWidth <= viewport.ActualWidth &&
-					image.ActualHeight <= viewport.ActualHeight;
+			return Image.ActualWidth <= viewport.ActualWidth &&
+					Image.ActualHeight <= viewport.ActualHeight;
 		}
 
 		internal void Initialize(Grid viewport)
 		{
 			if (!IsFittingGrid(viewport))
 			{
-				image.Stretch = Stretch.Uniform;
-				RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.Linear);
+				Image.Stretch = Stretch.Uniform;
+				RenderOptions.SetBitmapScalingMode(Image, BitmapScalingMode.Linear);
 			}
 		}
 	}

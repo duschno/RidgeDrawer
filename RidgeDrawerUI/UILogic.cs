@@ -68,8 +68,6 @@ namespace RidgeDrawerUI
 						Model.Original = ConvertToNativeDpi(Model.OriginalBitmap);
 						Model.Processed = ConvertToNativeDpi(Logic.ProcessByFilename(Model.Filename, Model.Param));
 						Image.Source = Model.Processed;
-						Image.MaxWidth = scaler.OriginalWidth * scaler.MaxFactor;
-						Image.MaxHeight = scaler.OriginalHeight * scaler.MaxFactor;
 					}
 					catch (Exception e)
 					{
