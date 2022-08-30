@@ -69,8 +69,8 @@ namespace RidgeDrawerUI
 			if (e.LeftButton == MouseButtonState.Pressed ||
 				e.MiddleButton == MouseButtonState.Pressed)
 			{
-				if (scaler.CurrentScaleType == ScaleType.NonScaledBiggerThanViewport ||
-					scaler.CurrentScaleType == ScaleType.FactorScaledBiggerThanViewport)
+				if (scaler.CurrentScaleType == ScaleType.OriginalBiggerThanViewport ||
+					scaler.CurrentScaleType == ScaleType.EnlargedBiggerThanViewport)
 				{
 					System.Windows.Point newPos = Mouse.GetPosition(Window);
 					Thickness margin = Image.Margin;
@@ -144,11 +144,6 @@ namespace RidgeDrawerUI
 				Model.Param.Debug = !Model.Param.Debug;
 				Model.UpdateView();
 			}
-		}
-
-		private void Viewport_Loaded(object sender, RoutedEventArgs e)
-		{
-			//scaler.Initialize();
 		}
 
 		private void Viewport_SizeChanged(object sender, SizeChangedEventArgs e)

@@ -196,7 +196,6 @@
 
             <Border x:Name="ViewportBorder" BorderBrush="DarkOrange" Grid.Column="1"/>
             <Grid Name="Viewport" SnapsToDevicePixels="True" UseLayoutRounding="True" Grid.Column="1" Panel.ZIndex="-1"
-                  Loaded="Viewport_Loaded"
                   SizeChanged="Viewport_SizeChanged"
                   MouseWheel="Viewport_MouseWheel"
                   MouseMove="Viewport_MouseMove"

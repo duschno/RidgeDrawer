@@ -138,8 +138,8 @@ namespace RidgeDrawerUI
 				return;
 
 			scaler.ChangeScale(zoomIn);
-			if (!zoomIn && (scaler.CurrentScaleType == ScaleType.FactorScaledBiggerThanViewport ||
-							scaler.CurrentScaleType == ScaleType.NonScaledBiggerThanViewport))
+			if (!zoomIn && (scaler.CurrentScaleType == ScaleType.EnlargedBiggerThanViewport ||
+							scaler.CurrentScaleType == ScaleType.OriginalBiggerThanViewport))
 				Image.Margin = CheckBoundaries(Image.Margin);
 
 			ChangeUIProps();
@@ -147,8 +147,8 @@ namespace RidgeDrawerUI
 
 		private void ChangeUIProps()
 		{
-			if (scaler.CurrentScaleType == ScaleType.NonScaledBiggerThanViewport ||
-				scaler.CurrentScaleType == ScaleType.FactorScaledBiggerThanViewport)
+			if (scaler.CurrentScaleType == ScaleType.OriginalBiggerThanViewport ||
+				scaler.CurrentScaleType == ScaleType.EnlargedBiggerThanViewport)
 			{
 				Viewport.Cursor = Cursors.SizeAll;
 			}
