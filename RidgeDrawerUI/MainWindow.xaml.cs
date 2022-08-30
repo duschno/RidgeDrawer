@@ -67,7 +67,7 @@ namespace RidgeDrawerUI
 		private void Viewport_MouseMove(object sender, MouseEventArgs e)
 		{
 			if ((e.LeftButton == MouseButtonState.Pressed || e.MiddleButton == MouseButtonState.Pressed) &&
-				Image.Stretch != Stretch.None)
+				scaler.CurrentScaleType != ScaleType.NoScaleSmallerThanViewport)
 			{
 				System.Windows.Point newPos = Mouse.GetPosition(Window);
 				Thickness margin = Image.Margin;
@@ -149,6 +149,9 @@ namespace RidgeDrawerUI
 
 		private void Viewport_SizeChanged(object sender, SizeChangedEventArgs e)
 		{
+			if (Image.Source == null)
+				return;
+
 			if (Viewport.IsLoaded)
 				ChangeUIProps();
 		}

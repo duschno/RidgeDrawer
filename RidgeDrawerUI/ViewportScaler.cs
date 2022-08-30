@@ -31,7 +31,40 @@ namespace RidgeDrawerUI
 		public int CurrentFactor { get; private set; }
 		private int MaxFactor { get; set; }
 
-		public ScaleType CurrentScaleType { get; private set; }
+		private ScaleType currentScaleType;
+
+		public ScaleType CurrentScaleType
+		{
+			get
+			{
+				return currentScaleType;
+			}
+
+			private set
+			{
+				switch (value)
+				{
+					case ScaleType.FitToViewport:
+						Image.Stretch = Stretch.Uniform;
+						RenderOptions.SetBitmapScalingMode(Image, BitmapScalingMode.Linear);
+						break;
+					case ScaleType.NoScaleSmallerThanViewport:
+						Image.Stretch = Stretch.None;
+						RenderOptions.SetBitmapScalingMode(Image, BitmapScalingMode.Linear);
+						break;
+					case ScaleType.NoScaleBiggerThanViewport:
+						Image.Stretch = Stretch.Uniform;
+						RenderOptions.SetBitmapScalingMode(Image, BitmapScalingMode.Linear);
+						break;
+					case ScaleType.Factor:
+						Image.Stretch = Stretch.Uniform;
+						RenderOptions.SetBitmapScalingMode(Image, BitmapScalingMode.NearestNeighbor);
+						break;
+					default:
+						break;
+				}
+			}
+		}
 
 		private Image Image { get; set; }
 
@@ -40,11 +73,6 @@ namespace RidgeDrawerUI
 			Image = image;
 			CurrentFactor = 1;
 			MaxFactor = maxFactor;
-		}
-
-		private void ChangeScaleType(ScaleType scaleType)
-		{
-			CurrentScaleType = scaleType;
 		}
 
 		public void SetNextFactor(bool zoomIn)
@@ -84,7 +112,7 @@ namespace RidgeDrawerUI
 			}
 			else
 			{
-				if (Image.Stretch == Stretch.None)
+				if (CurrentScaleType == ScaleType.NoScaleSmallerThanViewport)
 					return;
 
 				if (Image.Width <= Image.Source.Width)
@@ -113,36 +141,21 @@ namespace RidgeDrawerUI
 			{
 				if (Image.Source.Width < viewport.ActualWidth &&
 					Image.Source.Height < viewport.ActualHeight)
-					Image.Stretch = Stretch.None;
+				{
+					CurrentScaleType = ScaleType.NoScaleSmallerThanViewport;
+				}
 				else
-					Image.Stretch = Stretch.Uniform;
-
-				RenderOptions.SetBitmapScalingMode(Image, BitmapScalingMode.Linear);
+				{
+					CurrentScaleType = ScaleType.NoScaleBiggerThanViewport;
+				}
 			}
 			else
 			{
-				Image.Stretch = Stretch.Uniform;
-				RenderOptions.SetBitmapScalingMode(Image, BitmapScalingMode.NearestNeighbor);
+				CurrentScaleType = ScaleType.Factor;
 			}
 		}
 
 
-
-		public double OriginalHeight
-		{
-			get
-			{
-				return Image.Source.Height;
-			}
-		}
-
-		public double OriginalWidth
-		{
-			get
-			{
-				return Image.Source.Width;
-			}
-		}
 
 		public bool IsOriginalSize
 		{
@@ -152,18 +165,12 @@ namespace RidgeDrawerUI
 			}
 		}
 
-		internal bool IsFittingGrid(Grid viewport)
-		{
-			return Image.ActualWidth <= viewport.ActualWidth &&
-					Image.ActualHeight <= viewport.ActualHeight;
-		}
-
 		internal void Initialize(Grid viewport)
 		{
-			if (!IsFittingGrid(viewport))
+			if (Image.ActualWidth > viewport.ActualWidth ||
+				Image.ActualHeight > viewport.ActualHeight)
 			{
-				Image.Stretch = Stretch.Uniform;
-				RenderOptions.SetBitmapScalingMode(Image, BitmapScalingMode.Linear);
+				CurrentScaleType = ScaleType.FitToViewport;
 			}
 		}
 	}

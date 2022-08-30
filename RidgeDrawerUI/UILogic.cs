@@ -131,28 +131,20 @@ namespace RidgeDrawerUI
 				pixelData, stride);
 		}
 
-		private void ChangeScale(bool zoomIn)
+		private void ChangeZoom(bool zoomIn)
 		{
 			if (Image.Source == null)
 				return;
 
 			scaler.ChangeScale(zoomIn);
-
 			if (!zoomIn && !scaler.IsOriginalSize)
 				Image.Margin = CheckBoundaries(Image.Margin);
-		}
 
-		private void ChangeZoom(bool zoomIn)
-		{
-			ChangeScale(zoomIn);
 			ChangeUIProps();
 		}
 
 		private void ChangeUIProps()
 		{
-			if (Image.Source == null)
-				return;
-
 			scaler.ChangeUIProps(Viewport);
 			if (scaler.IsOriginalSize)
 			{
@@ -205,8 +197,8 @@ namespace RidgeDrawerUI
 			System.Windows.Point resPoint = new System.Windows.Point();
 			if (double.IsNaN(Image.Width))
 			{
-				resPoint.X = (int)(point.X * scaler.OriginalWidth / Image.ActualWidth);
-				resPoint.Y = (int)(point.Y * scaler.OriginalHeight / Image.ActualHeight);
+				resPoint.X = (int)(point.X * Image.Source.Width / Image.ActualWidth);
+				resPoint.Y = (int)(point.Y * Image.Source.Height / Image.ActualHeight);
 			}
 			else
 			{
