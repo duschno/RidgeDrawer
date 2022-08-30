@@ -45,14 +45,18 @@ namespace RidgeDrawerUI
 				switch (value)
 				{
 					case ScaleType.FitToViewport:
+						CurrentFactor = 1;
+						Image.Width = Image.Height = double.NaN;
 						Image.Stretch = Stretch.Uniform;
 						RenderOptions.SetBitmapScalingMode(Image, BitmapScalingMode.Linear);
 						break;
 					case ScaleType.NoScaleSmallerThanViewport:
+						CurrentFactor = 1;
 						Image.Stretch = Stretch.None;
 						RenderOptions.SetBitmapScalingMode(Image, BitmapScalingMode.Linear);
 						break;
 					case ScaleType.NoScaleBiggerThanViewport:
+						CurrentFactor = 1;
 						Image.Stretch = Stretch.Uniform;
 						RenderOptions.SetBitmapScalingMode(Image, BitmapScalingMode.Linear);
 						break;
@@ -85,12 +89,6 @@ namespace RidgeDrawerUI
 			CurrentFactor += zoomIn ? 1 : -1;
 		}
 
-		private void SetToFitGrid()
-		{
-			CurrentFactor = 1;
-			Image.Width = Image.Height = double.NaN;
-		}
-
 		internal void ChangeScale(bool zoomIn)
 		{
 			if (Image.Source == null)
@@ -116,14 +114,14 @@ namespace RidgeDrawerUI
 					return;
 
 				if (Image.Width <= Image.Source.Width)
-					SetToFitGrid();
+					CurrentScaleType = ScaleType.FitToViewport;
 				else
 				{
 					SetNextFactor(zoomIn);
 					Image.Width = Image.Source.Width * CurrentFactor;
 					Image.Height = Image.Source.Height * CurrentFactor;
 					if (Image.Width < Image.Source.Width)
-						SetToFitGrid();
+						CurrentScaleType = ScaleType.FitToViewport;
 				}
 			}
 		}
