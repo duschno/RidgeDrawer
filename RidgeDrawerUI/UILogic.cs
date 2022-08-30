@@ -29,7 +29,6 @@ namespace RidgeDrawerUI
 			FillComboBox(LineType, typeof(LineType));
 			FillComboBox(Method, typeof(MethodType));
 			FillComboBox(Backend, typeof(BackendDrawerBase));
-			scaler = new ViewportScaler(maxFactor: 8);
 			Model = new RenderParamsModel(
 				new RenderParams
 				{
@@ -69,8 +68,8 @@ namespace RidgeDrawerUI
 						Model.Original = ConvertToNativeDpi(Model.OriginalBitmap);
 						Model.Processed = ConvertToNativeDpi(Logic.ProcessByFilename(Model.Filename, Model.Param));
 						Image.Source = Model.Processed;
-						Image.MaxWidth = scaler.OriginalWidth(Image) * scaler.MaxFactor;
-						Image.MaxHeight = scaler.OriginalHeight(Image) * scaler.MaxFactor;
+						Image.MaxWidth = scaler.OriginalWidth * scaler.MaxFactor;
+						Image.MaxHeight = scaler.OriginalHeight * scaler.MaxFactor;
 					}
 					catch (Exception e)
 					{
@@ -84,6 +83,7 @@ namespace RidgeDrawerUI
 					}
 				});
 			DataContext = Model;
+			scaler = new ViewportScaler(Image, maxFactor: 8);
 			Model.UpdateView();
 		}
 
@@ -138,9 +138,9 @@ namespace RidgeDrawerUI
 			if (Image.Source == null)
 				return;
 
-			scaler.ChangeScale(Image, zoomIn);
+			scaler.ChangeScale(zoomIn);
 
-			if (!zoomIn && !scaler.IsOriginalSize(Image))
+			if (!zoomIn && !scaler.IsOriginalSize)
 				Image.Margin = CheckBoundaries(Image.Margin);
 		}
 
@@ -155,8 +155,8 @@ namespace RidgeDrawerUI
 			if (Image.Source == null)
 				return;
 
-			scaler.ChangeUIProps(Image, Viewport);
-			if (scaler.IsOriginalSize(Image))
+			scaler.ChangeUIProps(Viewport);
+			if (scaler.IsOriginalSize)
 			{
 				Viewport.Cursor = Cursors.Arrow;
 				Image.Margin = new Thickness();
@@ -200,7 +200,7 @@ namespace RidgeDrawerUI
 			if (Image.Source == null)
 				return;
 
-			scaler.SetOriginalSize(Image);
+			scaler.SetOriginalSize();
 			ChangeUIProps();
 		}
 	}

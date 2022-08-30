@@ -35,8 +35,11 @@ namespace RidgeDrawerUI
 		public int CurrentFactor { get; set; }
 		public int MaxFactor { get; private set; }
 
-		public ViewportScaler(int maxFactor)
+		private Image image;
+
+		public ViewportScaler(Image image, int maxFactor)
 		{
+			this.image = image;
 			CurrentFactor = 1;
 			MaxFactor = maxFactor;
 		}
@@ -51,13 +54,13 @@ namespace RidgeDrawerUI
 			CurrentFactor += zoomIn ? 1 : -1;
 		}
 
-		private void SetToFitGrid(Image image)
+		private void SetToFitGrid()
 		{
 			CurrentFactor = 1;
 			image.Width = image.Height = double.NaN;
 		}
 
-		internal void ChangeScale(Image image, bool zoomIn)
+		internal void ChangeScale(bool zoomIn)
 		{
 			if (image.Source == null)
 				return;
@@ -82,28 +85,28 @@ namespace RidgeDrawerUI
 					return;
 
 				if (image.Width <= image.Source.Width)
-					SetToFitGrid(image);
+					SetToFitGrid();
 				else
 				{
 					SetNextFactor(zoomIn);
 					image.Width = image.Source.Width * CurrentFactor;
 					image.Height = image.Source.Height * CurrentFactor;
 					if (image.Width < image.Source.Width)
-						SetToFitGrid(image);
+						SetToFitGrid();
 				}
 			}
 		}
 
-		internal void SetOriginalSize(Image image)
+		internal void SetOriginalSize()
 		{
 			CurrentFactor = 1;
 			image.Width = image.Source.Width;
 			image.Height = image.Source.Height;
 		}
 
-		internal void ChangeUIProps(Image image, Grid viewport)
+		internal void ChangeUIProps(Grid viewport)
 		{
-			if (IsOriginalSize(image))
+			if (IsOriginalSize)
 			{
 				if (image.Source.Width < viewport.ActualWidth &&
 					image.Source.Height < viewport.ActualHeight)
@@ -120,30 +123,39 @@ namespace RidgeDrawerUI
 			}
 		}
 
-		internal double OriginalHeight(Image image)
+		public double OriginalHeight
 		{
-			return image.Source.Height;
+			get
+			{
+				return image.Source.Height;
+			}
 		}
 
-		internal double OriginalWidth(Image image)
+		public double OriginalWidth
 		{
-			return image.Source.Width;
+			get
+			{
+				return image.Source.Width;
+			}
 		}
 
-		public bool IsOriginalSize(Image image)
+		public bool IsOriginalSize
 		{
-			return double.IsNaN(image.Width) || image.Width == image.Source.Width;
+			get
+			{
+				return double.IsNaN(image.Width) || image.Width == image.Source.Width;
+			}
 		}
 
-		internal bool IsFittingGrid(Image image, Grid viewport)
+		internal bool IsFittingGrid(Grid viewport)
 		{
 			return image.ActualWidth <= viewport.ActualWidth &&
 					image.ActualHeight <= viewport.ActualHeight;
 		}
 
-		internal void Initialize(Image image, Grid viewport)
+		internal void Initialize(Grid viewport)
 		{
-			if (!IsFittingGrid(image, viewport))
+			if (!IsFittingGrid(viewport))
 			{
 				image.Stretch = Stretch.Uniform;
 				RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.Linear);

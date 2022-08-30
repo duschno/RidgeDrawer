@@ -129,7 +129,7 @@ namespace RidgeDrawerUI
 
 		private void Viewport_Loaded(object sender, RoutedEventArgs e)
 		{
-			scaler.Initialize(Image, Viewport);
+			scaler.Initialize(Viewport);
 		}
 
 		private void Viewport_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -209,8 +209,8 @@ namespace RidgeDrawerUI
 			System.Windows.Point resPoint = new System.Windows.Point();
 			if (double.IsNaN(Image.Width))
 			{
-				resPoint.X = (int)(point.X * scaler.OriginalWidth(Image) / Image.ActualWidth);
-				resPoint.Y = (int)(point.Y * scaler.OriginalHeight(Image) / Image.ActualHeight);
+				resPoint.X = (int)(point.X * scaler.OriginalWidth / Image.ActualWidth);
+				resPoint.Y = (int)(point.Y * scaler.OriginalHeight / Image.ActualHeight);
 			}
 			else
 			{
