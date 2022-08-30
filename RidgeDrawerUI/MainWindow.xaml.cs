@@ -129,11 +129,7 @@ namespace RidgeDrawerUI
 
 		private void Viewport_Loaded(object sender, RoutedEventArgs e)
 		{
-			if (!IsFittingGrid)
-			{
-				Image.Stretch = Stretch.Uniform;
-				RenderOptions.SetBitmapScalingMode(Image, BitmapScalingMode.Linear);
-			}
+			scaler.Initialize(Image, Viewport);
 		}
 
 		private void Viewport_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -213,8 +209,8 @@ namespace RidgeDrawerUI
 			System.Windows.Point resPoint = new System.Windows.Point();
 			if (double.IsNaN(Image.Width))
 			{
-				resPoint.X = (int)(point.X * OriginalWidth / Image.ActualWidth);
-				resPoint.Y = (int)(point.Y * OriginalHeight / Image.ActualHeight);
+				resPoint.X = (int)(point.X * scaler.OriginalWidth(Image) / Image.ActualWidth);
+				resPoint.Y = (int)(point.Y * scaler.OriginalHeight(Image) / Image.ActualHeight);
 			}
 			else
 			{

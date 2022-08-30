@@ -18,39 +18,6 @@ namespace RidgeDrawerUI
 		private System.Windows.Point startPos;
 		private Thickness oldMargin;
 
-		private double OriginalWidth
-		{
-			get
-			{
-				return Image.Source.Width;
-			}
-		}
-
-		private double OriginalHeight
-		{
-			get
-			{
-				return Image.Source.Height;
-			}
-		}
-
-		private bool IsFittingGrid
-		{
-			get
-			{
-				return Image.ActualWidth <= Viewport.ActualWidth &&
-					Image.ActualHeight <= Viewport.ActualHeight;
-			}
-		}
-
-		private bool IsOriginalSize
-		{
-			get
-			{
-				return double.IsNaN(Image.Width) || Image.Width == OriginalWidth;
-			}
-		}
-
 		public MainWindow()
 		{
 			InitializeComponent();
@@ -102,8 +69,8 @@ namespace RidgeDrawerUI
 						Model.Original = ConvertToNativeDpi(Model.OriginalBitmap);
 						Model.Processed = ConvertToNativeDpi(Logic.ProcessByFilename(Model.Filename, Model.Param));
 						Image.Source = Model.Processed;
-						Image.MaxWidth = OriginalWidth * scaler.MaxFactor;
-						Image.MaxHeight = OriginalHeight * scaler.MaxFactor;
+						Image.MaxWidth = scaler.OriginalWidth(Image) * scaler.MaxFactor;
+						Image.MaxHeight = scaler.OriginalHeight(Image) * scaler.MaxFactor;
 					}
 					catch (Exception e)
 					{
@@ -173,7 +140,7 @@ namespace RidgeDrawerUI
 
 			scaler.ChangeScale(Image, zoomIn);
 
-			if (!zoomIn && !IsOriginalSize)
+			if (!zoomIn && !scaler.IsOriginalSize(Image))
 				Image.Margin = CheckBoundaries(Image.Margin);
 		}
 
@@ -189,7 +156,7 @@ namespace RidgeDrawerUI
 				return;
 
 			scaler.ChangeUIProps(Image, Viewport);
-			if (IsOriginalSize)
+			if (scaler.IsOriginalSize(Image))
 			{
 				Viewport.Cursor = Cursors.Arrow;
 				Image.Margin = new Thickness();
@@ -213,8 +180,8 @@ namespace RidgeDrawerUI
 
 		private Thickness CheckBoundaries(Thickness margin)
 		{
-			double widthOver = Viewport.ActualWidth - Image.Width;
-			double heightOver = Viewport.ActualHeight - Image.Height;
+			double widthOver = Viewport.ActualWidth - Image.ActualWidth;
+			double heightOver = Viewport.ActualHeight - Image.ActualHeight;
 
 			if (widthOver >= 0 || margin.Left > 0)
 				margin.Left = 0;

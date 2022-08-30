@@ -120,9 +120,34 @@ namespace RidgeDrawerUI
 			}
 		}
 
-		private bool IsOriginalSize(Image image)
+		internal double OriginalHeight(Image image)
+		{
+			return image.Source.Height;
+		}
+
+		internal double OriginalWidth(Image image)
+		{
+			return image.Source.Width;
+		}
+
+		public bool IsOriginalSize(Image image)
 		{
 			return double.IsNaN(image.Width) || image.Width == image.Source.Width;
+		}
+
+		internal bool IsFittingGrid(Image image, Grid viewport)
+		{
+			return image.ActualWidth <= viewport.ActualWidth &&
+					image.ActualHeight <= viewport.ActualHeight;
+		}
+
+		internal void Initialize(Image image, Grid viewport)
+		{
+			if (!IsFittingGrid(image, viewport))
+			{
+				image.Stretch = Stretch.Uniform;
+				RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.Linear);
+			}
 		}
 	}
 }
