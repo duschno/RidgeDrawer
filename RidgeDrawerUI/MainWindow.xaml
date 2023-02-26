@@ -9,6 +9,7 @@
         Height="800" Width="1000" MinWidth="640" MinHeight="480"
         KeyDown="Window_KeyDown" WindowStartupLocation="CenterScreen" PreviewMouseDown="Window_MouseDown"
         ResizeMode="CanResizeWithGrip">
+    <!-- add desing time values, move specific controls to separate xaml and load it dynamically-->
     <Window.Resources>
         <ResourceDictionary>
             <local:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
