@@ -225,7 +225,7 @@ namespace RidgeDrawer
 						else if (prop.PropertyType.IsEnum)
 							obj = Enum.Parse(prop.PropertyType, value, true);
 						else if (prop.PropertyType == typeof(Type))
-							obj = Type.GetType($"{Assembly.GetExecutingAssembly().GetName().Name}.{value}", true, true);
+							obj = Type.GetType($"{Assembly.GetExecutingAssembly().GetName().Name}.{value}", true, true); // make a property attribute and specify how it should be converted there
 						else
 							obj = Convert.ChangeType(value, prop.PropertyType);
 
