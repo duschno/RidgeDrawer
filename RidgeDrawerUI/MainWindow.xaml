@@ -43,8 +43,6 @@
                 <Setter Property="HorizontalAlignment" Value="Left"/>
                 <Setter Property="VerticalAlignment" Value="Top"/>
                 <Setter Property="Margin" Value="15,5,0,0"/>
-                <EventSetter Event="Checked" Handler="Control_ValueChanged"/>
-                <EventSetter Event="Unchecked" Handler="Control_ValueChanged"/>
             </Style>
             <Style TargetType="{x:Type TextBlock}">
                 <Setter Property="HorizontalAlignment" Value="Left"/>
@@ -61,7 +59,6 @@
                 <Setter Property="HorizontalAlignment" Value="Left"/>
                 <Setter Property="VerticalAlignment" Value="Top"/>
                 <Setter Property="Margin" Value="84,-22,0,0"/>
-                <EventSetter Event="SelectionChanged" Handler="Control_ValueChanged"/>
             </Style>
             <Style TargetType="{x:Type ComboBox}" x:Key="ComboBoxEnumStyle" 
                    BasedOn="{StaticResource ComboBoxBaseStyle}">
@@ -100,39 +97,39 @@
                     <!--#region Text boxes-->
                     <TextBlock Text="Lines count"/>
                     <TextBox x:Name="LinesCount" PreviewTextInput="PositiveNumberValidation" 
-                                 TabIndex="0" Text="{Binding Param.LinesCount,UpdateSourceTrigger=Explicit}"/>
+                                 TabIndex="0" Text="{Binding Param.LinesCount}"/>
 
                     <TextBlock Text="Stroke"/>
                     <TextBox x:Name="Stroke" PreviewTextInput="PositiveNumberValidation"
-                                 TabIndex="1" Text="{Binding Param.Stroke,UpdateSourceTrigger=Explicit}"/>
+                                 TabIndex="1" Text="{Binding Param.Stroke}"/>
 
                     <TextBlock Text="Factor"/>
                     <TextBox x:Name="Factor" PreviewTextInput="PositiveNumberValidation"
-                                 TabIndex="2" Text="{Binding Param.Factor,UpdateSourceTrigger=Explicit}"/>
+                                 TabIndex="2" Text="{Binding Param.Factor}"/>
 
                     <TextBlock Text="Chunk size"/>
                     <TextBox x:Name="ChunkSize" PreviewTextInput="PositiveNumberValidation"
-                                 TabIndex="3" Text="{Binding Param.ChunkSize,UpdateSourceTrigger=Explicit}"/>
+                                 TabIndex="3" Text="{Binding Param.ChunkSize}"/>
 
                     <TextBlock Text="Angle"/>
                     <TextBox x:Name="Angle" PreviewTextInput="AngleValidation"
-                                 TabIndex="4" Text="{Binding Param.Angle,UpdateSourceTrigger=Explicit}"/>
+                                 TabIndex="4" Text="{Binding Param.Angle}"/>
                     
                     <TextBlock Text="Grey point"/>
                     <TextBox x:Name="GreyPoint" PreviewTextInput="ColorRangeValidation"
-                                 TabIndex="5" Text="{Binding Param.GreyPoint,UpdateSourceTrigger=Explicit}"/>
+                                 TabIndex="5" Text="{Binding Param.GreyPoint}"/>
                     
                     <TextBlock Text="Black point"/>
                     <TextBox x:Name="BlackPoint" PreviewTextInput="ColorRangeValidation"
-                                 TabIndex="6" Text="{Binding Param.BlackPoint,UpdateSourceTrigger=Explicit}"/>
+                                 TabIndex="6" Text="{Binding Param.BlackPoint}"/>
 
                     <TextBlock Text="White point"/>
                     <TextBox x:Name="WhitePoint" PreviewTextInput="ColorRangeValidation"
-                                 TabIndex="7" Text="{Binding Param.WhitePoint,UpdateSourceTrigger=Explicit}"/>
+                                 TabIndex="7" Text="{Binding Param.WhitePoint}"/>
                     
                     <TextBlock Text="Points around peak" TextWrapping="Wrap" Width="70"/>
                     <TextBox x:Name="PointsAroundPeak"
-                                 TabIndex="8" Text="{Binding Param.PointsAroundPeak,UpdateSourceTrigger=Explicit}"/>
+                                 TabIndex="8" Text="{Binding Param.PointsAroundPeak}"/>
                     <!--#endregion-->
 
                     <Separator Height="8" Visibility="Hidden"/>
@@ -182,11 +179,11 @@
                     <TextBlock Text="X" Margin="67,-26,0,0"/>
                     <TextBox x:Name="PullPointX" PreviewTextInput="PositiveNumberValidation"
                              TabIndex="18" Margin="84,-22,0,0" Width="40"
-                             Text="{Binding Param.PullPointX,UpdateSourceTrigger=Explicit}"/>
+                             Text="{Binding Param.PullPointX}"/>
                     <TextBlock Text="Y" Margin="127,-26,0,0"/>
                     <TextBox x:Name="PullPointY" PreviewTextInput="PositiveNumberValidation"
                              TabIndex="19" Margin="144,-22,0,0" Width="40"
-                             Text="{Binding Param.PullPointY,UpdateSourceTrigger=Explicit}"/>
+                             Text="{Binding Param.PullPointY}"/>
                     <Button x:Name="PullPointButton" Content="Point by click"
                                 Margin="84,5,0,0" Click="PullPointButton_Click"
                                 HorizontalAlignment="Left"

@@ -17,7 +17,19 @@ namespace RidgeDrawerUI
 		}
 
 		private Action render;
-		public RenderParams Param { get; set; }
+		private RenderParams param;
+		public RenderParams Param
+		{
+			get
+			{
+				return param;
+			}
+			set
+			{
+				param = value;
+				param.PropertyChanged += (sender, e) => UpdateView();
+			}
+		}
 		public RenderParams DefaultParam { get; set; }
 		public string Filename { get; set; }
 		public Bitmap OriginalBitmap { get; set; }

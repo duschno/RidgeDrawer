@@ -139,7 +139,6 @@ namespace RidgeDrawerUI
 			{
 				Model.Param.Debug = !Model.Param.Debug;
 				UpdateDebugLines(Model.Param.Debug);
-				Model.UpdateView();
 			}
 		}
 
@@ -177,14 +176,13 @@ namespace RidgeDrawerUI
 			BindingExpression binding = BindingOperations.GetBindingExpression((TextBox)sender,
 				TextBox.TextProperty);
 			if (binding != null)
-				binding.UpdateSource(); // manually update value in source
-			Model.UpdateView();
+				binding.UpdateSource();
 		}
 
 		private void ParamChange_PreviewKeyDown(object sender, KeyEventArgs e)
 		{
 			if (e.Key == Key.Space)
-				e.Handled = true;
+				e.Handled = true; // replace with validation
 		}
 
 		private void PullPointButton_Click(object sender, RoutedEventArgs e)
@@ -200,9 +198,8 @@ namespace RidgeDrawerUI
 			System.Windows.Point? point = GetCursorPositionOverImage();
 			if (point.HasValue)
 			{
-				Model.Param.PullPointX = (int)point.Value.X;
+				Model.Param.PullPointX = (int)point.Value.X; // render triggers 2 times here
 				Model.Param.PullPointY = (int)point.Value.Y;
-				Model.UpdateView();
 			}
 		}
 
@@ -246,11 +243,6 @@ namespace RidgeDrawerUI
 			ColorValue.Text = string.Empty;
 
 			UpdateDebugLines(false);
-		}
-
-		private void Control_ValueChanged(object sender, RoutedEventArgs e)
-		{
-			Model.UpdateView();
 		}
 	}
 }
