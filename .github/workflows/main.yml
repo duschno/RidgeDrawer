@@ -25,7 +25,8 @@ jobs:
     #   run: nuget restore RidgeDrawer.sln
     
     - name: Build solution & zip binaries
-      run: msbuild RidgeDrawer.sln -t:rebuild -property:Configuration=Release; Compress-Archive -Path bin/Release/*.exe -Destination bin.zip
+      id: build_solution
+      run: msbuild RidgeDrawer.sln -t:rebuild -property:Configuration=Release; Compress-Archive -Path bin/Release/*.exe -Destination bin.zip; echo "::set-output name=version::$((Get-Item RidgeDrawer.exe).VersionInfo.FileVersion)"
     
     - name: Create Release
       id: create_release
@@ -34,7 +35,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: build
-        release_name: Build v${{ (Get-Item RidgeDrawer.exe).VersionInfo.FileVersion }}
+        release_name: Build v${{ steps.build_solution.outputs.version }}
         body: "Changes:"
         draft: false
         prerelease: true
