@@ -28,9 +28,7 @@ jobs:
     #  run: msbuild RidgeDrawer.sln -t:rebuild -property:Configuration=Release
 
     - name: Build solution
-      run: cd bin\Release
-    - name: Build solution 2
-      run: cd
+      run: dir
     
     # - name: Create Release
     #   id: create_release
