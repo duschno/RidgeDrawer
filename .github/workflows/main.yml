@@ -35,10 +35,9 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: build
-        release_name: Build v${{ steps.build_solution.outputs.version }}
-        body: "Changes:"
+        release_name: Release v${{ steps.build_solution.outputs.version }}
         draft: false
-        prerelease: true
+        prerelease: false
         
     - name: Upload Release
       uses: actions/upload-release-asset@v1
@@ -47,5 +46,5 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: bin.zip
-        asset_name: RidgeDrawer.zip
+        asset_name: RidgeDrawer v${{ steps.build_solution.outputs.version }}.zip
         asset_content_type: application/zip
