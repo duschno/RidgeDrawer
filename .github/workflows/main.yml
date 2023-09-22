@@ -12,42 +12,39 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     
-    #- name: Setup MSBuild
-    #  uses: microsoft/setup-msbuild@v1
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1
     
-    #- name: Setup NuGet
-    #  uses: NuGet/setup-nuget@v1.0.5
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1.0.5
       
-    #- name: setup-msbuild
-    #  uses: microsoft/setup-msbuild@v1.1
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1.1
     
-    #- name: Restore Packages
-    #  run: nuget restore test.sln
+    - name: Restore Packages
+      run: nuget restore test.sln
     
-    #- name: Build solution
-    #  run: msbuild RidgeDrawer.sln -t:rebuild -property:Configuration=Release
-
-    - name: Build solution
-      run: dir
+    - name: Build solution & Zip Binaries
+      run: msbuild RidgeDrawer.sln -t:rebuild -property:Configuration=Release; Compress-Archive -Path bin/Release/* -Destination RidgeDrawer.zip
     
-    # - name: Create Release
-    #   id: create_release
-    #   uses: actions/create-release@v1
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    #   with:
-    #     tag_name: release
-    #     release_name: Release
-    #     draft: false
-    #     prerelease: false
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: release
+        release_name: Release
+        draft: false
+        prerelease: false
         
-    # - name: Upload Client win7-x64 Asset
-    #   id: upload-release-client-win-asset 
-    #   uses: actions/upload-release-asset@v1
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    #   with:
-    #     upload_url: ${{ steps.create_release.outputs.upload_url }}
-    #     asset_path: /home/runner/work/RepoName/RepoName/ProjectName/bin/Release/net5.0/win7-x64/publish/client-win-x64.zip
-    #     asset_name: client-win-x64.zip
-    #     asset_content_type: application/zip
+    - name: Upload Release
+      id: upload-release-client-win-asset 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: RidgeDrawer.zip
+        asset_name: RidgeDrawer.zip
+        asset_content_type: application/zip
