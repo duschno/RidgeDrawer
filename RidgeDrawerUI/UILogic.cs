@@ -56,11 +56,14 @@ namespace RidgeDrawerUI
 				() => {
 					try
 					{
+						LockUnusedParams();
+						NotImplementedLabel.Visibility = Visibility.Collapsed;
+
+						if (string.IsNullOrEmpty(Model.Filename))
+							return;
 						if (!File.Exists(Model.Filename))
 							throw new ArgumentException($"'{Model.Filename}' could not be found");
 
-						LockUnusedParams();
-						NotImplementedLabel.Visibility = Visibility.Collapsed;
 						Cursor = Cursors.Wait;
 						Arguments.Text = Logic.CopyArgs(Model.Filename, Model.Param);
 						Window.Title = $"{Path.GetFileName(Model.Filename)} - {appName}";
