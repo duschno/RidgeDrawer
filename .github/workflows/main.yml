@@ -33,8 +33,9 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: prerelease
-        release_name: Prerelease
+        tag_name: build
+        release_name: Build v${{ (Get-Item RidgeDrawer.exe).VersionInfo.FileVersion }}
+        body: "Changes:"
         draft: false
         prerelease: true
         
