@@ -22,6 +22,8 @@ namespace RidgeDrawerUI
 		{
 			InitializeComponent();
 
+			string[] args = Environment.GetCommandLineArgs();
+			string filename = args.Length > 1 ? args[1] : null;
 			Window.Title = appName;
 			Height = SystemParameters.PrimaryScreenHeight * 0.9;
 			Width = SystemParameters.PrimaryScreenWidth * 0.9;
@@ -52,7 +54,7 @@ namespace RidgeDrawerUI
 					PullPointX = 960,
 					PullPointY = 540
 				},
-				@"..\..\TestImages\soldier.png",
+				filename,
 				() => {
 					try
 					{

@@ -16,6 +16,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{943D41E3-AD0E-4C0E-A420-86ED63B0E158}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		GlobalAssemblyInfo.cs = GlobalAssemblyInfo.cs
 	EndProjectSection
 EndProject
 Global
