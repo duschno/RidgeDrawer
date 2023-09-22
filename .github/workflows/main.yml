@@ -24,8 +24,8 @@ jobs:
     # - name: Restore Packages
     #   run: nuget restore RidgeDrawer.sln
     
-    - name: Build solution & Zip Binaries
-      run: msbuild RidgeDrawer.sln -t:rebuild -property:Configuration=Release; Compress-Archive -Path bin/Release/* -Destination RidgeDrawer.zip
+    - name: Build solution & zip binaries
+      run: msbuild RidgeDrawer.sln -t:rebuild -property:Configuration=Release; Compress-Archive -Path bin/Release/*.exe -Destination RidgeDrawer.zip
     
     - name: Create Release
       id: create_release
