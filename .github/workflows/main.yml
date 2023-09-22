@@ -25,7 +25,7 @@ jobs:
     #   run: nuget restore RidgeDrawer.sln
     
     - name: Build solution & zip binaries
-      run: msbuild RidgeDrawer.sln -t:rebuild -property:Configuration=Release; Compress-Archive -Path bin/Release/*.exe -Destination RidgeDrawer.zip
+      run: msbuild RidgeDrawer.sln -t:rebuild -property:Configuration=Release; Compress-Archive -Path bin/Release/*.exe -Destination bin.zip
     
     - name: Create Release
       id: create_release
@@ -33,18 +33,16 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: release
         release_name: Release
         draft: false
         prerelease: false
         
     - name: Upload Release
-      id: upload-release-client-win-asset 
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: RidgeDrawer.zip
+        asset_path: bin.zip
         asset_name: RidgeDrawer.zip
         asset_content_type: application/zip
