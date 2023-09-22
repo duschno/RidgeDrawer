@@ -52,7 +52,7 @@ namespace RidgeDrawerUI
 					PullPointX = 960,
 					PullPointY = 540
 				},
-				@"..\soldier.png",
+				@"..\TestImages\soldier.png",
 				() => {
 					try
 					{
