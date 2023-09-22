@@ -10,34 +10,31 @@ jobs:
   build:
     runs-on: windows-2019
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     
-    - name: Setup MSBuild
-      uses: microsoft/setup-msbuild@v1
+    #- name: Setup MSBuild
+    #  uses: microsoft/setup-msbuild@v1
     
     #- name: Setup NuGet
     #  uses: NuGet/setup-nuget@v1.0.5
       
-    - name: setup-msbuild
-      uses: microsoft/setup-msbuild@v1.1
+    #- name: setup-msbuild
+    #  uses: microsoft/setup-msbuild@v1.1
     
     #- name: Restore Packages
     #  run: nuget restore test.sln
     
-    - name: Build solution
-      run: msbuild RidgeDrawerUI\RidgeDrawerUI.csproj -t:rebuild -property:Configuration=Release
+    #- name: Build solution
+    #  run: msbuild RidgeDrawerUI\RidgeDrawerUI.csproj -t:rebuild -property:Configuration=Release
       
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+    - name: Build
+      run: echo ${{ github.sha }} > Release.txt
+    - name: Test
+      run: cat Release.txt
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
       with:
-        tag_name: ${{ github.ref_name }}
-        release_name: Release ${{ github.ref_name }}
-        body: |
-          Changes in this Release
-          - First Change
-          - Second Change
-        draft: false
-        prerelease: false
+        files: |
+          Release.txt
+          LICENSE
