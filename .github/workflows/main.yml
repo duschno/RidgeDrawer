@@ -26,7 +26,7 @@ jobs:
     
     - name: Build solution & zip binaries
       id: build_solution
-      run: msbuild RidgeDrawer.sln -t:rebuild -property:Configuration=Release; Compress-Archive -Path bin/Release/*.exe -Destination bin.zip; echo "::set-output name=version::$((Get-Item RidgeDrawer.exe).VersionInfo.FileVersion)"
+      run: msbuild RidgeDrawer.sln -t:rebuild -property:Configuration=Release; Compress-Archive -Path bin/Release/*.exe -Destination bin.zip; echo "::set-output name=version::$((Get-Item bin/Release/RidgeDrawer.exe).VersionInfo.FileVersion)"
     
     - name: Create Release
       id: create_release
