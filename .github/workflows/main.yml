@@ -10,19 +10,41 @@ jobs:
   build:
     runs-on: windows-2019
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     
-    - name: Setup MSBuild
-      uses: microsoft/setup-msbuild@v1
+    # - name: Setup MSBuild
+    #   uses: microsoft/setup-msbuild@v1
     
-    #- name: Setup NuGet
-    #  uses: NuGet/setup-nuget@v1.0.5
+    # - name: Setup NuGet
+    #   uses: NuGet/setup-nuget@v1.0.5
       
-    - name: setup-msbuild
+    - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v1.1
     
-    #- name: Restore Packages
-    #  run: nuget restore test.sln
+    # - name: Restore Packages
+    #   run: nuget restore RidgeDrawer.sln
     
-    - name: Build solution
-      run: msbuild RidgeDrawerUI\RidgeDrawerUI.csproj -t:rebuild -property:Configuration=Release
+    - name: Build solution & Zip Binaries
+      run: msbuild RidgeDrawer.sln -t:rebuild -property:Configuration=Release; Compress-Archive -Path bin/Release/* -Destination RidgeDrawer.zip
+    
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: release
+        release_name: Release
+        draft: false
+        prerelease: false
+        
+    - name: Upload Release
+      id: upload-release-client-win-asset 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: RidgeDrawer.zip
+        asset_name: RidgeDrawer.zip
+        asset_content_type: application/zip
