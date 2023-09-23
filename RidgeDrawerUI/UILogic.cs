@@ -1,12 +1,12 @@
 ﻿using RidgeDrawer;
 using System;
+using System.Drawing;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Drawing;
-using System.IO;
 
 namespace RidgeDrawerUI
 {
@@ -55,7 +55,8 @@ namespace RidgeDrawerUI
 					PullPointY = 540
 				},
 				filename,
-				() => {
+				() =>
+				{
 					try
 					{
 						LockUnusedParams();
