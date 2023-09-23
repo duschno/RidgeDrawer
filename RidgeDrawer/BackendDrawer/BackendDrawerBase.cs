@@ -72,7 +72,7 @@ namespace RidgeDrawer // TODO: каждая линия со своими пар�
 
 		private List<List<MyPoint>> GetAffectedPoints(List<MyPoint> coords, int zeroLevel)
 		{
-			if (param.PointsAroundPeak == -1) // если -1 - рисовать все, если 0 - не рисовать ничего, если 1 - осавлять 1 грей поинт и т.д.
+			if (param.PointsAroundPeak == -1) // если -1 - рисовать все, если 0 - не рисовать ничего, если 1 - оставлять 1 грей поинт с левой и правой стороны и т.д.
 				return new List<List<MyPoint>>() { coords };
 
 			List<List<MyPoint>> coordsParts = new List<List<MyPoint>>();
@@ -173,17 +173,23 @@ namespace RidgeDrawer // TODO: каждая линия со своими пар�
 			int pixel = origBitmap.GetPixel(x, y).Greyscale();
 			if (pixel > param.WhitePoint) pixel = param.WhitePoint;
 			if (pixel < param.BlackPoint) pixel = param.BlackPoint;
-
-			int f = param.Invert ? param.WhitePoint - pixel : pixel - param.BlackPoint;
-			return f / (double)(param.WhitePoint - param.BlackPoint);
+			int f;
+			int sign = param.Invert ? -1 : 1;
+			if (pixel == param.GreyPoint)
+				return 0.0;
+			if (pixel > param.GreyPoint)
+				f = pixel - param.GreyPoint;
+			else
+				f = -1 * (param.GreyPoint - pixel);
+			return sign * f / (double)(param.WhitePoint - param.BlackPoint); // [-0.5; 0.5]
 		}
 
-		private MyPoint CalculateAngle(int x, int y, int factorX, int factorY)
+		private MyPoint CalculateAngle(int x, int y, int factorX, int factorY) // TODO? поддержка вращения самого простого? (т.е. вся картинка с анкором в центре)
 		{
 			double sin = Math.Sin(Math.PI * -param.Angle / 180.0); // param.Angle is negative to rotate it clockwise
 			double cos = Math.Cos(Math.PI * -param.Angle / 180.0);
-			int xAddition = (int)((factorX - param.Factor / 2.0) * sin); // вычитаем param.Factor / 2.0, чтобы линии построенные по серому не сдвигались. но с черным и белым это не работает. мб все таки ввести точку серого?
-			int yAddition = (int)((factorY - param.Factor / 2.0) * cos);
+			int xAddition = (int)(factorX * sin); // вычитаем param.Factor / 2.0, чтобы линии построенные по серому не сдвигались. но с черным и белым это не работает. мб все таки ввести точку серого?
+			int yAddition = (int)(factorY * cos);
 			double len = Distance(new MyPoint(x, y), new MyPoint(x + xAddition, y + yAddition));
 			return PullToPoint(new MyPoint(x + xAddition, y + yAddition), len);
 		}
@@ -201,7 +207,7 @@ namespace RidgeDrawer // TODO: каждая линия со своими пар�
 
 			int maxChunk = 20;
 			int minChunk = 3;
-			double greyGreyscale = 127 / 255.0;
+			double greyGreyscale = 0.0;
 			int greyAccumulator = (int)(maxChunk - (maxChunk - minChunk) * greyGreyscale);
 
 			int lineNumber = 0;
@@ -217,41 +223,41 @@ namespace RidgeDrawer // TODO: каждая линия со своими пар�
 				{
 					double greyscale = CalculateGreyScale(origBitmap, x, y, param);
 					int oldAccumulator = accumulator;
-					accumulator = (int)(maxChunk - (maxChunk - minChunk) * greyscale); // TODO: добавить грей поинт. который будет центром. по дефолту приращение вниз и вверх одинаковое, но например при грей поинте 10 приращние белого будет намного сильнее, чем черного
+					accumulator = (int)(maxChunk - (maxChunk - minChunk) * (greyscale + 0.5)); // TODO: добавить грей поинт. который будет центром. по дефолту приращение вниз и вверх одинаковое, но например при грей поинте 10 приращние белого будет намного сильнее, чем черного
 
-					if (!prevStepCorrected) // point correction for grey color TODO: checkbox "syncronize"
-					{
-						bool cond0 = greyscale == greyGreyscale;
-						bool cond1 = x + greyAccumulator < origBitmap.Width && CalculateGreyScale(origBitmap, x + greyAccumulator, y, param) == greyGreyscale;
-						bool cond2 = x + 2 * greyAccumulator < origBitmap.Width && CalculateGreyScale(origBitmap, x + 2 * greyAccumulator, y, param) == greyGreyscale;
-						bool cond3 = x - oldAccumulator > 0 && CalculateGreyScale(origBitmap, x - oldAccumulator, y, param) != greyGreyscale; // стоит ли фиксить случай когда 
-						if (cond0 && cond1 && cond2 && cond3)
-						{
-							var leftValue = xStart + (x - xStart) / greyAccumulator * greyAccumulator;
-							var rightValue = leftValue + greyAccumulator;
+					//if (!prevStepCorrected) // point correction for grey color TODO: добавить checkbox "syncronize", чтобы точки синхронизировались
+					//{
+					//	bool cond0 = greyscale == greyGreyscale; // добавить для сквигла, чтобы для серых точек ничего не рисовалось, просто прямая линия
+					//	bool cond1 = x + greyAccumulator < origBitmap.Width && CalculateGreyScale(origBitmap, x + greyAccumulator, y, param) == greyGreyscale;
+					//	bool cond2 = x + 2 * greyAccumulator < origBitmap.Width && CalculateGreyScale(origBitmap, x + 2 * greyAccumulator, y, param) == greyGreyscale;
+					//	bool cond3 = x - oldAccumulator > 0 && CalculateGreyScale(origBitmap, x - oldAccumulator, y, param) != greyGreyscale; // стоит ли фиксить случай когда 
+					//	if (cond0 && cond1 && cond2 && cond3)
+					//	{
+					//		var leftValue = xStart + (x - xStart) / greyAccumulator * greyAccumulator;
+					//		var rightValue = leftValue + greyAccumulator;
 
-							if (coords.Count > 0 && coords[coords.Count - 1].X > leftValue)
-								x = rightValue;
-							else
-							{
-								if (x - leftValue < rightValue - x)
-									x = leftValue;
-								else
-									x = rightValue;
-							}
+					//		if (coords.Count > 0 && coords[coords.Count - 1].X > leftValue)
+					//			x = rightValue;
+					//		else
+					//		{
+					//			if (x - leftValue < rightValue - x)
+					//				x = leftValue;
+					//			else
+					//				x = rightValue;
+					//		}
 
-							sign = (x / greyAccumulator) % 2 == 0 ? -1 : 1;
-							accumulator = greyAccumulator;
-							prevStepCorrected = true;
-						}
-					}
-					else
-					{
-						prevStepCorrected = false;
-					}
+					//		sign = (x / greyAccumulator) % 2 == 0 ? -1 : 1;
+					//		accumulator = greyAccumulator;
+					//		prevStepCorrected = true;
+					//	}
+					//}
+					//else
+					//{
+					//	prevStepCorrected = false;
+					//}
 
-					MyPoint point = CalculateAngle(x, y, accumulator, (int)(sign * param.Factor * greyscale));
-					point.Y += param.Factor / 2;
+					MyPoint point = CalculateAngle(x, y, accumulator, (int)(sign * param.Factor * (greyscale + 0.5))); // даже так оно не совпадает со старым алгоритмом
+					//point.Y += param.Factor / 2;
 					coords.Add(point);
 					sign *= -1;
 				}
