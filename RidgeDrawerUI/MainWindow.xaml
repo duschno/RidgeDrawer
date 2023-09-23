@@ -8,7 +8,7 @@
         x:Name="Window"
         Height="800" Width="1000" MinWidth="640" MinHeight="480"
         KeyDown="Window_KeyDown" WindowStartupLocation="CenterScreen" PreviewMouseDown="Window_MouseDown"
-        ResizeMode="CanResizeWithGrip">
+        ResizeMode="CanResizeWithGrip" Loaded="Window_Loaded">
     <!-- add desing time values, move specific controls to separate xaml and load it dynamically-->
     <Window.Resources>
         <ResourceDictionary>
@@ -36,13 +36,15 @@
                 <Setter Property="VerticalAlignment" Value="Top"/>
                 <Setter Property="TextWrapping" Value="Wrap"/>
                 <Setter Property="Margin" Value="84,-22,0,0"/>
-                <EventSetter Event="KeyDown" Handler="ParamChange_KeyDown"/>
-                <EventSetter Event="PreviewKeyDown" Handler="ParamChange_PreviewKeyDown"/>
+                <EventSetter Event="KeyDown" Handler="TextBox_KeyDown"/>
+                <EventSetter Event="PreviewKeyDown" Handler="TextBox_PreviewKeyDown"/>
             </Style>
             <Style TargetType="{x:Type CheckBox}">
                 <Setter Property="HorizontalAlignment" Value="Left"/>
                 <Setter Property="VerticalAlignment" Value="Top"/>
                 <Setter Property="Margin" Value="15,5,0,0"/>
+                <EventSetter Event="Checked" Handler="Control_ParamChanged"/>
+                <EventSetter Event="Unchecked" Handler="Control_ParamChanged"/>
             </Style>
             <Style TargetType="{x:Type TextBlock}">
                 <Setter Property="HorizontalAlignment" Value="Left"/>
@@ -59,6 +61,7 @@
                 <Setter Property="HorizontalAlignment" Value="Left"/>
                 <Setter Property="VerticalAlignment" Value="Top"/>
                 <Setter Property="Margin" Value="84,-22,0,0"/>
+                <EventSetter Event="SelectionChanged" Handler="Control_ParamChanged"/>
             </Style>
             <Style TargetType="{x:Type ComboBox}" x:Key="ComboBoxEnumStyle" 
                    BasedOn="{StaticResource ComboBoxBaseStyle}">

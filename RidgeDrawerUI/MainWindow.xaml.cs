@@ -6,6 +6,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Drawing;
 using System.Windows.Data;
+using System;
 
 namespace RidgeDrawerUI
 {
@@ -34,7 +35,7 @@ namespace RidgeDrawerUI
 			if (result == true)
 			{
 				Model.Filename = dlg.FileName;
-				Model.UpdateView();
+				UpdateView();
 			}
 		}
 
@@ -56,7 +57,7 @@ namespace RidgeDrawerUI
 		private void Reset_Click(object sender, RoutedEventArgs e)
 		{
 			Model.Param = Model.DefaultParam.Clone();
-			Model.UpdateView();
+			UpdateView();
 		}
 
 		private void Viewport_MouseWheel(object sender, MouseWheelEventArgs e)
@@ -163,7 +164,7 @@ namespace RidgeDrawerUI
 			UpdateUIProps();
 		}
 
-		private void ParamChange_KeyDown(object sender, KeyEventArgs e)
+		private void TextBox_KeyDown(object sender, KeyEventArgs e)
 		{
 			if (e.Key != Key.Enter)
 				return;
@@ -176,10 +177,13 @@ namespace RidgeDrawerUI
 			BindingExpression binding = BindingOperations.GetBindingExpression((TextBox)sender,
 				TextBox.TextProperty);
 			if (binding != null)
+			{
 				binding.UpdateSource();
+				UpdateView();
+			}
 		}
 
-		private void ParamChange_PreviewKeyDown(object sender, KeyEventArgs e)
+		private void TextBox_PreviewKeyDown(object sender, KeyEventArgs e)
 		{
 			if (e.Key == Key.Space)
 				e.Handled = true; // replace with validation
@@ -198,8 +202,9 @@ namespace RidgeDrawerUI
 			System.Windows.Point? point = GetCursorPositionOverImage();
 			if (point.HasValue)
 			{
-				Model.Param.PullPointX = (int)point.Value.X; // render triggers 2 times here
+				Model.Param.PullPointX = (int)point.Value.X;
 				Model.Param.PullPointY = (int)point.Value.Y;
+				UpdateView();
 			}
 		}
 
@@ -224,7 +229,7 @@ namespace RidgeDrawerUI
 			Model.Filename = logicParams.InputFilename;
 			Model.Param = logicParams.RenderParams;
 			Arguments.Text = Logic.CopyArgs(Model.Filename, Model.Param);
-			Model.UpdateView();
+			UpdateView();
 		}
 
 		private void Window_MouseDown(object sender, MouseButtonEventArgs e)
@@ -243,6 +248,16 @@ namespace RidgeDrawerUI
 			ColorValue.Text = string.Empty;
 
 			UpdateDebugLines(false);
+		}
+
+		private void Control_ParamChanged(object sender, EventArgs e)
+		{
+			UpdateView();
+		}
+
+		private void Window_Loaded(object sender, RoutedEventArgs e)
+		{
+			UpdateView();
 		}
 	}
 }

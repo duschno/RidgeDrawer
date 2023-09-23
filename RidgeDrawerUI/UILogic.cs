@@ -88,7 +88,6 @@ namespace RidgeDrawerUI
 				});
 			DataContext = Model;
 			scaler = new ViewportScaler(Image, Viewport, maxFactor: 8);
-			Model.UpdateView();
 		}
 
 		public System.Drawing.Color GetPixelOfOriginal(int x, int y)
@@ -103,6 +102,7 @@ namespace RidgeDrawerUI
 			if (type.IsAbstract)
 				comboBox.ItemsSource = Logic.GetImplementations(type);
 		}
+
 		private void LockUnusedParams()
 		{
 			switch (Model.Param.Method)
@@ -229,6 +229,12 @@ namespace RidgeDrawerUI
 
 			DebugPousePositionX.Visibility = isVisible ? Visibility.Visible : Visibility.Collapsed;
 			DebugPousePositionY.Visibility = isVisible ? Visibility.Visible : Visibility.Collapsed;
+		}
+
+		private void UpdateView()
+		{
+			if (IsLoaded)
+				Model.UpdateView();
 		}
 	}
 }

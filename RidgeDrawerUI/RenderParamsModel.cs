@@ -8,6 +8,8 @@ namespace RidgeDrawerUI
 {
 	public class RenderParamsModel : INotifyPropertyChanged
 	{
+		private Action render;
+
 		public RenderParamsModel(RenderParams param, string filename, Action renderAction)
 		{
 			Param = param;
@@ -16,21 +18,8 @@ namespace RidgeDrawerUI
 			render = renderAction;
 		}
 
-		private Action render;
-		private RenderParams param;
-		public RenderParams Param
-		{
-			get
-			{
-				return param;
-			}
-			set
-			{
-				param = value;
-				param.PropertyChanged += (sender, e) => UpdateView();
-			}
-		}
-		public RenderParams DefaultParam { get; set; }
+		public RenderParams Param { get; set; }
+		public RenderParams DefaultParam { get; private set; }
 		public string Filename { get; set; }
 		public Bitmap OriginalBitmap { get; set; }
 		public ImageSource Original { get; set; }
