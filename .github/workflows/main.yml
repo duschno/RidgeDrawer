@@ -34,8 +34,12 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: build${{ steps.build_solution.outputs.version }}
-        release_name: Release v${{ steps.build_solution.outputs.version }}
+        tag_name: v${{ steps.build_solution.outputs.version }}-b
+        release_name: v${{ steps.build_solution.outputs.version }}
+        body: |
+            Changes in this Release
+            - First Change
+            - Second Change
         draft: false
         prerelease: false
         
@@ -54,6 +58,6 @@ jobs:
       with:
         keep_latest: 3
         delete_tags: true
-        delete_tag_pattern: build
+        delete_tag_pattern: -b
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
