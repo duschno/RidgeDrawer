@@ -29,7 +29,7 @@ jobs:
       id: build_solution
       run: >
         msbuild RidgeDrawer.sln -t:rebuild -property:Configuration=Release;
-        $version = "v$((Get-Item bin/Release/RidgeDrawer.exe).VersionInfo.FileVersion)"
+        $version = "v$((Get-Item bin/Release/RidgeDrawer.exe).VersionInfo.FileVersion)";
         Compress-Archive -Path bin/Release/*.exe -Destination RidgeDrawer.$version.zip;
         echo "::set-output name=version::$version"
 
