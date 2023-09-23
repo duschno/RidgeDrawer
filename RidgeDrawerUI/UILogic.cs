@@ -21,14 +21,7 @@ namespace RidgeDrawerUI
 		public MainWindow()
 		{
 			InitializeComponent();
-
-			Window.Title = appName;
-			Height = SystemParameters.PrimaryScreenHeight * 0.9;
-			Width = SystemParameters.PrimaryScreenWidth * 0.9;
-			FillComboBox(Smoothing, typeof(SmoothingType));
-			FillComboBox(LineType, typeof(LineType));
-			FillComboBox(Method, typeof(MethodType));
-			FillComboBox(Backend, typeof(BackendDrawerBase));
+			InitializeMainWindow();
 			Model = new RenderParamsModel(
 				new RenderParams
 				{
@@ -52,38 +45,58 @@ namespace RidgeDrawerUI
 					PullPointX = 960,
 					PullPointY = 540
 				},
-				@"..\soldier.png",
-				() => {
-					try
-					{
-						if (!File.Exists(Model.Filename))
-							throw new ArgumentException($"'{Model.Filename}' could not be found");
-
-						LockUnusedParams();
-						NotImplementedLabel.Visibility = Visibility.Collapsed;
-						Cursor = Cursors.Wait;
-						Arguments.Text = Logic.CopyArgs(Model.Filename, Model.Param);
-						Window.Title = $"{Path.GetFileName(Model.Filename)} - {appName}";
-						Model.OriginalBitmap = new Bitmap(Model.Filename);
-						Model.Original = ConvertToNativeDpi(Model.OriginalBitmap);
-						Model.Processed = ConvertToNativeDpi(Logic.ProcessByFilename(Model.Filename, Model.Param));
-						Image.Source = Model.Processed;
-						scaler.Initialize();
-					}
-					catch (Exception e)
-					{
-						NotImplementedLabel.Content = $"{e.Message}:\n{e.StackTrace}";
-						NotImplementedLabel.Visibility = Visibility.Visible;
-						Arguments.Text = string.Empty;
-					}
-					finally
-					{
-						Cursor = Cursors.Arrow;
-					}
-				});
+				/*@"..\soldier.png"*/null);
 			DataContext = Model;
 			scaler = new ViewportScaler(Image, Viewport, maxFactor: 8);
-			Model.UpdateView();
+			UpdateView();
+		}
+
+		private void InitializeMainWindow()
+		{
+			Window.Title = appName;
+			Height = SystemParameters.PrimaryScreenHeight * 0.9;
+			Width = SystemParameters.PrimaryScreenWidth * 0.9;
+			InitializeComboBox(Smoothing, typeof(SmoothingType));
+			InitializeComboBox(LineType, typeof(LineType));
+			InitializeComboBox(Method, typeof(MethodType));
+			InitializeComboBox(Backend, typeof(BackendDrawerBase));
+		}
+
+		private void UpdateView()
+		{
+			Model.UpdateProperties();
+			Render();
+		}
+
+		private void Render()
+		{
+			try
+			{
+				if (string.IsNullOrEmpty(Model.Filename))
+					return;
+				if (!File.Exists(Model.Filename))
+					throw new ArgumentException($"'{Model.Filename}' could not be found");
+
+				LockUnusedParams();
+				NotImplementedLabel.Visibility = Visibility.Collapsed;
+				Cursor = Cursors.Wait;
+				Arguments.Text = Logic.CopyArgs(Model.Filename, Model.Param);
+				Window.Title = $"{Path.GetFileName(Model.Filename)} - {appName}";
+				Model.OriginalBitmap = new Bitmap(Model.Filename);
+				Model.Original = ConvertToNativeDpi(Model.OriginalBitmap);
+				Model.Processed = ConvertToNativeDpi(Logic.ProcessByFilename(Model.Filename, Model.Param));
+				Image.Source = Model.Processed;
+			}
+			catch (Exception e)
+			{
+				NotImplementedLabel.Content = $"{e.Message}:\n{e.StackTrace}";
+				NotImplementedLabel.Visibility = Visibility.Visible;
+				Arguments.Text = string.Empty;
+			}
+			finally
+			{
+				Cursor = Cursors.Arrow;
+			}
 		}
 
 		public System.Drawing.Color GetPixelOfOriginal(int x, int y)
@@ -91,7 +104,7 @@ namespace RidgeDrawerUI
 			return Model.OriginalBitmap.GetPixel(x, y);
 		}
 
-		private void FillComboBox(ComboBox comboBox, Type type)
+		private void InitializeComboBox(ComboBox comboBox, Type type)
 		{
 			if (type.IsEnum)
 				comboBox.ItemsSource = Enum.GetValues(type);
@@ -137,7 +150,19 @@ namespace RidgeDrawerUI
 			if (Image.Source == null)
 				return;
 
+			//double oldWidth = Image.ActualWidth;
+			//double oldHeight = Image.ActualHeight;
 			scaler.ChangeScale(zoomIn);
+			//System.Windows.Point? p = GetCursorPositionOverImage();
+			//if (p.HasValue)
+			//{
+			//	Thickness t = new Thickness
+			//	{
+			//		Left = oldHeight - Image.Height,
+			//		Top = oldWidth - Image.Width,
+			//	};
+			//	Image.Margin = t;
+			//}
 			if (!zoomIn && (scaler.CurrentScaleType == ScaleType.EnlargedBiggerThanViewport ||
 							scaler.CurrentScaleType == ScaleType.OriginalBiggerThanViewport))
 				Image.Margin = CheckBoundaries(Image.Margin);

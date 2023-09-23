@@ -8,15 +8,13 @@ namespace RidgeDrawerUI
 {
 	public class RenderParamsModel : INotifyPropertyChanged
 	{
-		public RenderParamsModel(RenderParams param, string filename, Action renderAction)
+		public RenderParamsModel(RenderParams param, string filename)
 		{
 			Param = param;
 			DefaultParam = param.Clone();
 			Filename = filename;
-			render = renderAction;
 		}
 
-		private Action render;
 		public RenderParams Param { get; set; }
 		public RenderParams DefaultParam { get; set; }
 		public string Filename { get; set; }
@@ -42,10 +40,9 @@ namespace RidgeDrawerUI
 		}
 		#endregion
 
-		public void UpdateView()
+		public void UpdateProperties()
 		{
 			OnPropertyChanged(nameof(Param));
-			render?.Invoke();
 		}
 	}
 }
