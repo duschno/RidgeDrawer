@@ -3,7 +3,7 @@
   <br/>
   Ridge Drawer
   <br/>
-  [![build](https://github.com/duschno/RidgeDrawer/actions/workflows/main.yml/badge.svg?event=push)]
+  [![build](https://github.com/duschno/RidgeDrawer/actions/workflows/main.yml/badge.svg?event=push)](https://github.com/duschno/RidgeDrawer/actions/workflows/main.yml)
 </h1>
 <p align="center">
   A GUI/command line tool that allows you to generate fancy lines over the image:
