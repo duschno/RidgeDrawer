@@ -29,7 +29,7 @@ jobs:
       id: build_solution
       run: >
         msbuild RidgeDrawer.sln -t:rebuild -property:Configuration=Release;
-        $version = v(Get-Item bin/Release/RidgeDrawer.exe).VersionInfo.FileVersion
+        $version = "v$((Get-Item bin/Release/RidgeDrawer.exe).VersionInfo.FileVersion)"
         Compress-Archive -Path bin/Release/*.exe -Destination RidgeDrawer.$version.zip;
         echo "::set-output name=version::$version"
 
@@ -41,7 +41,7 @@ jobs:
         name: ${{ steps.build_solution.outputs.version }}
         draft: false
         prerelease: false
-        files: RidgeDrawer.zip
+        files: RidgeDrawer.${{ steps.build_solution.outputs.version }}.zip
     
     - name: Delete older releases
       uses: dev-drprasad/delete-older-releases@v0.2.1
