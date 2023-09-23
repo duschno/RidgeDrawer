@@ -34,7 +34,9 @@ namespace RidgeDrawerUI
 			if (result == true)
 			{
 				Model.Filename = dlg.FileName;
-				Model.UpdateView();
+				Image.Margin = new Thickness(); //центрирование нового изображдения должно быть дефолтное
+				scaler.Initialize();
+				UpdateView();
 			}
 		}
 
@@ -56,7 +58,7 @@ namespace RidgeDrawerUI
 		private void Reset_Click(object sender, RoutedEventArgs e)
 		{
 			Model.Param = Model.DefaultParam.Clone();
-			Model.UpdateView();
+			UpdateView();
 		}
 
 		private void Viewport_MouseWheel(object sender, MouseWheelEventArgs e)
@@ -139,7 +141,7 @@ namespace RidgeDrawerUI
 			{
 				Model.Param.Debug = !Model.Param.Debug;
 				UpdateDebugLines(Model.Param.Debug);
-				Model.UpdateView();
+				UpdateView();
 			}
 		}
 
@@ -178,7 +180,7 @@ namespace RidgeDrawerUI
 				TextBox.TextProperty);
 			if (binding != null)
 				binding.UpdateSource(); // manually update value in source
-			Model.UpdateView();
+			UpdateView();
 		}
 
 		private void ParamChange_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -202,7 +204,7 @@ namespace RidgeDrawerUI
 			{
 				Model.Param.PullPointX = (int)point.Value.X;
 				Model.Param.PullPointY = (int)point.Value.Y;
-				Model.UpdateView();
+				UpdateView();
 			}
 		}
 
@@ -227,7 +229,7 @@ namespace RidgeDrawerUI
 			Model.Filename = logicParams.InputFilename;
 			Model.Param = logicParams.RenderParams;
 			Arguments.Text = Logic.CopyArgs(Model.Filename, Model.Param);
-			Model.UpdateView();
+			UpdateView();
 		}
 
 		private void Window_MouseDown(object sender, MouseButtonEventArgs e)
@@ -250,7 +252,39 @@ namespace RidgeDrawerUI
 
 		private void Control_ValueChanged(object sender, RoutedEventArgs e)
 		{
-			Model.UpdateView();
+			UpdateView();
+		}
+
+		private void Window_Loaded(object sender, RoutedEventArgs e)
+		{
+			InitializeMainWindow();
+			Model = new RenderParamsModel(
+				new RenderParams
+				{
+					LinesCount = 50,
+					Stroke = 1,
+					Factor = 30,
+					ChunkSize = 5,
+					GreyPoint = 127,
+					BlackPoint = 0,
+					WhitePoint = 255,
+					Angle = 0,
+					Smoothing = SmoothingType.None,
+					LineType = RidgeDrawer.LineType.Line,
+					Method = RidgeDrawer.MethodType.Squiggle,
+					Backend = typeof(GDIPlus),
+					DrawOnSides = false,
+					PointsAroundPeak = -1,
+					FillInside = false,
+					Invert = false,
+					Debug = false,
+					PullPointX = 960,
+					PullPointY = 540
+				},
+				@"..\soldier.png");
+			DataContext = Model;
+			scaler = new ViewportScaler(Image, Viewport, maxFactor: 8);
+			UpdateView();
 		}
 	}
 }
