@@ -228,6 +228,7 @@ namespace RidgeDrawerUI
 			logicParams = Logic.ParseArgs(logicParams, Clipboard.GetText().Split());
 			Model.Filename = logicParams.InputFilename;
 			Model.Param = logicParams.RenderParams;
+			// todo: change so that model prop is assigned here, not ui element
 			Arguments.Text = Logic.CopyArgs(Model.Filename, Model.Param);
 			UpdateView();
 		}

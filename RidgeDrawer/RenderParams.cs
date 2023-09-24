@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Reflection;
 
 namespace RidgeDrawer
@@ -28,71 +27,81 @@ namespace RidgeDrawer
 
 	public class LogicParams
 	{
-		public string InputFilename;
-		public string OutputFilename;
-		public RenderParams RenderParams;
+		[ConsoleArgument("input_image", "Input image destination path",
+			typeof(string), true, false)]
+		public string InputFilename { get; set; }
+
+		[ConsoleArgument("output_image", "Output image destination path, input_image path by default",
+			typeof(string), false, false)]
+		public string OutputFilename { get; set; }
+
+		public RenderParams RenderParams { get; set; }
 	}
 
 	public class RenderParams
 	{
-		[ConsoleArgument("l")]
+		//добавить еще 2 параметра - сколько процентов от общего надо рисовать. если 0 и 100, то рисовать все, если 10 и 90, то с боков не будет
+		//TODO: рендерится не все сразу, а можно отрендерить лишь одну вертиальную линию например, чтобы можно было это анимировать. ниче не понял
+
+		[ConsoleArgument("l", "Amount of lines")]
 		public int LinesCount { get; set; }
 
-		[ConsoleArgument("s")]
+		[ConsoleArgument("s", "Line stroke width")]
 		public int Stroke { get; set; } // в конце прямо перед отрисовкой
 
-		[ConsoleArgument("f")]
+		[ConsoleArgument("f", "Multiply factor")]
 		public int Factor { get; set; }
 
-		[ConsoleArgument("c")]
+		[ConsoleArgument("c", "Line chunk size")]
 		public int ChunkSize { get; set; }
 
-		[ConsoleArgument("g")]
+		[ConsoleArgument("g", "Grey point")]
 		public int GreyPoint { get; set; }
 
-		[ConsoleArgument("b")]
+		[ConsoleArgument("b", "Black point")]
 		public int BlackPoint { get; set; }
 
-		[ConsoleArgument("w")]
+		[ConsoleArgument("w", "White point")]
 		public int WhitePoint { get; set; }
 
-		[ConsoleArgument("a")]
+		[ConsoleArgument("a", "Angle")]
 		public int Angle { get; set; }
 
-		[ConsoleArgument("st")]
+		[ConsoleArgument("st", "Line smoothing", typeof(SmoothingType))]
 		public SmoothingType Smoothing { get; set; } // в начале
 
-		[ConsoleArgument("lt")]
+		[ConsoleArgument("lt", "Line type", typeof(LineType))]
 		public LineType LineType { get; set; } // в конце
 
-		[ConsoleArgument("mt")]
+		[ConsoleArgument("mt", "Render algorithm method", typeof(MethodType))]
 		public MethodType Method { get; set; } // в начале
 
-		[ConsoleArgument("bt")]
+		[ConsoleArgument("bt", "Render backend", typeof(BackendDrawerBase))]
 		public Type Backend { get; set; }
 
-		[ConsoleArgument("dos")]
+		[ConsoleArgument("dos", "Draw on line sides", typeof(bool))]
 		public bool DrawOnSides { get; set; }
 
-		[ConsoleArgument("pap")]
+		[ConsoleArgument("pap", @"Amount of points around peaks
+                                  Does not work at the moment")]
 		public int PointsAroundPeak { get; set; }
 
-		[ConsoleArgument("fi")]
+		[ConsoleArgument("fi", "Prevent lines overlapping", typeof(bool))]
 		public bool FillInside { get; set; }
 
-		[ConsoleArgument("inv")]
+		[ConsoleArgument("inv", "Invert", typeof(bool))]
 		public bool Invert { get; set; }
 
-		[ConsoleArgument("d")]
+		[ConsoleArgument("d", "Render with debug info", typeof(bool))]
 		public bool Debug { get; set; }
 
-		[ConsoleArgument("ptx")]
-		public int PullPointX { get; set; }
+		[ConsoleArgument("ptx", @"Pull lines to point (X axis)
+					              Does not work at the moment")]
+		public int PullPointX { get; set; } // todo: make so that it is image center if this param is not specified // \d+(.\d+)?(,\d+(.\d+)?)?
 
-		[ConsoleArgument("pty")]
+		[ConsoleArgument("pty", @"Pull lines to point (Y axis)
+					              Does not work at the moment")]
 		public int PullPointY { get; set; }
-
-		//добавить еще 2 паарметра - сколько процентов от общего надо рисовать. если 0 и 100, то рисовать все, если 10 и 90, то с боков не будет
 
 		public RenderParams Clone()
 		{
@@ -102,17 +111,19 @@ namespace RidgeDrawer
 			return clone;
 		}
 
-		//TODO: рендерится не все сразу, а можно отрендерить лишь одну вертиальную линию например, чтобы можно было это анимировать. ниче не понял
-	}
-
-	[AttributeUsage(AttributeTargets.Property)]
-	public class ConsoleArgumentAttribute : Attribute
-	{
-		public ConsoleArgumentAttribute(string name)
+		public bool Equals(RenderParams other)
 		{
-			Name = name;
-		}
+			if (other == null)
+				return false;
+			foreach (PropertyInfo prop in typeof(RenderParams).GetProperties())
+			{
+				var v1 = prop.GetValue(this);
+				var v2 = prop.GetValue(other);
+				if (!Equals(v1, v2))
+					return false;
+			}
 
-		public virtual string Name { get; set; }
+			return true;
+		}
 	}
 }

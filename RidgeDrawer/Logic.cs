@@ -115,11 +115,6 @@ namespace RidgeDrawer
 
 		#region Console app related stuff
 
-		public static void ProcessByArgs(string[] args)
-		{
-			Main(args);
-		}
-
 		/// <summary>
 		/// Entry point of the console app
 		/// </summary>
@@ -179,6 +174,11 @@ namespace RidgeDrawer
 			//	}
 			//};
 #endif
+			if (args.Length == 0)
+			{
+				ConsoleHelper.ShowUsage();
+				return;
+			}
 
 			logicParam = ParseArgs(logicParam, args);
 			Bitmap bmp = ProcessByFilename(logicParam.InputFilename, logicParam.RenderParams);
@@ -188,6 +188,7 @@ namespace RidgeDrawer
 		public static LogicParams ParseArgs(LogicParams defaultLogicParam, string[] args)
 		{
 			LogicParams logicParam = defaultLogicParam;
+			// todo: in UI args should be applied w/o image
 			if (logicParam.InputFilename == null && args.Length == 0)
 				throw new ArgumentException("Image filename not specified");
 			if (args.Length == 0)
@@ -203,39 +204,33 @@ namespace RidgeDrawer
 			if (logicParam.RenderParams == null)
 				logicParam.RenderParams = new RenderParams();
 
-			PropertyInfo[] props = typeof(RenderParams).GetProperties();
-			Regex r = new Regex(@"-(?'name'\w+)(?'value':.+)?");
-			object renderParamObj = logicParam.RenderParams;
+			var propAndAttrs = new List<Tuple<PropertyInfo, ConsoleArgumentAttribute>>(); // todo: move to class
+			foreach (PropertyInfo prop in typeof(RenderParams).GetProperties()) // todo: move to method
+			{
+				var attr = prop.GetCustomAttributes().OfType<ConsoleArgumentAttribute>()
+					.FirstOrDefault();
+				if (attr != null)
+					propAndAttrs.Add(new Tuple<PropertyInfo, ConsoleArgumentAttribute>(prop, attr));
+			}
+			// todo: -l:5 or -l should pass, but not -l:, modify regex. added ^$ - seems to be fixed now
+			Regex r = new Regex(@"-(?'name'\w+)(:(?'value'.+))?");
+			RenderParams renderParam = logicParam.RenderParams;
 			foreach (string arg in args)
 			{
 				Match match = r.Match(arg);
 				if (match.Success)
 				{
+					//todo: throw error if arg or value are invalid or not found
 					string name = match.Groups["name"].Value;
 					string value = match.Groups["value"].Value;
-					value = string.IsNullOrEmpty(value) ? null : value.Substring(1);
-					PropertyInfo prop = props.FirstOrDefault(
-						p => (string)p.CustomAttributes.FirstOrDefault().ConstructorArguments[0].Value == name);
-
-					if (prop != null)
-					{
-						object obj = null;
-						if (prop.PropertyType == typeof(bool))
-							obj = bool.Parse((value ?? "true").Replace("1", "true").Replace("0", "false"));
-						else if (prop.PropertyType.IsEnum)
-							obj = Enum.Parse(prop.PropertyType, value, true);
-						else if (prop.PropertyType == typeof(Type))
-							obj = Type.GetType($"{Assembly.GetExecutingAssembly().GetName().Name}.{value}", true, true); // make a property attribute and specify how it should be converted there
-						else
-							obj = Convert.ChangeType(value, prop.PropertyType);
-
-						prop.SetValue(renderParamObj, obj);
-					}
+					var propAndAttr = propAndAttrs.FirstOrDefault(p => p.Item2.Name == name);
+					if (propAndAttr != null)
+						propAndAttr.Item1.SetValue(renderParam, propAndAttr.Item2.FromString(value));
 				}
 
 			}
 
-			logicParam.RenderParams = (RenderParams)renderParamObj;
+			logicParam.RenderParams = renderParam;
 			return logicParam;
 		}
 

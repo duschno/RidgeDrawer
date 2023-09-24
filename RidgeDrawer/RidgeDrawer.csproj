@@ -52,6 +52,7 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Helpers\ConsoleArgumentAttribute.cs" />
     <Compile Include="BackendDrawer\BackendDrawerBase.cs" />
     <Compile Include="BackendDrawer\Manual2.cs" />
     <Compile Include="BackendDrawer\Manual.cs" />
@@ -59,6 +60,9 @@
     <Compile Include="BackendDrawer\Cairo.cs" />
     <Compile Include="BackendDrawer\CAS.cs" />
     <Compile Include="BackendDrawer\Sandbox.cs" />
+    <Compile Include="Helpers\ConsoleHelper.cs" />
+    <Compile Include="Helpers\FastInvoke.cs" />
+    <Compile Include="Helpers\StringExtension.cs" />
     <Compile Include="Logic.cs" />
     <Compile Include="MyPoint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

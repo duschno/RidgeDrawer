@@ -9,6 +9,7 @@ namespace RidgeDrawerUI
 	public class RenderParamsModel : INotifyPropertyChanged
 	{
 		private Action render;
+		private RenderParams prevParam;
 
 		public RenderParamsModel(RenderParams param, string filename, Action renderAction)
 		{
@@ -45,6 +46,9 @@ namespace RidgeDrawerUI
 
 		public void UpdateView()
 		{
+			if (Param.Equals(prevParam))
+				return;
+			prevParam = Param.Clone();
 			OnPropertyChanged(nameof(Param));
 			render?.Invoke();
 		}
