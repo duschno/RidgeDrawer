@@ -74,22 +74,33 @@ namespace RidgeDrawer
 			return result;
 		}
 
-		public static LogicParams ParamsFromArgs(LogicParams defaultLogicParam, string[] args)
+		public static LogicParams ParamsFromArgs(LogicParams defaultLogicParam, bool inputFileRequired, string[] args)
 		{
 			LogicParams logicParam = defaultLogicParam;
-			// todo: in UI args should be applied w/o image
-			if (logicParam.InputFilename == null && args.Length == 0)
-				throw new ArgumentException("Image filename not specified");
-			if (args.Length == 0)
-				return logicParam;
+			if (inputFileRequired)
+			{
+				if (args.Length == 0)
+					throw new ArgumentException("Image filename not specified");
 
-			logicParam.InputFilename = args[0];
-			var paramArgs = args.Skip(1);
+				logicParam.InputFilename = args[0];
+				args = args.Skip(1).ToArray();
+			}
+			else
+			{
+				if (args.Length == 0)
+					return logicParam;
+
+				if (!args[0].StartsWith("-"))
+				{
+					logicParam.InputFilename = args[0];
+					args = args.Skip(1).ToArray();
+				}
+			}
 
 			if (args.Length > 1 && !args[1].StartsWith("-"))
 			{
 				logicParam.OutputFilename = args[1];
-				paramArgs = args.Skip(2);
+				args = args.Skip(1).ToArray();
 			}
 			else
 				logicParam.OutputFilename = AddPostfix(logicParam.InputFilename);
@@ -107,7 +118,7 @@ namespace RidgeDrawer
 			}
 			Regex r = new Regex(@"^-(?<name>\w+)(:(?<value>.+))?$", RegexOptions.ExplicitCapture);
 			RenderParams renderParam = logicParam.RenderParams;
-			foreach (string arg in paramArgs)
+			foreach (string arg in args)
 			{
 				Match match = r.Match(arg);
 				if (match.Success)

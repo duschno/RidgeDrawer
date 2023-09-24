@@ -187,7 +187,7 @@ namespace RidgeDrawer
 
 			try
 			{
-				logicParam = ArgsHelper.ParamsFromArgs(logicParam, args);
+				logicParam = ArgsHelper.ParamsFromArgs(logicParam, true, args);
 			}
 			catch (Exception e)
 			{

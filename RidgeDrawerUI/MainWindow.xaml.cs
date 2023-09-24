@@ -227,7 +227,7 @@ namespace RidgeDrawerUI
 			};
 			try
 			{
-				logicParams = ArgsHelper.ParamsFromArgs(logicParams, Clipboard.GetText().Split());
+				logicParams = ArgsHelper.ParamsFromArgs(logicParams, false, Clipboard.GetText().Split());
 			}
 			catch (Exception ex)
 			{
