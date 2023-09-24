@@ -61,7 +61,6 @@
     <Compile Include="BackendDrawer\CAS.cs" />
     <Compile Include="BackendDrawer\Sandbox.cs" />
     <Compile Include="Helpers\ArgsHelper.cs" />
-    <Compile Include="Helpers\FastInvoke.cs" />
     <Compile Include="Helpers\StringExtension.cs" />
     <Compile Include="Logic.cs" />
     <Compile Include="MyPoint.cs" />
