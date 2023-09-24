@@ -68,7 +68,7 @@ namespace RidgeDrawerUI
 							throw new ArgumentException($"'{Model.Filename}' could not be found");
 
 						Cursor = Cursors.Wait;
-						Arguments.Text = Logic.CopyArgs(Model.Filename, Model.Param);
+						Arguments.Text = ArgsHelper.ArgsFromParams(Model.Filename, Model.Param);
 						Window.Title = $"{Path.GetFileName(Model.Filename)} - {appName}";
 						Model.OriginalBitmap = new Bitmap(Model.Filename);
 						Model.Original = ConvertToNativeDpi(Model.OriginalBitmap);

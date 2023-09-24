@@ -60,7 +60,7 @@
     <Compile Include="BackendDrawer\Cairo.cs" />
     <Compile Include="BackendDrawer\CAS.cs" />
     <Compile Include="BackendDrawer\Sandbox.cs" />
-    <Compile Include="Helpers\ConsoleHelper.cs" />
+    <Compile Include="Helpers\ArgsHelper.cs" />
     <Compile Include="Helpers\FastInvoke.cs" />
     <Compile Include="Helpers\StringExtension.cs" />
     <Compile Include="Logic.cs" />
