@@ -115,6 +115,11 @@ namespace RidgeDrawer
 
 		#region Console app related stuff
 
+		public static void ProcessByArgs(string[] args)
+		{
+			Main(args);
+		}
+
 		/// <summary>
 		/// Entry point of the console app
 		/// </summary>
