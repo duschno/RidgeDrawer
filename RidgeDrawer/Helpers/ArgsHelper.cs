@@ -84,9 +84,13 @@ namespace RidgeDrawer
 				return logicParam;
 
 			logicParam.InputFilename = args[0];
+			var paramArgs = args.Skip(1);
 
 			if (args.Length > 1 && !args[1].StartsWith("-"))
+			{
 				logicParam.OutputFilename = args[1];
+				paramArgs = args.Skip(2);
+			}
 			else
 				logicParam.OutputFilename = AddPostfix(logicParam.InputFilename);
 
@@ -101,22 +105,28 @@ namespace RidgeDrawer
 				if (attr != null)
 					propAndAttrs.Add(new Tuple<PropertyInfo, ConsoleArgumentAttribute>(prop, attr));
 			}
-			// todo: -l:5 or -l should pass, but not -l:, modify regex. added ^$ - seems to be fixed now
-			Regex r = new Regex(@"-(?'name'\w+)(:(?'value'.+))?");
+			Regex r = new Regex(@"^-(?<name>\w+)(:(?<value>.+))?$", RegexOptions.ExplicitCapture);
 			RenderParams renderParam = logicParam.RenderParams;
-			foreach (string arg in args)
+			foreach (string arg in paramArgs)
 			{
 				Match match = r.Match(arg);
 				if (match.Success)
 				{
-					//todo: throw error if arg or value are invalid or not found
 					string name = match.Groups["name"].Value;
 					string value = match.Groups["value"].Value;
 					var propAndAttr = propAndAttrs.FirstOrDefault(p => p.Item2.Name == name);
 					if (propAndAttr != null)
-						propAndAttr.Item1.SetValue(renderParam, propAndAttr.Item2.FromString(value));
+					{
+						if (propAndAttr.Item2.Validate(value))
+							propAndAttr.Item1.SetValue(renderParam, propAndAttr.Item2.FromString(value));
+						else
+							throw new ArgumentException($"Value required for {arg}");
+					}
+					else
+						throw new ArgumentException($"Invalid arg {arg}");
 				}
-
+				else
+					throw new ArgumentException($"Invalid format {arg}");
 			}
 
 			logicParam.RenderParams = renderParam;

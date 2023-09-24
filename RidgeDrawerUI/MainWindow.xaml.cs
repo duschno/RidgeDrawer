@@ -225,7 +225,15 @@ namespace RidgeDrawerUI
 				InputFilename = Model.Filename,
 				RenderParams = Model.Param
 			};
-			logicParams = ArgsHelper.ParamsFromArgs(logicParams, Clipboard.GetText().Split());
+			try
+			{
+				logicParams = ArgsHelper.ParamsFromArgs(logicParams, Clipboard.GetText().Split());
+			}
+			catch (Exception ex)
+			{
+				ShowError(ex, Clipboard.GetText());
+				return;
+			}
 			Model.Filename = logicParams.InputFilename;
 			Model.Param = logicParams.RenderParams;
 			// todo: change so that model prop is assigned here, not ui element

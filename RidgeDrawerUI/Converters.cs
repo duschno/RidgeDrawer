@@ -7,13 +7,11 @@ namespace RidgeDrawerUI
 {
 	public class BooleanToVisibilityConverter : IValueConverter
 	{
-
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
 			bool visible = System.Convert.ToBoolean(value, culture);
 			return visible ? Visibility.Visible : Visibility.Collapsed;
 		}
-
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
 		{

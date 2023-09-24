@@ -210,9 +210,12 @@
                 <Button x:Name="FullsizeButton" Content="Fullsize (0/F)" Style="{StaticResource FullsizeButtonStyle}"
                         HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"
                         Panel.ZIndex="2" Width="80" Height="20" Click="FullsizeButton_Click"/>
-                <Label x:Name="NotImplementedLabel" Panel.ZIndex="3"
-                       VerticalAlignment="Center" HorizontalAlignment="Center"
-                       Foreground="#E6E4E1" Visibility="Hidden" FontFamily="Consolas" Background="#1E1E1E"/>
+                <Border Panel.ZIndex="3" VerticalAlignment="Center" HorizontalAlignment="Center"
+                        Margin="10" CornerRadius="5" Background="#1E1E1E"
+                        Visibility="{Binding Visibility, ElementName=Error}">
+                    <TextBlock x:Name="Error" TextWrapping="Wrap"
+                       Foreground="#E6E4E1" Visibility="Hidden" FontFamily="Consolas"/>
+                </Border>
                 <Image x:Name="Image" Stretch="None" Panel.ZIndex="1">
                     <Image.ContextMenu>
                         <ContextMenu>
@@ -228,10 +231,10 @@
                 <TextBlock Name="CursorPosition" Style="{StaticResource StatusBarTextBlock}"/>
             </StatusBarItem>
             <StatusBarItem>
-                <TextBlock Name="ColorValue" Style="{StaticResource StatusBarTextBlock}"/>
+                <TextBlock Name="ColorValue" Style="{StaticResource StatusBarTextBlock}" Width="75"/>
             </StatusBarItem>
-            <StatusBarItem HorizontalAlignment="Right" Margin="0,0,17,0">
-                <TextBlock Name="Arguments" Style="{StaticResource StatusBarTextBlock}">
+            <StatusBarItem HorizontalAlignment="Stretch" Margin="0,0,17,0" HorizontalContentAlignment="Stretch">
+                <TextBlock Name="Arguments" Style="{StaticResource StatusBarTextBlock}" TextAlignment="Right">
                     <TextBlock.ContextMenu>
                         <ContextMenu>
                             <MenuItem x:Name="CopyArgs" Header="Copy" Click="CopyArgs_Click"/>

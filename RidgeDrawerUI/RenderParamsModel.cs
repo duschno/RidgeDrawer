@@ -10,6 +10,7 @@ namespace RidgeDrawerUI
 	{
 		private Action render;
 		private RenderParams prevParam;
+		private string prevFilename;
 
 		public RenderParamsModel(RenderParams param, string filename, Action renderAction)
 		{
@@ -46,11 +47,16 @@ namespace RidgeDrawerUI
 
 		public void UpdateView()
 		{
-			if (Param.Equals(prevParam))
-				return;
-			prevParam = Param.Clone();
 			OnPropertyChanged(nameof(Param));
-			render?.Invoke();
+
+			if (string.IsNullOrEmpty(Filename) || Param.Equals(prevParam) && Filename == prevFilename)
+				return;
+			else
+			{
+				prevParam = Param.Clone();
+				prevFilename = Filename;
+				render?.Invoke();
+			}
 		}
 	}
 }

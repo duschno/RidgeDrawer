@@ -180,7 +180,15 @@ namespace RidgeDrawer
 				return;
 			}
 
-			logicParam = ArgsHelper.ParamsFromArgs(logicParam, args);
+			try
+			{
+				logicParam = ArgsHelper.ParamsFromArgs(logicParam, args);
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(e.Message);
+				return;
+			}
 			Bitmap bmp = ProcessByFilename(logicParam.InputFilename, logicParam.RenderParams);
 			SaveAsPng(BitmapToBitmapSource(bmp), logicParam.OutputFilename);
 		}

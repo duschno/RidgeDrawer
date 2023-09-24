@@ -60,7 +60,7 @@ namespace RidgeDrawerUI
 					try
 					{
 						LockUnusedParams();
-						NotImplementedLabel.Visibility = Visibility.Collapsed;
+						Error.Visibility = Visibility.Collapsed;
 
 						if (string.IsNullOrEmpty(Model.Filename))
 							return;
@@ -78,9 +78,7 @@ namespace RidgeDrawerUI
 					}
 					catch (Exception e)
 					{
-						NotImplementedLabel.Content = $"{e.Message}:\n{e.StackTrace}";
-						NotImplementedLabel.Visibility = Visibility.Visible;
-						Arguments.Text = string.Empty;
+						ShowError(e);
 					}
 					finally
 					{
@@ -89,6 +87,20 @@ namespace RidgeDrawerUI
 				});
 			DataContext = Model;
 			scaler = new ViewportScaler(Image, Viewport, maxFactor: 8);
+		}
+
+		public void ShowError(Exception e, string customMsg = null)
+		{
+			if (!string.IsNullOrEmpty(customMsg))
+				customMsg += new string('\n', 2);
+			Error.Text = $"{customMsg}{e.Message}\n{e.StackTrace}";
+			Error.Visibility = Visibility.Visible;
+			Arguments.Text = string.Empty;
+
+			Model.OriginalBitmap = null;
+			Model.Original = null;
+			Model.Processed = null;
+			Image.Source = null;
 		}
 
 		public System.Drawing.Color GetPixelOfOriginal(int x, int y)

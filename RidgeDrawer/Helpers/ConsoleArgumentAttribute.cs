@@ -37,6 +37,11 @@ public class ConsoleArgumentAttribute : Attribute
 		return Convert.ChangeType(value, Type);
 	}
 
+	public bool Validate(string value)
+	{
+		return !string.IsNullOrEmpty(value) || Type == typeof(bool);
+	}
+
 	public string TypeName
 	{
 		get
