@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img src="https://raw.githubusercontent.com/duschno/RidgeDrawer/master/docs/icon.png" alt="Ridge Drawer logo" height="64">
+  <img src="https://raw.githubusercontent.com/duschno/RidgeDrawer/master/docs/icon.svg" alt="Ridge Drawer logo" height="64">
   <br/>
   Ridge Drawer
   <a href="https://github.com/duschno/RidgeDrawer/actions/workflows/main.yml"><img src="https://github.com/duschno/RidgeDrawer/actions/workflows/main.yml/badge.svg?branch=master&event=push"></a>
