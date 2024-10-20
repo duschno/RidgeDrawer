@@ -172,6 +172,7 @@ namespace RidgeDrawer
 			//		WhitePoint = 255,
 			//		Smoothing = SmoothingType.Antialias,
 			//		LineType = LineType.Curve,
+			//      Method = MethodType.Squiggle,
 			//		Effect = EffectType.Squiggle,
 			//		DrawOnSides = true,
 			//		FillInside = true,
