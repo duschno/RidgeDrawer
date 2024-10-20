@@ -36,7 +36,7 @@ public class ConsoleArgumentAttribute : Attribute
 			return Enum.Parse(Type, value, true);
 		if (Type == typeof(BackendBase))
 			return Type.GetType($"{Assembly.GetExecutingAssembly().GetName().Name}.{value}", true, true);
-		if (Type == typeof(IEffect))
+		if (Type == typeof(EffectBase))
 			return Type.GetType($"{Assembly.GetExecutingAssembly().GetName().Name}.{value}", true, true);
 		return Convert.ChangeType(value, Type);
 	}

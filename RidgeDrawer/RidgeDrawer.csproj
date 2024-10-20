@@ -52,9 +52,10 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Backend\IBackend.cs" />
     <Compile Include="Logic.cs" />
     <Compile Include="MyPoint.cs" />
-    <Compile Include="Effects\IEffect.cs" />
+    <Compile Include="Effects\EffectBase.cs" />
     <Compile Include="Effects\RidgeLines.cs" />
     <Compile Include="Effects\WiggleBlocks.cs" />
     <Compile Include="Effects\CAS.cs" />

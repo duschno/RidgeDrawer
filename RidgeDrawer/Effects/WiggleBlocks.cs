@@ -3,13 +3,13 @@ using System.Drawing;
 
 namespace RidgeDrawer
 {
-	public class WiggleBlocks : IEffect
+	public class WiggleBlocks : EffectBase
 	{
 		int height;
 		int width;
 		Color[] colors = new Color[] { Color.Black };
 
-		public void Apply(BackendBase backend, Bitmap newBitmap, Bitmap origBitmap, RenderParams param)
+		public override void Apply()
 		{
 			/// go through every <see cref="reduceMltp"/>th pixel imitating imdage downsize
 			/// if pixel is key color set pixel to the x+random, y+random

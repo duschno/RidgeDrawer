@@ -6,9 +6,9 @@ using System.Drawing.Drawing2D;
 
 namespace RidgeDrawer
 {
-	public class Sandbox : IEffect
+	public class Sandbox : EffectBase
 	{
-		public void Apply(BackendBase backend, Bitmap newBitmap, Bitmap origBitmap, RenderParams param)
+		public override void Apply()
 		{
 			using (Graphics graphics = Graphics.FromImage(newBitmap))
 			{

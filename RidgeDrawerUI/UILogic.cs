@@ -30,7 +30,7 @@ namespace RidgeDrawerUI
 			FillComboBox(Smoothing, typeof(SmoothingType));
 			FillComboBox(LineType, typeof(LineType));
 			FillComboBox(Method, typeof(MethodType));
-			FillComboBox(Effect, typeof(IEffect));
+			FillComboBox(Effect, typeof(EffectBase));
 			FillComboBox(Backend, typeof(BackendBase));
 			Model = new RenderParamsModel(
 				new RenderParams

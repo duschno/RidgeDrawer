@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace RidgeDrawer // TODO: каждая линия со своими параматрами, но это уже в афтере - типа рандом такой
 {
-	public abstract class BackendBase
+	public abstract class BackendBase : IBackend
 	{
 		#region Abstract methods
 
@@ -29,18 +29,19 @@ namespace RidgeDrawer // TODO: каждая линия со своими пар�
 
 		public void Draw()
 		{
-			IEffect effect;
+			EffectBase effect;
 			try
 			{
 				// TODO: не рисовать линии, у которых не было приращения
-				effect = Activator.CreateInstance(param.Effect) as IEffect;
+				effect = Activator.CreateInstance(param.Effect) as EffectBase;
+				effect.Construct(this, newBitmap, origBitmap, param);
 			}
 			catch (Exception)
 			{
 				throw new NotImplementedException($"{param.Effect} effect is not supported");
 			}
 			
-			effect.Apply(this, newBitmap, origBitmap, param);
+			effect.Apply();
 			if (param.Debug)
 				DrawDebugInfo();
 		}

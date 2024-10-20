@@ -22,7 +22,7 @@ namespace RidgeDrawer
 		[ConsoleArgument("d", "Render with debug info", type: typeof(bool))]
 		public bool Debug { get; set; }
 
-		[ConsoleArgument("ef", "Effect", type: typeof(IEffect))]
+		[ConsoleArgument("ef", "Effect", type: typeof(EffectBase))]
 		public Type Effect { get; set; }
 	}
 }

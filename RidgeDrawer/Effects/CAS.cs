@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace RidgeDrawer
 {
-	internal class CAS : IEffect
+	internal class CAS : EffectBase
 	{
 		float Sharpening = 1.0f;
 		float Contrast = 0.0f;
@@ -13,7 +13,7 @@ namespace RidgeDrawer
 		Bitmap newBitmap;
 		Bitmap origBitmap;
 
-		public void Apply(BackendBase backend, Bitmap newBitmap, Bitmap origBitmap, RenderParams param)
+		public override void Apply()
 		{
 			height = newBitmap.Height;
 			width = newBitmap.Width;
