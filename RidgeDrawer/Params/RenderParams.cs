@@ -3,12 +3,6 @@ using System.Reflection;
 
 namespace RidgeDrawer
 {
-	public enum SmoothingType
-	{
-		None,
-		Antialias,
-	}
-
 	public enum LineType
 	{
 		Line,
@@ -28,31 +22,31 @@ namespace RidgeDrawer
 	public class LogicParams
 	{
 		[ConsoleArgument("input_image", "Input image destination path",
-			typeof(string), true, false)]
+			null, typeof(string), true, false)]
 		public string InputFilename { get; set; }
 
 		[ConsoleArgument("output_image", "Output image destination path, input_image path by default",
-			typeof(string), false, false)]
+			null, typeof(string), false, false)]
 		public string OutputFilename { get; set; }
 
 		public RenderParams RenderParams { get; set; }
 	}
 
-	public class RenderParams
+	public class RenderParams : ParamsBase
 	{
 		//добавить еще 2 параметра - сколько процентов от общего надо рисовать. если 0 и 100, то рисовать все, если 10 и 90, то с боков не будет
 		//TODO: рендерится не все сразу, а можно отрендерить лишь одну вертиальную линию например, чтобы можно было это анимировать. ниче не понял
 
-		[ConsoleArgument("l", "Amount of lines")]
+		[ConsoleArgument("l", "Amount of lines", "Lines count")]
 		public int LinesCount { get; set; }
 
-		[ConsoleArgument("s", "Line stroke width")]
+		[ConsoleArgument("s", "Line stroke width", "Stroke")]
 		public int Stroke { get; set; } // в конце прямо перед отрисовкой
 
-		[ConsoleArgument("f", "Multiply factor")]
+		[ConsoleArgument("f", "Multiply factor", "Factor")]
 		public int Factor { get; set; }
 
-		[ConsoleArgument("c", "Line chunk size")]
+		[ConsoleArgument("c", "Line chunk size", "Chunk size")]
 		public int ChunkSize { get; set; }
 
 		[ConsoleArgument("g", "Grey point")]
@@ -67,40 +61,28 @@ namespace RidgeDrawer
 		[ConsoleArgument("a", "Angle")]
 		public int Angle { get; set; }
 
-		[ConsoleArgument("st", "Line smoothing", typeof(SmoothingType))]
-		public SmoothingType Smoothing { get; set; } // в начале
-
-		[ConsoleArgument("lt", "Line type", typeof(LineType))]
+		[ConsoleArgument("lt", "Line type", type: typeof(LineType))]
 		public LineType LineType { get; set; } // в конце
 
-		[ConsoleArgument("mt", "Render algorithm method", typeof(MethodType))]
+		[ConsoleArgument("mt", "Render algorithm method", "Method", typeof(MethodType))]
 		public MethodType Method { get; set; } // в начале
 
-		[ConsoleArgument("bt", "Render backend", typeof(BackendDrawerBase))]
-		public Type Backend { get; set; }
-
-		[ConsoleArgument("dos", "Draw on line sides", typeof(bool))]
+		[ConsoleArgument("dos", "Draw on line sides", "Draw on sides", type: typeof(bool))]
 		public bool DrawOnSides { get; set; }
 
-		[ConsoleArgument("pap", @"Amount of points around peaks
-                                  Does not work at the moment")]
+		[ConsoleArgument("pap", "Amount of points around peaks\nDoes not work at the moment", "Points around peak")]
 		public int PointsAroundPeak { get; set; }
 
-		[ConsoleArgument("fi", "Prevent lines overlapping", typeof(bool))]
+		[ConsoleArgument("fi", "Prevent lines overlapping", "Fill inside", type: typeof(bool))]
 		public bool FillInside { get; set; }
 
-		[ConsoleArgument("inv", "Invert", typeof(bool))]
+		[ConsoleArgument("inv", "Invert", type: typeof(bool))]
 		public bool Invert { get; set; }
 
-		[ConsoleArgument("d", "Render with debug info", typeof(bool))]
-		public bool Debug { get; set; }
-
-		[ConsoleArgument("ptx", @"Pull lines to point (X axis)
-					              Does not work at the moment")]
+		[ConsoleArgument("ptx", "Pull lines to point (X axis)\nDoes not work at the moment", "Pull to X")]
 		public int PullPointX { get; set; } // todo: make so that it is image center if this param is not specified // \d+(.\d+)?(,\d+(.\d+)?)?
 
-		[ConsoleArgument("pty", @"Pull lines to point (Y axis)
-					              Does not work at the moment")]
+		[ConsoleArgument("pty", "Pull lines to point (Y axis)\nDoes not work at the moment", "Pull to Y")]
 		public int PullPointY { get; set; }
 
 		public RenderParams Clone()

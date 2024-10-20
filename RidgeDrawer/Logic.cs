@@ -10,6 +10,7 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 using System.Text.RegularExpressions;
+using RidgeDrawer;
 
 namespace RidgeDrawer
 {
@@ -21,11 +22,11 @@ namespace RidgeDrawer
 		/// </summary>
 		/// <param name="type">Backend to use</param>
 		/// <returns>Drawer instance</returns>
-		private static BackendDrawerBase GetBackendDrawer(Type type)
+		private static BackendBase GetBackendDrawer(Type type)
 		{
 			try
 			{
-				return (BackendDrawerBase)Activator.CreateInstance(type);
+				return (BackendBase)Activator.CreateInstance(type);
 			}
 			catch (Exception e)
 			{
@@ -60,7 +61,7 @@ namespace RidgeDrawer
 				using (SolidBrush brush = new SolidBrush(Color.White))
 					graphics.FillRectangle(brush, 0, 0, newBitmap.Width, newBitmap.Height);
 
-				BackendDrawerBase drawer = GetBackendDrawer(param.Backend);
+				BackendBase drawer = GetBackendDrawer(param.Backend);
 				drawer.Construct(newBitmap, origBitmap, param);
 				drawer.Draw();
 			}
@@ -143,6 +144,7 @@ namespace RidgeDrawer
 					Smoothing = SmoothingType.None,
 					LineType = LineType.Line,
 					Method = MethodType.Ridge,
+					Effect = typeof(RidgeLines),
 					DrawOnSides = false,
 					PointsAroundPeak = -1,
 					FillInside = false,
@@ -170,7 +172,8 @@ namespace RidgeDrawer
 			//		WhitePoint = 255,
 			//		Smoothing = SmoothingType.Antialias,
 			//		LineType = LineType.Curve,
-			//		Method = MethodType.Squiggle,
+			//      Method = MethodType.Squiggle,
+			//		Effect = EffectType.Squiggle,
 			//		DrawOnSides = true,
 			//		FillInside = true,
 			//		Invert = false,

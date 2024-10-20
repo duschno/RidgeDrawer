@@ -6,18 +6,20 @@ using System.Reflection;
 [AttributeUsage(AttributeTargets.Property)]
 public class ConsoleArgumentAttribute : Attribute
 {
-	public ConsoleArgumentAttribute(string name, string desc, Type type = null,
+	public ConsoleArgumentAttribute(string name, string fullDesc, string shortDesc = null, Type type = null,
 		bool isMandatory = false, bool isSignRequired = true)
 	{
 		Name = name;
-		Description = desc;
+		FullDescription = fullDesc;
+		ShortDescription = shortDesc ?? fullDesc;
 		Type = type ?? typeof(int);
 		IsMandatory = isMandatory;
 		IsSignRequired = isSignRequired;
 	}
 
 	public string Name { get; private set; }
-	public string Description { get; private set; }
+	public string FullDescription { get; private set; }
+	public string ShortDescription { get; private set; }
 	private Type Type { get; set; }
 	private bool IsMandatory { get; set; }
 	private bool IsSignRequired { get; set; }
@@ -32,7 +34,9 @@ public class ConsoleArgumentAttribute : Attribute
 		}
 		if (Type.IsEnum)
 			return Enum.Parse(Type, value, true);
-		if (Type == typeof(BackendDrawerBase))
+		if (Type == typeof(BackendBase))
+			return Type.GetType($"{Assembly.GetExecutingAssembly().GetName().Name}.{value}", true, true);
+		if (Type == typeof(IEffect))
 			return Type.GetType($"{Assembly.GetExecutingAssembly().GetName().Name}.{value}", true, true);
 		return Convert.ChangeType(value, Type);
 	}
@@ -48,7 +52,7 @@ public class ConsoleArgumentAttribute : Attribute
 		{
 			if (Type.IsEnum)
 				return Type.Name;
-			if (Type == typeof(BackendDrawerBase))
+			if (Type == typeof(BackendBase))
 				return Type.Name;
 			if (Type == typeof(int))
 				return "int";
@@ -62,11 +66,11 @@ public class ConsoleArgumentAttribute : Attribute
 		{
 			if (Type.IsEnum)
 				return string.Join(", ", Enum.GetNames(Type));
-			if (Type == typeof(BackendDrawerBase))
+			if (Type == typeof(BackendBase))
 			{
 				return string.Join(", ",
-					typeof(BackendDrawerBase).Assembly.GetTypes()
-					.Where(t => t.IsSubclassOf(typeof(BackendDrawerBase)))
+					typeof(BackendBase).Assembly.GetTypes()
+					.Where(t => t.IsSubclassOf(typeof(BackendBase)))
 					.Select(t => t.Name));
 			}
 			return null;

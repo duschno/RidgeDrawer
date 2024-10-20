@@ -1,22 +1,24 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Numerics;
 using System.Threading.Tasks;
 
 namespace RidgeDrawer
 {
-	public class CAS : BackendDrawerBase
+	internal class CAS : IEffect
 	{
-
 		float Sharpening = 1.0f;
 		float Contrast = 0.0f;
 		int height;
 		int width;
+		Bitmap newBitmap;
+		Bitmap origBitmap;
 
-		private void Play()
+		public void Apply(BackendBase backend, Bitmap newBitmap, Bitmap origBitmap, RenderParams param)
 		{
 			height = newBitmap.Height;
 			width = newBitmap.Width;
+			this.newBitmap = newBitmap;
+			this.origBitmap = origBitmap;
 			using (Graphics graphics = Graphics.FromImage(newBitmap))
 			{
 				Parallel.For(0, width, Sharpen);
@@ -149,31 +151,6 @@ namespace RidgeDrawer
 				(int)(c.Y * 255),
 				(int)(c.Z * 255)
 			);
-		}
-
-		protected override void DrawCurve(MyPoint[] coords)
-		{
-			Play();
-		}
-		protected override void DrawDots(MyPoint[] coords)
-		{
-			Play();
-		}
-		protected override void DrawLines(MyPoint[] coords)
-		{
-			Play();
-		}
-		protected override void DrawVariableLines(MyPoint[] coords, int y)
-		{
-			Play();
-		}
-		protected override void DrawBezier(MyPoint[] coords)
-		{
-			Play();
-		}
-		protected override void DrawDebugInfo()
-		{
-			throw new NotImplementedException();
 		}
 	}
 }

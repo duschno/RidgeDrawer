@@ -7,27 +7,27 @@ using System.Runtime.InteropServices;
 
 namespace RidgeDrawer
 {
-	public class Cairo : BackendDrawerBase
+	public class Cairo : BackendBase
 	{
 		[DllImport(@"PlusPlus.dll", CallingConvention = CallingConvention.Cdecl)]
 		private extern static void Draw(IntPtr hdc, int[] x, int[] y, int size);
 
-		protected override void DrawBezier(MyPoint[] coords)
+		public override void DrawBezier(MyPoint[] coords)
 		{
 			throw new NotImplementedException();
 		}
 
-		protected override void DrawCurve(MyPoint[] coords)
+		public override void DrawCurve(MyPoint[] coords)
 		{
 			throw new NotImplementedException();
 		}
 
-		protected override void DrawDots(MyPoint[] coords)
+		public override void DrawDots(MyPoint[] coords)
 		{
 			throw new NotImplementedException();
 		}
 
-		protected override void DrawLines(MyPoint[] coords)
+		public override void DrawLines(MyPoint[] coords)
 		{
 			using (Graphics graphics = Graphics.FromImage(newBitmap))
 			{
@@ -37,12 +37,12 @@ namespace RidgeDrawer
 			}
 		}
 
-		protected override void DrawVariableLines(MyPoint[] coords, int y)
+		public override void DrawVariableLines(MyPoint[] coords, int y)
 		{
 			throw new NotImplementedException();
 		}
 
-		protected override void DrawDebugInfo()
+		public override void DrawDebugInfo()
 		{
 			throw new NotImplementedException();
 		}

@@ -41,7 +41,7 @@ namespace RidgeDrawer
 			Console.WriteLine("Params:");
 			foreach (var attr in argAttrs)
 			{
-				var desc = attr.Description;
+				var desc = attr.FullDescription;
 				if (attr.AllowedValue != null)
 					desc += $"\nAllowed values: {attr.AllowedValue}";
 

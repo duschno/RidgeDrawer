@@ -2,59 +2,33 @@
 using System.Collections.Generic;
 using System.Drawing;
 
-namespace RidgeDrawer // TODO: каждая линия со своими параматрами, но это уже в афтере - типа рандом такой
+namespace RidgeDrawer
 {
-	public abstract class BackendDrawerBase
+	public class RidgeLines : IEffect
 	{
-		#region Abstract methods
-
-		protected abstract void DrawLines(MyPoint[] coords);
-		protected abstract void DrawDots(MyPoint[] coords);
-		protected abstract void DrawVariableLines(MyPoint[] coords, int y);
-		protected abstract void DrawCurve(MyPoint[] coords);
-		protected abstract void DrawBezier(MyPoint[] coords);
-		protected abstract void DrawDebugInfo();
-
-		#endregion
-
-		protected Bitmap newBitmap;
-		protected Bitmap origBitmap;
-		protected RenderParams param;
-
-		public virtual void Construct(Bitmap newBitmap, Bitmap origBitmap, RenderParams param)
-		{
-			this.newBitmap = newBitmap;
-			this.origBitmap = origBitmap;
-			this.param = param;
-		}
-
-		#region Generic drawing logic
-
-		public void Draw()
+		public void Apply(BackendBase backend, Bitmap newBitmap, Bitmap origBitmap, RenderParams param)
 		{
 			switch (param.Method) // TODO: не рисовать линии без приращения
 			{
 				case MethodType.Ridge:
-					MethodRidge();
+					MethodRidge(backend, newBitmap, origBitmap, param);
 					break;
 				case MethodType.Squiggle:
-					MethodSquiggle();
+					MethodSquiggle(backend, newBitmap, origBitmap, param);
 					break;
 				default:
 					throw new NotImplementedException($"{param.Method} drawing method is not supported");
 			}
-
-			if (param.Debug)
-				DrawDebugInfo();
 		}
 
-		private void MethodRidge() // TODO: чекни скрин на телефоне с женщиной, там линии объемно смещаются от центра
+		public void MethodRidge(BackendBase backend, Bitmap newBitmap, Bitmap origBitmap, RenderParams param)
 		{
+			// TODO: чекни скрин на телефоне с женщиной, там линии объемно смещаются от центра
 			int lineNumber = 0; // сейчас он считает так: насколько относительно серого цвета сместить вверх или вниз линию. надо переделать от белого
 			while (lineNumber < param.LinesCount)
 			{
 				List<MyPoint> coords = new List<MyPoint>();
-				int y = GetLineY(lineNumber);
+				int y = GetLineY(lineNumber, origBitmap, param);
 
 				for (int x = origBitmap.Width / 2 % param.ChunkSize; x < origBitmap.Width; x += param.ChunkSize) // TODO: чанки распределять на оси Х не равномерно, а без сдвига, что бы при некратных значениях (50 и 51 наприм) не было фликеринга, а просто добавлялась новая координата
 					coords.Add(CalculatePoint(origBitmap, x, y, param));
@@ -64,13 +38,13 @@ namespace RidgeDrawer // TODO: каждая линия со своими пар�
 					coords.Add(CalculatePoint(origBitmap, origBitmap.Width - 1, y, param));
 				}
 
-				foreach (List<MyPoint> coordsPart in GetAffectedPoints(coords, y))
-					RenderLine(coordsPart, param, y);
+				foreach (List<MyPoint> coordsPart in GetAffectedPoints(coords, y, param))
+					RenderLine(backend, coordsPart, param, y);
 				lineNumber++;
 			}
 		}
 
-		private List<List<MyPoint>> GetAffectedPoints(List<MyPoint> coords, int zeroLevel)
+		protected List<List<MyPoint>> GetAffectedPoints(List<MyPoint> coords, int zeroLevel, RenderParams param)
 		{
 			if (param.PointsAroundPeak == -1) // если -1 - рисовать все, если 0 - не рисовать ничего, если 1 - осавлять 1 грей поинт и т.д.
 				return new List<List<MyPoint>>() { coords };
@@ -112,14 +86,14 @@ namespace RidgeDrawer // TODO: каждая линия со своими пар�
 		/// <param name="p1">First point</param>
 		/// <param name="p2">Second point</param>
 		/// <returns></returns>
-		private double Distance(MyPoint p1, MyPoint p2)
+		protected double Distance(MyPoint p1, MyPoint p2)
 		{
 			int x = p1.X - p2.X;
 			int y = p1.Y - p2.Y;
 			return Math.Sqrt(x * x + y * y);
 		}
 
-		private MyPoint PullToPoint(MyPoint point, double force)
+		protected MyPoint PullToPoint(MyPoint point, double force, RenderParams param)
 		{
 			return point;
 
@@ -162,13 +136,13 @@ namespace RidgeDrawer // TODO: каждая линия со своими пар�
 			return point;
 		}
 
-		private MyPoint CalculatePoint(Bitmap origBitmap, int x, int y, RenderParams param)
+		protected MyPoint CalculatePoint(Bitmap origBitmap, int x, int y, RenderParams param)
 		{
 			int greyscaleFactored = (int)Math.Round(CalculateGreyScale(origBitmap, x, y, param) * param.Factor); // round is used because otherwise angle=0 differs from angle=1 for 127 color. ебаное решение, переделывай
-			return CalculateAngle(x, y, greyscaleFactored, greyscaleFactored);
+			return CalculateAngle(x, y, greyscaleFactored, greyscaleFactored, param);
 		}
 
-		private double CalculateGreyScale(Bitmap origBitmap, int x, int y, RenderParams param)
+		protected double CalculateGreyScale(Bitmap origBitmap, int x, int y, RenderParams param)
 		{
 			int pixel = origBitmap.GetPixel(x, y).Greyscale();
 			if (pixel > param.WhitePoint) pixel = param.WhitePoint;
@@ -178,24 +152,25 @@ namespace RidgeDrawer // TODO: каждая линия со своими пар�
 			return f / (double)(param.WhitePoint - param.BlackPoint);
 		}
 
-		private MyPoint CalculateAngle(int x, int y, int factorX, int factorY)
+		protected MyPoint CalculateAngle(int x, int y, int factorX, int factorY, RenderParams param)
 		{
 			double sin = Math.Sin(Math.PI * -param.Angle / 180.0); // param.Angle is negative to rotate it clockwise
 			double cos = Math.Cos(Math.PI * -param.Angle / 180.0);
 			int xAddition = (int)((factorX - param.Factor / 2.0) * sin); // вычитаем param.Factor / 2.0, чтобы линии построенные по серому не сдвигались. но с черным и белым это не работает. мб все таки ввести точку серого?
 			int yAddition = (int)((factorY - param.Factor / 2.0) * cos);
 			double len = Distance(new MyPoint(x, y), new MyPoint(x + xAddition, y + yAddition));
-			return PullToPoint(new MyPoint(x + xAddition, y + yAddition), len);
+			return PullToPoint(new MyPoint(x + xAddition, y + yAddition), len, param);
 		}
 
-		private int GetLineY(int lineNumber)
+		protected int GetLineY(int lineNumber, Bitmap origBitmap, RenderParams param)
 		{
 			//	точное положение линии от нуля							прибавляем половину интервала, чтобы было посередине
 			return (origBitmap.Height * lineNumber / param.LinesCount) + (origBitmap.Height / (param.LinesCount * 2));
 		}
 
-		private void MethodSquiggle() // TODO: фактор у линии тоже должен быть таким, что чем больше частота - тем больше амплитуда
+		public void MethodSquiggle(BackendBase backend, Bitmap newBitmap, Bitmap origBitmap, RenderParams param)
 		{
+			// TODO: фактор у линии тоже должен быть таким, что чем больше частота - тем больше амплитуда
 			if (param.WhitePoint <= param.BlackPoint)
 				throw new NotImplementedException($"White point is less or equal to black point");
 
@@ -209,7 +184,7 @@ namespace RidgeDrawer // TODO: каждая линия со своими пар�
 			{
 				List<MyPoint> coords = new List<MyPoint>();
 				int sign = -1;
-				int y = GetLineY(lineNumber);
+				int y = GetLineY(lineNumber, origBitmap, param);
 				int accumulator = minChunk;
 				bool prevStepCorrected = false;
 				int xStart = 1;
@@ -250,7 +225,7 @@ namespace RidgeDrawer // TODO: каждая линия со своими пар�
 						prevStepCorrected = false;
 					}
 
-					MyPoint point = CalculateAngle(x, y, accumulator, (int)(sign * param.Factor * greyscale));
+					MyPoint point = CalculateAngle(x, y, accumulator, (int)(sign * param.Factor * greyscale), param);
 					point.Y += param.Factor / 2;
 					coords.Add(point);
 					sign *= -1;
@@ -269,39 +244,36 @@ namespace RidgeDrawer // TODO: каждая линия со своими пар�
 					coords.Add(new MyPoint(pN1.X + stepRight, pN2.Y)); // TODO: одной новой точки иногда не хватает, все равно остается пустота
 				}
 
-				foreach (List<MyPoint> coordsPart in GetAffectedPoints(coords, y))
-					RenderLine(coordsPart, param, y);
+				foreach (List<MyPoint> coordsPart in GetAffectedPoints(coords, y, param))
+					RenderLine(backend, coordsPart, param, y);
 				lineNumber++;
 			}
 		}
-
-		private void RenderLine(List<MyPoint> coords, RenderParams param, int y)
+		protected void RenderLine(BackendBase backend, List<MyPoint> coords, RenderParams param, int y)
 		{
 			if (coords.Count < 2)
 				return;
 			switch (param.LineType)
 			{
 				case LineType.Line:
-					DrawLines(coords.ToArray());
+					backend.DrawLines(coords.ToArray());
 					break;
 				case LineType.VariableLine:
-					DrawVariableLines(coords.ToArray(), y);
+					backend.DrawVariableLines(coords.ToArray(), y);
 					break;
 				case LineType.Curve:
-					DrawCurve(coords.ToArray());
+					backend.DrawCurve(coords.ToArray());
 					break;
 				case LineType.Bezier:
-					DrawBezier(coords.ToArray());
+					backend.DrawBezier(coords.ToArray());
 					break;
 				case LineType.Dot:
-					DrawDots(coords.ToArray());
+					backend.DrawDots(coords.ToArray());
 					break;
 				default:
 					throw new NotImplementedException($"{param.LineType} line is not supported");
 			}
 
 		}
-
-		#endregion
 	}
 }

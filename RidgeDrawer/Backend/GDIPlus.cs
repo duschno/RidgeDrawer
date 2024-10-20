@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RidgeDrawer;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
@@ -6,7 +7,7 @@ using System.Drawing.Drawing2D;
 
 namespace RidgeDrawer
 {
-	public class GDIPlus : BackendDrawerBase
+	public class GDIPlus : BackendBase
 	{
 		private Graphics graphics;
 		private Pen pen;
@@ -29,7 +30,7 @@ namespace RidgeDrawer
 				SmoothingMode.AntiAlias : SmoothingMode.None;
 		}
 
-		protected override void DrawBezier(MyPoint[] coords)
+		public override void DrawBezier(MyPoint[] coords)
 		{
 			MyPoint[] fin = new MyPoint[(coords.Length - 1) / 3 * 3 + 1];
 			for (int i = 0; i < fin.Length; i++)
@@ -37,7 +38,7 @@ namespace RidgeDrawer
 			graphics.DrawBeziers(pen, MyPoint.ToPoint(fin));
 		}
 
-		protected override void DrawCurve(MyPoint[] coords)
+		public override void DrawCurve(MyPoint[] coords)
 		{
 			if (param.FillInside)
 			{
@@ -48,7 +49,7 @@ namespace RidgeDrawer
 			graphics.DrawCurve(pen, MyPoint.ToPoint(coords), .5f); // TODO: implement tension to manual too
 		}
 
-		private Color GetColor(bool isFill)
+		public Color GetColor(bool isFill)
 		{
 			if (param.Debug)
 			{
@@ -65,7 +66,7 @@ namespace RidgeDrawer
 			return isFill ? Color.White : Color.Black;
 		}
 
-		protected override void DrawDots(MyPoint[] coords)
+		public override void DrawDots(MyPoint[] coords)
 		{
 			int strokeAmount = param.Stroke;
 			if (param.Debug && param.LineType != LineType.Dot)
@@ -86,7 +87,7 @@ namespace RidgeDrawer
 			return fillCoords.ToArray();
 		}
 
-		protected override void DrawLines(MyPoint[] coords)
+		public override void DrawLines(MyPoint[] coords)
 		{
 			if (param.FillInside)
 			{
@@ -107,7 +108,7 @@ namespace RidgeDrawer
 			//}
 		}
 
-		protected override void DrawVariableLines(MyPoint[] coords, int y)
+		public override void DrawVariableLines(MyPoint[] coords, int y)
 		{
 			for (int i = 0; i < coords.Length - 1; i++)
 			{
@@ -117,7 +118,7 @@ namespace RidgeDrawer
 			}
 		}
 
-		protected override void DrawDebugInfo()
+		public override void DrawDebugInfo()
 		{
 			brush = new SolidBrush(Color.Orange);
 			int width = 20;

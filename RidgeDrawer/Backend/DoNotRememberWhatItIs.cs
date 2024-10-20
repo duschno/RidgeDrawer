@@ -1,28 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 
 namespace RidgeDrawer
 {
-	public class Manual2 : BackendDrawerBase
+	public class DoNotRememberWhatItIs : BackendBase
 	{
-		protected override void DrawBezier(MyPoint[] coords)
+		public override void DrawBezier(MyPoint[] coords)
 		{
 			throw new NotImplementedException();
 		}
 
-		protected override void DrawCurve(MyPoint[] coords)
+		public override void DrawCurve(MyPoint[] coords)
 		{
 			throw new NotImplementedException();
 		}
 
-		protected override void DrawDots(MyPoint[] coords)
+		public override void DrawDots(MyPoint[] coords)
 		{
 			throw new NotImplementedException();
 		}
 
-		protected override void DrawLines(MyPoint[] coords)
+		public override void DrawLines(MyPoint[] coords)
 		{
 			for (int i = 0; i < coords.Length - 1; i++)
 			{
@@ -52,12 +50,12 @@ namespace RidgeDrawer
 			}
 		}
 
-		protected override void DrawVariableLines(MyPoint[] coords, int y)
+		public override void DrawVariableLines(MyPoint[] coords, int y)
 		{
 			throw new NotImplementedException();
 		}
 
-		protected override void DrawDebugInfo()
+		public override void DrawDebugInfo()
 		{
 			throw new NotImplementedException();
 		}
