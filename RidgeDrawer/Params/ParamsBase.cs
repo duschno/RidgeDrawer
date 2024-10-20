@@ -14,6 +14,9 @@ namespace RidgeDrawer
 
 	public class ParamsBase
 	{
+		//если параметр задан - надо сохранять его состояние, чтобы при сменах плагина не слетало
+		//для всех параметров надо будет задат начальное значнеи
+
 		[ConsoleArgument("bt", "Render backend", type: typeof(BackendBase))]
 		public Type Backend { get; set; }
 
