@@ -29,6 +29,7 @@ namespace RidgeDrawerUI
 			Width = SystemParameters.PrimaryScreenWidth * 0.9;
 			FillComboBox(Smoothing, typeof(SmoothingType));
 			FillComboBox(LineType, typeof(LineType));
+			FillComboBox(Method, typeof(MethodType));
 			FillComboBox(Effect, typeof(IEffect));
 			FillComboBox(Backend, typeof(BackendBase));
 			Model = new RenderParamsModel(
