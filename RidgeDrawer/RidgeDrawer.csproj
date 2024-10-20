@@ -53,20 +53,21 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Effects\IEffect.cs" />
+    <Compile Include="Effects\Ridge.cs" />
     <Compile Include="Effects\Squiggle.cs" />
     <Compile Include="Helpers\ConsoleArgumentAttribute.cs" />
     <Compile Include="BackendDrawer\BackendDrawerBase.cs" />
-    <Compile Include="BackendDrawer\Manual2.cs" />
+    <Compile Include="Effects\Manual2.cs" />
     <Compile Include="BackendDrawer\PixelManual.cs" />
     <Compile Include="BackendDrawer\GDIPlus.cs" />
     <Compile Include="BackendDrawer\Cairo.cs" />
-    <Compile Include="BackendDrawer\CAS.cs" />
-    <Compile Include="BackendDrawer\Sandbox.cs" />
+    <Compile Include="Effects\CAS.cs" />
+    <Compile Include="Effects\Sandbox.cs" />
     <Compile Include="Helpers\ArgsHelper.cs" />
     <Compile Include="Helpers\StringExtension.cs" />
     <Compile Include="Logic.cs" />
     <Compile Include="MyPoint.cs" />
-    <Compile Include="Params\IParam.cs" />
+    <Compile Include="Params\ParamsBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Params\RenderParams.cs" />
   </ItemGroup>

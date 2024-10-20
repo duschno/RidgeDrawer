@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RidgeDrawer.Effects
+namespace RidgeDrawer
 {
 	internal interface IEffect
 	{

@@ -1,5 +1,4 @@
-﻿using RidgeDrawer;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
@@ -7,7 +6,7 @@ using System.Drawing.Drawing2D;
 
 namespace RidgeDrawer
 {
-	public class PixelManual : BackendDrawerBase
+	public class PerPixel : BackendDrawerBase
 	{
 		protected override void DrawBezier(MyPoint[] coords)
 		{

@@ -1,14 +1,10 @@
-﻿using System;
+﻿using RidgeDrawer.Effects;
+using RidgeDrawer;
+using System;
 using System.Reflection;
 
 namespace RidgeDrawer
 {
-	public enum SmoothingType
-	{
-		None,
-		Antialias,
-	}
-
 	public enum LineType
 	{
 		Line,
@@ -38,7 +34,7 @@ namespace RidgeDrawer
 		public RenderParams RenderParams { get; set; }
 	}
 
-	public class RenderParams
+	public class RenderParams : ParamsBase
 	{
 		//добавить еще 2 параметра - сколько процентов от общего надо рисовать. если 0 и 100, то рисовать все, если 10 и 90, то с боков не будет
 		//TODO: рендерится не все сразу, а можно отрендерить лишь одну вертиальную линию например, чтобы можно было это анимировать. ниче не понял
@@ -67,9 +63,6 @@ namespace RidgeDrawer
 		[ConsoleArgument("a", "Angle")]
 		public int Angle { get; set; }
 
-		[ConsoleArgument("st", "Line smoothing", typeof(SmoothingType))]
-		public SmoothingType Smoothing { get; set; } // в начале
-
 		[ConsoleArgument("lt", "Line type", typeof(LineType))]
 		public LineType LineType { get; set; } // в конце
 
@@ -91,9 +84,6 @@ namespace RidgeDrawer
 
 		[ConsoleArgument("inv", "Invert", typeof(bool))]
 		public bool Invert { get; set; }
-
-		[ConsoleArgument("d", "Render with debug info", typeof(bool))]
-		public bool Debug { get; set; }
 
 		[ConsoleArgument("ptx", @"Pull lines to point (X axis)
 					              Does not work at the moment")]
