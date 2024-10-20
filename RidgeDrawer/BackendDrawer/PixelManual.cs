@@ -6,7 +6,7 @@ using System.Drawing.Drawing2D;
 
 namespace RidgeDrawer
 {
-	public class Manual : BackendDrawerBase
+	public class PixelManual : BackendDrawerBase
 	{
 		protected override void DrawBezier(MyPoint[] coords)
 		{

@@ -57,7 +57,7 @@
     <Compile Include="Helpers\ConsoleArgumentAttribute.cs" />
     <Compile Include="BackendDrawer\BackendDrawerBase.cs" />
     <Compile Include="BackendDrawer\Manual2.cs" />
-    <Compile Include="BackendDrawer\Manual.cs" />
+    <Compile Include="BackendDrawer\PixelManual.cs" />
     <Compile Include="BackendDrawer\GDIPlus.cs" />
     <Compile Include="BackendDrawer\Cairo.cs" />
     <Compile Include="BackendDrawer\CAS.cs" />
