@@ -73,6 +73,17 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+            <Style TargetType="{x:Type GroupBox}">
+                <Setter Property="Width" Value="185"/>
+                <Setter Property="Margin" Value="-3,0,0,0"/>
+                <Setter Property="BorderBrush" Value="DarkGray"/>
+            </Style>
+            <Style x:Key="GroupBoxHeader">
+                <Setter Property="Control.Margin" Value="-15,0"/>
+            </Style>
+            <Style x:Key="GroupBoxContent">
+                <Setter Property="Control.Margin" Value="-12,0,0,5"/>
+            </Style>
         </ResourceDictionary>
     </Window.Resources>
     <Grid>
@@ -95,103 +106,111 @@
                     <Button Content="Reset (R)" Margin="0,-20,16,0" Click="Reset_Click" HorizontalAlignment="Right"/>
                     <!--#endregion-->
 
-                    <Separator Height="8" Visibility="Hidden"/>
+                    <GroupBox>
+                        <GroupBox.Header>
+                            <StackPanel Style="{StaticResource GroupBoxHeader}">
+                                <TextBlock Text="Backend"/>
+                                <ComboBox x:Name="Backend" TabIndex="12"
+                                          Style="{StaticResource ComboBoxBaseStyle}" SelectedItem="{Binding Param.Backend}"
+                                          DisplayMemberPath="Name"/>
+                            </StackPanel>
+                        </GroupBox.Header>
+                        <StackPanel Style="{StaticResource GroupBoxContent}">
+                            <TextBlock Text="Smoothing"/>
+                            <ComboBox x:Name="Smoothing" TabIndex="9"
+                                      Style="{StaticResource ComboBoxEnumStyle}" SelectedItem="{Binding Param.Smoothing}"/>
 
-                    <TextBlock Text="Backend"/>
-                    <ComboBox x:Name="Backend" TabIndex="12"
-                              Style="{StaticResource ComboBoxBaseStyle}" SelectedItem="{Binding Param.Backend}"
-                              DisplayMemberPath="Name"/>
-
-                    <TextBlock Text="Smoothing"/>
-                    <ComboBox x:Name="Smoothing" TabIndex="9" 
-                              Style="{StaticResource ComboBoxEnumStyle}" SelectedItem="{Binding Param.Smoothing}"/>
-
-                    <CheckBox x:Name="Debug" Content="Debug (D)"
-                                  TabIndex="16" IsChecked="{Binding Param.Debug}"/>
-                    <StackPanel Margin="15,0,0,0" Visibility="{Binding IsChecked, ElementName=Debug,
+                            <CheckBox x:Name="Debug" Content="Debug (D)"
+                                      TabIndex="16" IsChecked="{Binding Param.Debug}"/>
+                            <StackPanel Margin="15,0,0,0" Visibility="{Binding IsChecked, ElementName=Debug,
                                                                Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <CheckBox x:Name="DebugSpecificOption" Content="Not in use" TabIndex="17"/>
-                    </StackPanel>
-                    
-                    <Separator Height="8" Visibility="Hidden"/>
+                                <CheckBox x:Name="DebugSpecificOption" Content="Not in use" TabIndex="17"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </GroupBox>
 
-                    <TextBlock Text="Effect"/>
-                    <ComboBox x:Name="Effect" TabIndex="11" 
+                    <GroupBox>
+                        <GroupBox.Header>
+                            <StackPanel Style="{StaticResource GroupBoxHeader}">
+                                <TextBlock Text="Effect"/>
+                                <ComboBox x:Name="Effect" TabIndex="11" 
                               Style="{StaticResource ComboBoxBaseStyle}" SelectedItem="{Binding Param.Effect}"
                               DisplayMemberPath="Name"/>
-
-                    <!--#region Text boxes-->
-                    <TextBlock Text="Lines count"/>
-                    <TextBox x:Name="LinesCount" PreviewTextInput="PositiveNumberValidation" 
+                            </StackPanel>
+                        </GroupBox.Header>
+                        <StackPanel Style="{StaticResource GroupBoxContent}">
+                            <!--#region Text boxes-->
+                            <TextBlock Text="Lines count"/>
+                            <TextBox x:Name="LinesCount" PreviewTextInput="PositiveNumberValidation" 
                                  TabIndex="0" Text="{Binding Param.LinesCount}"/>
 
-                    <TextBlock Text="Stroke"/>
-                    <TextBox x:Name="Stroke" PreviewTextInput="PositiveNumberValidation"
+                            <TextBlock Text="Stroke"/>
+                            <TextBox x:Name="Stroke" PreviewTextInput="PositiveNumberValidation"
                                  TabIndex="1" Text="{Binding Param.Stroke}"/>
 
-                    <TextBlock Text="Factor"/>
-                    <TextBox x:Name="Factor" PreviewTextInput="PositiveNumberValidation"
+                            <TextBlock Text="Factor"/>
+                            <TextBox x:Name="Factor" PreviewTextInput="PositiveNumberValidation"
                                  TabIndex="2" Text="{Binding Param.Factor}"/>
 
-                    <TextBlock Text="Chunk size"/>
-                    <TextBox x:Name="ChunkSize" PreviewTextInput="PositiveNumberValidation"
+                            <TextBlock Text="Chunk size"/>
+                            <TextBox x:Name="ChunkSize" PreviewTextInput="PositiveNumberValidation"
                                  TabIndex="3" Text="{Binding Param.ChunkSize}"/>
 
-                    <TextBlock Text="Angle"/>
-                    <TextBox x:Name="Angle" PreviewTextInput="AngleValidation"
+                            <TextBlock Text="Angle"/>
+                            <TextBox x:Name="Angle" PreviewTextInput="AngleValidation"
                                  TabIndex="4" Text="{Binding Param.Angle}"/>
-                    
-                    <TextBlock Text="Grey point"/>
-                    <TextBox x:Name="GreyPoint" PreviewTextInput="ColorRangeValidation"
+
+                            <TextBlock Text="Grey point"/>
+                            <TextBox x:Name="GreyPoint" PreviewTextInput="ColorRangeValidation"
                                  TabIndex="5" Text="{Binding Param.GreyPoint}"/>
-                    
-                    <TextBlock Text="Black point"/>
-                    <TextBox x:Name="BlackPoint" PreviewTextInput="ColorRangeValidation"
+
+                            <TextBlock Text="Black point"/>
+                            <TextBox x:Name="BlackPoint" PreviewTextInput="ColorRangeValidation"
                                  TabIndex="6" Text="{Binding Param.BlackPoint}"/>
 
-                    <TextBlock Text="White point"/>
-                    <TextBox x:Name="WhitePoint" PreviewTextInput="ColorRangeValidation"
+                            <TextBlock Text="White point"/>
+                            <TextBox x:Name="WhitePoint" PreviewTextInput="ColorRangeValidation"
                                  TabIndex="7" Text="{Binding Param.WhitePoint}"/>
-                    
-                    <TextBlock Text="Points around peak" TextWrapping="Wrap" Width="70"/>
-                    <TextBox x:Name="PointsAroundPeak"
+
+                            <TextBlock Text="Points around peak" TextWrapping="Wrap" Width="70"/>
+                            <TextBox x:Name="PointsAroundPeak"
                                  TabIndex="8" Text="{Binding Param.PointsAroundPeak}"/>
-                    <!--#endregion-->
+                            <!--#endregion-->
 
-                    <!--#region Combo boxes-->
-                    <TextBlock Text="Line type" />
-                    <ComboBox x:Name="LineType" TabIndex="10" 
+                            <!--#region Combo boxes-->
+                            <TextBlock Text="Line type" />
+                            <ComboBox x:Name="LineType" TabIndex="10" 
                               Style="{StaticResource ComboBoxEnumStyle}" SelectedItem="{Binding Param.LineType}"/>
-                    <!--#endregion-->
+                            <!--#endregion-->
 
-                    <Separator Height="7" Visibility="Hidden"/>
-
-                    <!--#region Check boxes-->
-                    <CheckBox x:Name="DrawOnSides" Content="Draw on sides"
+                            <!--#region Check boxes-->
+                            <CheckBox x:Name="DrawOnSides" Content="Draw on sides"
                                   TabIndex="13" IsChecked="{Binding Param.DrawOnSides}"/>
-                    <CheckBox x:Name="FillInside" Content="Fill inside"
+                            <CheckBox x:Name="FillInside" Content="Fill inside"
                                   TabIndex="14" IsChecked="{Binding Param.FillInside}"/>
-                    <CheckBox x:Name="Invert" Content="Invert"
+                            <CheckBox x:Name="Invert" Content="Invert"
                                   TabIndex="15" IsChecked="{Binding Param.Invert}"/>
 
-                    <!--#endregion-->
+                            <!--#endregion-->
 
-                    <!--#region Specific params-->
-                    <TextBlock Text="Specific parameters:"/>
-                    <TextBlock Text="Pull to"/>
-                    <TextBlock Text="X" Margin="67,-26,0,0"/>
-                    <TextBox x:Name="PullPointX" PreviewTextInput="PositiveNumberValidation"
+                            <!--#region Specific params-->
+                            <TextBlock Text="Specific parameters:"/>
+                            <TextBlock Text="Pull to"/>
+                            <TextBlock Text="X" Margin="67,-26,0,0"/>
+                            <TextBox x:Name="PullPointX" PreviewTextInput="PositiveNumberValidation"
                              TabIndex="18" Margin="84,-22,0,0" Width="40"
                              Text="{Binding Param.PullPointX}"/>
-                    <TextBlock Text="Y" Margin="127,-26,0,0"/>
-                    <TextBox x:Name="PullPointY" PreviewTextInput="PositiveNumberValidation"
+                            <TextBlock Text="Y" Margin="127,-26,0,0"/>
+                            <TextBox x:Name="PullPointY" PreviewTextInput="PositiveNumberValidation"
                              TabIndex="19" Margin="144,-22,0,0" Width="40"
                              Text="{Binding Param.PullPointY}"/>
-                    <Button x:Name="PullPointButton" Content="Point by click"
+                            <Button x:Name="PullPointButton" Content="Point by click"
                                 Margin="84,5,0,0" Click="PullPointButton_Click"
                                 HorizontalAlignment="Left"
                                 Width="100"/>
-                    <!--#endregion-->
+                            <!--#endregion-->
+                        </StackPanel>
+                    </GroupBox>
                 </StackPanel>
             </ScrollViewer>
 
