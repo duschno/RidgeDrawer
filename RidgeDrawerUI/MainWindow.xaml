@@ -74,15 +74,9 @@
                 </Setter>
             </Style>
             <Style TargetType="{x:Type GroupBox}">
-                <Setter Property="Width" Value="185"/>
-                <Setter Property="Margin" Value="-3,0,0,0"/>
+                <Setter Property="Width" Value="205"/>
+                <Setter Property="Margin" Value="5,0,0,0"/>
                 <Setter Property="BorderBrush" Value="DarkGray"/>
-            </Style>
-            <Style x:Key="GroupBoxHeader">
-                <Setter Property="Control.Margin" Value="-15,0"/>
-            </Style>
-            <Style x:Key="GroupBoxContent">
-                <Setter Property="Control.Margin" Value="-12,0,0,5"/>
             </Style>
         </ResourceDictionary>
     </Window.Resources>
@@ -96,9 +90,9 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <ScrollViewer Grid.Column="0" Width="210" VerticalScrollBarVisibility="Auto"
+            <ScrollViewer Grid.Column="0" Width="230" VerticalScrollBarVisibility="Auto"
                           Background="White">
-                <StackPanel Width="200" HorizontalAlignment="Left" Grid.Row="0">
+                <StackPanel Width="210" HorizontalAlignment="Left" Grid.Row="0">
                     <!--#region Common buttons-->
                     <Button Content="Open (O)" Margin="15,10,0,0" Click="Open_Click" HorizontalAlignment="Left"/>
                     <Button Content="Compare (C)" Margin="0,-20,16,0" Click="Compare_Click" HorizontalAlignment="Right"/>
@@ -106,16 +100,18 @@
                     <Button Content="Reset (R)" Margin="0,-20,16,0" Click="Reset_Click" HorizontalAlignment="Right"/>
                     <!--#endregion-->
 
+                    <Separator Height="8" Visibility="Hidden"/>
+
                     <GroupBox>
                         <GroupBox.Header>
-                            <StackPanel Style="{StaticResource GroupBoxHeader}">
+                            <StackPanel>
                                 <TextBlock Text="Backend"/>
                                 <ComboBox x:Name="Backend" TabIndex="12"
                                           Style="{StaticResource ComboBoxBaseStyle}" SelectedItem="{Binding Param.Backend}"
                                           DisplayMemberPath="Name"/>
                             </StackPanel>
                         </GroupBox.Header>
-                        <StackPanel Style="{StaticResource GroupBoxContent}">
+                        <StackPanel>
                             <TextBlock Text="Smoothing"/>
                             <ComboBox x:Name="Smoothing" TabIndex="9"
                                       Style="{StaticResource ComboBoxEnumStyle}" SelectedItem="{Binding Param.Smoothing}"/>
@@ -131,14 +127,14 @@
 
                     <GroupBox>
                         <GroupBox.Header>
-                            <StackPanel Style="{StaticResource GroupBoxHeader}">
+                            <StackPanel>
                                 <TextBlock Text="Effect"/>
                                 <ComboBox x:Name="Effect" TabIndex="11" 
                               Style="{StaticResource ComboBoxBaseStyle}" SelectedItem="{Binding Param.Effect}"
                               DisplayMemberPath="Name"/>
                             </StackPanel>
                         </GroupBox.Header>
-                        <StackPanel Style="{StaticResource GroupBoxContent}">
+                        <StackPanel>
                             <TextBlock Text="Method"/>
                             <ComboBox x:Name="Method" TabIndex="11" 
                               Style="{StaticResource ComboBoxEnumStyle}" SelectedItem="{Binding Param.Method}"/>
