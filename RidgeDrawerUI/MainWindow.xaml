@@ -97,6 +97,28 @@
 
                     <Separator Height="8" Visibility="Hidden"/>
 
+                    <TextBlock Text="Effect"/>
+                    <ComboBox x:Name="Effect" TabIndex="11" 
+                              Style="{StaticResource ComboBoxEnumStyle}" SelectedItem="{Binding Param.Effect}"/>
+
+                    <TextBlock Text="Backend"/>
+                    <ComboBox x:Name="Backend" TabIndex="12"
+                              Style="{StaticResource ComboBoxBaseStyle}" SelectedItem="{Binding Param.Backend}"
+                              DisplayMemberPath="Name"/>
+
+                    <TextBlock Text="Smoothing"/>
+                    <ComboBox x:Name="Smoothing" TabIndex="9" 
+                              Style="{StaticResource ComboBoxEnumStyle}" SelectedItem="{Binding Param.Smoothing}"/>
+
+                    <CheckBox x:Name="Debug" Content="Debug (D)"
+                                  TabIndex="16" IsChecked="{Binding Param.Debug}"/>
+                    <StackPanel Margin="15,0,0,0" Visibility="{Binding IsChecked, ElementName=Debug,
+                                                               Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <CheckBox x:Name="DebugSpecificOption" Content="Not in use" TabIndex="17"/>
+                    </StackPanel>
+
+                    <Separator Height="8" Visibility="Hidden"/>
+
                     <!--#region Text boxes-->
                     <TextBlock Text="Lines count"/>
                     <TextBox x:Name="LinesCount" PreviewTextInput="PositiveNumberValidation" 
@@ -137,23 +159,12 @@
 
                     <Separator Height="8" Visibility="Hidden"/>
 
-                    <!--#region Combo boxes-->
-                    <TextBlock Text="Smoothing"/>
-                    <ComboBox x:Name="Smoothing" TabIndex="9" 
-                              Style="{StaticResource ComboBoxEnumStyle}" SelectedItem="{Binding Param.Smoothing}"/>
 
+
+                    <!--#region Combo boxes-->
                     <TextBlock Text="LineType" />
                     <ComboBox x:Name="LineType" TabIndex="10" 
                               Style="{StaticResource ComboBoxEnumStyle}" SelectedItem="{Binding Param.LineType}"/>
-
-                    <TextBlock Text="Effect"/>
-                    <ComboBox x:Name="Effect" TabIndex="11" 
-                              Style="{StaticResource ComboBoxEnumStyle}" SelectedItem="{Binding Param.Effect}"/>
-
-                    <TextBlock Text="Backend"/>
-                    <ComboBox x:Name="Backend" TabIndex="12"
-                              Style="{StaticResource ComboBoxBaseStyle}" SelectedItem="{Binding Param.Backend}"
-                              DisplayMemberPath="Name"/>
                     <!--#endregion-->
 
                     <Separator Height="7" Visibility="Hidden"/>
@@ -165,12 +176,6 @@
                                   TabIndex="14" IsChecked="{Binding Param.FillInside}"/>
                     <CheckBox x:Name="Invert" Content="Invert"
                                   TabIndex="15" IsChecked="{Binding Param.Invert}"/>
-                    <CheckBox x:Name="Debug" Content="Debug (D)"
-                                  TabIndex="16" IsChecked="{Binding Param.Debug}"/>
-                    <StackPanel Margin="15,0,0,0" Visibility="{Binding IsChecked, ElementName=Debug,
-                                                               Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <CheckBox x:Name="DebugSpecificOption" Content="Not in use" TabIndex="17"/>
-                    </StackPanel>
 
                     <!--#endregion-->
 
