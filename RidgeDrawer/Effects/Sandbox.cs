@@ -6,10 +6,9 @@ using System.Drawing.Drawing2D;
 
 namespace RidgeDrawer
 {
-	public class Sandbox : BackendDrawerBase
+	public class Sandbox : IEffect
 	{
-
-		private void Play()
+		private void Apply()
 		{
 			using (Graphics graphics = Graphics.FromImage(newBitmap))
 			{
@@ -30,36 +29,6 @@ namespace RidgeDrawer
 
 				graphics.DrawCurve(new Pen(Color.Black), new Point[] { new Point(100, 100), new Point(200, 200), new Point(200, 100), new Point(100, 200) }, .5f);
 			}
-		}
-
-		protected override void DrawCurve(MyPoint[] coords)
-		{
-			Play();
-		}
-
-		protected override void DrawDots(MyPoint[] coords)
-		{
-			Play();
-		}
-
-		protected override void DrawLines(MyPoint[] coords)
-		{
-			Play();
-		}
-
-		protected override void DrawVariableLines(MyPoint[] coords, int y)
-		{
-			Play();
-		}
-
-		protected override void DrawBezier(MyPoint[] coords)
-		{
-			Play();
-		}
-
-		protected override void DrawDebugInfo()
-		{
-			throw new NotImplementedException();
 		}
 	}
 }

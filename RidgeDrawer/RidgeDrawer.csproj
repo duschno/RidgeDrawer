@@ -56,11 +56,11 @@
     <Compile Include="Effects\Ridge.cs" />
     <Compile Include="Effects\Squiggle.cs" />
     <Compile Include="Helpers\ConsoleArgumentAttribute.cs" />
-    <Compile Include="BackendDrawer\BackendDrawerBase.cs" />
+    <Compile Include="RenderBackend\BackendDrawerBase.cs" />
     <Compile Include="Effects\Manual2.cs" />
-    <Compile Include="BackendDrawer\PixelManual.cs" />
-    <Compile Include="BackendDrawer\GDIPlus.cs" />
-    <Compile Include="BackendDrawer\Cairo.cs" />
+    <Compile Include="RenderBackend\PixelManual.cs" />
+    <Compile Include="RenderBackend\GDIPlus.cs" />
+    <Compile Include="RenderBackend\Cairo.cs" />
     <Compile Include="Effects\CAS.cs" />
     <Compile Include="Effects\Sandbox.cs" />
     <Compile Include="Helpers\ArgsHelper.cs" />
