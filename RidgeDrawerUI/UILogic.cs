@@ -44,7 +44,8 @@ namespace RidgeDrawerUI
 					Angle = 0,
 					Smoothing = SmoothingType.None,
 					LineType = RidgeDrawer.LineType.Line,
-					Effect = typeof(Squiggle),
+					Method = RidgeDrawer.MethodType.Squiggle,
+					Effect = typeof(RidgeLines),
 					Backend = typeof(GDIPlus),
 					DrawOnSides = false,
 					PointsAroundPeak = -1,
@@ -118,12 +119,7 @@ namespace RidgeDrawerUI
 
 		private void LockUnusedParams()
 		{
-			if (Model.Param.Effect == typeof(Ridge))
-			{
-				WhitePoint.IsEnabled = true;
-				BlackPoint.IsEnabled = true;
-			}
-			else if (Model.Param.Effect == typeof(Squiggle))
+			if (Model.Param.Effect == typeof(RidgeLines))
 			{
 				WhitePoint.IsEnabled = true;
 				BlackPoint.IsEnabled = true;

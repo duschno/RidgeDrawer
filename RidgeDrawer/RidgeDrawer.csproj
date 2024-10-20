@@ -55,10 +55,7 @@
     <Compile Include="Logic.cs" />
     <Compile Include="MyPoint.cs" />
     <Compile Include="Effects\IEffect.cs" />
-    <Compile Include="Effects\Common.cs" />
-    <Compile Include="Effects\Ridge.cs" />
-    <Compile Include="Effects\PullToPoint.cs" />
-    <Compile Include="Effects\Squiggle.cs" />
+    <Compile Include="Effects\RidgeLines.cs" />
     <Compile Include="Effects\WiggleBlocks.cs" />
     <Compile Include="Effects\CAS.cs" />
     <Compile Include="Effects\Sandbox.cs" />

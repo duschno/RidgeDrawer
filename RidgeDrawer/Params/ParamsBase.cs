@@ -24,6 +24,6 @@ namespace RidgeDrawer
 		public bool Debug { get; set; }
 
 		[ConsoleArgument("ef", "Effect", type: typeof(IEffect))]
-		public Type Effect { get; set; } // в начале
+		public Type Effect { get; set; }
 	}
 }

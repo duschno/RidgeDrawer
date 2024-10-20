@@ -139,6 +139,9 @@
                             </StackPanel>
                         </GroupBox.Header>
                         <StackPanel Style="{StaticResource GroupBoxContent}">
+                            <TextBlock Text="Method"/>
+                            <ComboBox x:Name="Method" TabIndex="11" 
+                              Style="{StaticResource ComboBoxEnumStyle}" SelectedItem="{Binding Param.Method}"/>
                             <!--#region Text boxes-->
                             <TextBlock Text="Lines count"/>
                             <TextBox x:Name="LinesCount" PreviewTextInput="PositiveNumberValidation" 

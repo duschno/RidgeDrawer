@@ -12,6 +12,13 @@ namespace RidgeDrawer
 		Bezier
 	}
 
+	public enum MethodType
+	{
+		Ridge,
+		Squiggle
+		// TODO: коэф стягивания к указанной точке (типа как блюр по z индексу в афтере)
+	}
+
 	public class LogicParams
 	{
 		[ConsoleArgument("input_image", "Input image destination path",
@@ -56,6 +63,9 @@ namespace RidgeDrawer
 
 		[ConsoleArgument("lt", "Line type", type: typeof(LineType))]
 		public LineType LineType { get; set; } // в конце
+
+		[ConsoleArgument("mt", "Render algorithm method", "Method", typeof(MethodType))]
+		public MethodType Method { get; set; } // в начале
 
 		[ConsoleArgument("dos", "Draw on line sides", "Draw on sides", type: typeof(bool))]
 		public bool DrawOnSides { get; set; }
