@@ -66,8 +66,9 @@
     <Compile Include="Helpers\StringExtension.cs" />
     <Compile Include="Logic.cs" />
     <Compile Include="MyPoint.cs" />
+    <Compile Include="Params\IParam.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RenderParams.cs" />
+    <Compile Include="Params\RenderParams.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.editorconfig">

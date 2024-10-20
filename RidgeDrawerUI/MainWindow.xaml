@@ -88,7 +88,7 @@
             <ScrollViewer Grid.Column="0" Width="210" VerticalScrollBarVisibility="Auto"
                           Background="White">
                 <StackPanel Width="200" HorizontalAlignment="Left" Grid.Row="0">
-                    <!--#region Buttons-->
+                    <!--#region Common buttons-->
                     <Button Content="Open (O)" Margin="15,10,0,0" Click="Open_Click" HorizontalAlignment="Left"/>
                     <Button Content="Compare (C)" Margin="0,-20,16,0" Click="Compare_Click" HorizontalAlignment="Right"/>
                     <Button Content="Save (S)" Margin="15,10,0,0" Click="Save_Click" HorizontalAlignment="Left"/>
