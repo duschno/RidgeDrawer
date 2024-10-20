@@ -7,19 +7,19 @@ using System.Drawing.Drawing2D;
 
 namespace RidgeDrawer
 {
-	public class PixelManual : BackendDrawerBase
+	public class PixelManual : BackendBase
 	{
-		protected override void DrawBezier(MyPoint[] coords)
+		public override void DrawBezier(MyPoint[] coords)
 		{
 			throw new NotImplementedException();
 		}
 
-		protected override void DrawCurve(MyPoint[] coords)
+		public override void DrawCurve(MyPoint[] coords)
 		{
 			throw new NotImplementedException();
 		}
 
-		protected override void DrawDots(MyPoint[] coords)
+		public override void DrawDots(MyPoint[] coords)
 		{
 			foreach (var coord in coords)
 			{
@@ -90,7 +90,7 @@ namespace RidgeDrawer
 				newBitmap.SetPixel(x, y, Color.FromArgb(255 - alpha, color));
 		}
 
-		protected override void DrawLines(MyPoint[] coords)
+		public override void DrawLines(MyPoint[] coords)
 		{
 			for (int i = 0; i < coords.Length - 1; i++)
 				if (param.Smoothing == SmoothingType.Antialias)
@@ -99,12 +99,12 @@ namespace RidgeDrawer
 					DrawNonAALine(coords[i].X, coords[i].Y, coords[i + 1].X, coords[i + 1].Y);
 		}
 
-		protected override void DrawVariableLines(MyPoint[] coords, int y)
+		public override void DrawVariableLines(MyPoint[] coords, int y)
 		{
 			throw new NotImplementedException();
 		}
 
-		protected override void DrawDebugInfo()
+		public override void DrawDebugInfo()
 		{
 			throw new NotImplementedException();
 		}

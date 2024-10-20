@@ -8,7 +8,7 @@ namespace RidgeDrawer
 {
 	public class Sandbox : IEffect
 	{
-		private void Apply()
+		public void Apply(BackendBase backend, Bitmap newBitmap, Bitmap origBitmap, RenderParams param)
 		{
 			using (Graphics graphics = Graphics.FromImage(newBitmap))
 			{

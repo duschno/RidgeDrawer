@@ -14,10 +14,16 @@ namespace RidgeDrawer
 
 	public class ParamsBase
 	{
-		[ConsoleArgument("st", "Line smoothing", typeof(SmoothingType))]
+		[ConsoleArgument("bt", "Render backend", type: typeof(BackendBase))]
+		public Type Backend { get; set; }
+
+		[ConsoleArgument("st", "Line smoothing", type: typeof(SmoothingType))]
 		public SmoothingType Smoothing { get; set; } // в начале
 
-		[ConsoleArgument("d", "Render with debug info", typeof(bool))]
+		[ConsoleArgument("d", "Render with debug info", type: typeof(bool))]
 		public bool Debug { get; set; }
+
+		[ConsoleArgument("ef", "Effect", type: typeof(IEffect))]
+		public Type Effect { get; set; } // в начале
 	}
 }

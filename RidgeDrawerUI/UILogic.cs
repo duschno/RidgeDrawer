@@ -29,8 +29,8 @@ namespace RidgeDrawerUI
 			Width = SystemParameters.PrimaryScreenWidth * 0.9;
 			FillComboBox(Smoothing, typeof(SmoothingType));
 			FillComboBox(LineType, typeof(LineType));
-			FillComboBox(Effect, typeof(Effect));
-			FillComboBox(Backend, typeof(BackendDrawerBase));
+			FillComboBox(Effect, typeof(IEffect));
+			FillComboBox(Backend, typeof(BackendBase));
 			Model = new RenderParamsModel(
 				new RenderParams
 				{
@@ -44,7 +44,7 @@ namespace RidgeDrawerUI
 					Angle = 0,
 					Smoothing = SmoothingType.None,
 					LineType = RidgeDrawer.LineType.Line,
-					Effect = RidgeDrawer.Effect.Squiggle,
+					Effect = typeof(Squiggle),
 					Backend = typeof(GDIPlus),
 					DrawOnSides = false,
 					PointsAroundPeak = -1,
@@ -118,18 +118,15 @@ namespace RidgeDrawerUI
 
 		private void LockUnusedParams()
 		{
-			switch (Model.Param.Effect)
+			if (Model.Param.Effect == typeof(Ridge))
 			{
-				case RidgeDrawer.Effect.Ridge:
-					WhitePoint.IsEnabled = true;
-					BlackPoint.IsEnabled = true;
-					break;
-				case RidgeDrawer.Effect.Squiggle:
-					WhitePoint.IsEnabled = true;
-					BlackPoint.IsEnabled = true;
-					break;
-				default:
-					break;
+				WhitePoint.IsEnabled = true;
+				BlackPoint.IsEnabled = true;
+			}
+			else if (Model.Param.Effect == typeof(Squiggle))
+			{
+				WhitePoint.IsEnabled = true;
+				BlackPoint.IsEnabled = true;
 			}
 		}
 

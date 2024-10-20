@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace RidgeDrawer
 {
-	internal interface IEffect
+	public interface IEffect
 	{
-		void Apply();
+		void Apply(BackendBase backend, Bitmap newBitmap, Bitmap origBitmap, RenderParams param);
 	}
 }

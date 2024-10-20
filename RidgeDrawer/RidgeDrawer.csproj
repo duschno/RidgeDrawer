@@ -52,15 +52,17 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Effects\Common.cs" />
     <Compile Include="Effects\IEffect.cs" />
     <Compile Include="Effects\Ridge.cs" />
+    <Compile Include="Effects\PullToPoint.cs" />
     <Compile Include="Effects\Squiggle.cs" />
     <Compile Include="Helpers\ConsoleArgumentAttribute.cs" />
-    <Compile Include="RenderBackend\BackendDrawerBase.cs" />
-    <Compile Include="Effects\Manual2.cs" />
-    <Compile Include="RenderBackend\PixelManual.cs" />
-    <Compile Include="RenderBackend\GDIPlus.cs" />
-    <Compile Include="RenderBackend\Cairo.cs" />
+    <Compile Include="Backend\BackendBase.cs" />
+    <Compile Include="Backend\DoNotRememberWhatItIs.cs" />
+    <Compile Include="Backend\PixelManual.cs" />
+    <Compile Include="Backend\GDIPlus.cs" />
+    <Compile Include="Backend\Cairo.cs" />
     <Compile Include="Effects\CAS.cs" />
     <Compile Include="Effects\Sandbox.cs" />
     <Compile Include="Helpers\ArgsHelper.cs" />

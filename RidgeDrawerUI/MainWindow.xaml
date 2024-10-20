@@ -97,10 +97,6 @@
 
                     <Separator Height="8" Visibility="Hidden"/>
 
-                    <TextBlock Text="Effect"/>
-                    <ComboBox x:Name="Effect" TabIndex="11" 
-                              Style="{StaticResource ComboBoxEnumStyle}" SelectedItem="{Binding Param.Effect}"/>
-
                     <TextBlock Text="Backend"/>
                     <ComboBox x:Name="Backend" TabIndex="12"
                               Style="{StaticResource ComboBoxBaseStyle}" SelectedItem="{Binding Param.Backend}"
@@ -116,8 +112,13 @@
                                                                Converter={StaticResource BooleanToVisibilityConverter}}">
                         <CheckBox x:Name="DebugSpecificOption" Content="Not in use" TabIndex="17"/>
                     </StackPanel>
-
+                    
                     <Separator Height="8" Visibility="Hidden"/>
+
+                    <TextBlock Text="Effect"/>
+                    <ComboBox x:Name="Effect" TabIndex="11" 
+                              Style="{StaticResource ComboBoxBaseStyle}" SelectedItem="{Binding Param.Effect}"
+                              DisplayMemberPath="Name"/>
 
                     <!--#region Text boxes-->
                     <TextBlock Text="Lines count"/>
@@ -157,12 +158,8 @@
                                  TabIndex="8" Text="{Binding Param.PointsAroundPeak}"/>
                     <!--#endregion-->
 
-                    <Separator Height="8" Visibility="Hidden"/>
-
-
-
                     <!--#region Combo boxes-->
-                    <TextBlock Text="LineType" />
+                    <TextBlock Text="Line type" />
                     <ComboBox x:Name="LineType" TabIndex="10" 
                               Style="{StaticResource ComboBoxEnumStyle}" SelectedItem="{Binding Param.LineType}"/>
                     <!--#endregion-->
@@ -178,8 +175,6 @@
                                   TabIndex="15" IsChecked="{Binding Param.Invert}"/>
 
                     <!--#endregion-->
-
-                    <Separator Height="7" Visibility="Hidden"/>
 
                     <!--#region Specific params-->
                     <TextBlock Text="Specific parameters:"/>
