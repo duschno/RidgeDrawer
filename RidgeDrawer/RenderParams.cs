@@ -18,7 +18,7 @@ namespace RidgeDrawer
 		Bezier
 	}
 
-	public enum MethodType
+	public enum Effect
 	{
 		Ridge,
 		Squiggle
@@ -73,8 +73,8 @@ namespace RidgeDrawer
 		[ConsoleArgument("lt", "Line type", typeof(LineType))]
 		public LineType LineType { get; set; } // в конце
 
-		[ConsoleArgument("mt", "Render algorithm method", typeof(MethodType))]
-		public MethodType Method { get; set; } // в начале
+		[ConsoleArgument("ef", "Effect", typeof(Effect))]
+		public Effect Effect { get; set; } // в начале
 
 		[ConsoleArgument("bt", "Render backend", typeof(BackendDrawerBase))]
 		public Type Backend { get; set; }

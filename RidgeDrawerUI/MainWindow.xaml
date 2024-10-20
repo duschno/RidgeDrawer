@@ -146,9 +146,9 @@
                     <ComboBox x:Name="LineType" TabIndex="10" 
                               Style="{StaticResource ComboBoxEnumStyle}" SelectedItem="{Binding Param.LineType}"/>
 
-                    <TextBlock Text="Method"/>
-                    <ComboBox x:Name="Method" TabIndex="11" 
-                              Style="{StaticResource ComboBoxEnumStyle}" SelectedItem="{Binding Param.Method}"/>
+                    <TextBlock Text="Effect"/>
+                    <ComboBox x:Name="Effect" TabIndex="11" 
+                              Style="{StaticResource ComboBoxEnumStyle}" SelectedItem="{Binding Param.Effect}"/>
 
                     <TextBlock Text="Backend"/>
                     <ComboBox x:Name="Backend" TabIndex="12"

@@ -32,23 +32,23 @@ namespace RidgeDrawer // TODO: каждая линия со своими пар�
 
 		public void Draw()
 		{
-			switch (param.Method) // TODO: не рисовать линии без приращения
+			switch (param.Effect) // TODO: не рисовать линии без приращения
 			{
-				case MethodType.Ridge:
-					MethodRidge();
+				case Effect.Ridge:
+					EffectRidge();
 					break;
-				case MethodType.Squiggle:
-					MethodSquiggle();
+				case Effect.Squiggle:
+					EffectSquiggle();
 					break;
 				default:
-					throw new NotImplementedException($"{param.Method} drawing method is not supported");
+					throw new NotImplementedException($"{param.Effect} effect is not supported");
 			}
 
 			if (param.Debug)
 				DrawDebugInfo();
 		}
 
-		private void MethodRidge() // TODO: чекни скрин на телефоне с женщиной, там линии объемно смещаются от центра
+		private void EffectRidge() // TODO: чекни скрин на телефоне с женщиной, там линии объемно смещаются от центра
 		{
 			int lineNumber = 0; // сейчас он считает так: насколько относительно серого цвета сместить вверх или вниз линию. надо переделать от белого
 			while (lineNumber < param.LinesCount)
@@ -194,7 +194,7 @@ namespace RidgeDrawer // TODO: каждая линия со своими пар�
 			return (origBitmap.Height * lineNumber / param.LinesCount) + (origBitmap.Height / (param.LinesCount * 2));
 		}
 
-		private void MethodSquiggle() // TODO: фактор у линии тоже должен быть таким, что чем больше частота - тем больше амплитуда
+		private void EffectSquiggle() // TODO: фактор у линии тоже должен быть таким, что чем больше частота - тем больше амплитуда
 		{
 			if (param.WhitePoint <= param.BlackPoint)
 				throw new NotImplementedException($"White point is less or equal to black point");

@@ -52,6 +52,8 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Effects\IEffect.cs" />
+    <Compile Include="Effects\Squiggle.cs" />
     <Compile Include="Helpers\ConsoleArgumentAttribute.cs" />
     <Compile Include="BackendDrawer\BackendDrawerBase.cs" />
     <Compile Include="BackendDrawer\Manual2.cs" />
