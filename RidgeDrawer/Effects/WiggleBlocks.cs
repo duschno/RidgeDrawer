@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace RidgeDrawer
 {
-	public class WiggleDots : IEffect
+	public class WiggleBlocks : IEffect
 	{
 		int height;
 		int width;

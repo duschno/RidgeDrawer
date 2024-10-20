@@ -59,7 +59,7 @@
     <Compile Include="Effects\Ridge.cs" />
     <Compile Include="Effects\PullToPoint.cs" />
     <Compile Include="Effects\Squiggle.cs" />
-    <Compile Include="Effects\WiggleDots.cs" />
+    <Compile Include="Effects\WiggleBlocks.cs" />
     <Compile Include="Effects\CAS.cs" />
     <Compile Include="Effects\Sandbox.cs" />
     <Compile Include="Backend\BackendBase.cs" />
