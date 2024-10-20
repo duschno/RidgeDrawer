@@ -10,7 +10,7 @@ namespace RidgeDrawer
 		protected Bitmap origBitmap;
 		protected RenderParams param;
 
-		public void Construct(IBackend backend, Bitmap newBitmap, Bitmap origBitmap, RenderParams param)
+		public virtual void Construct(IBackend backend, Bitmap newBitmap, Bitmap origBitmap, RenderParams param)
 		{
 			this.backend = backend;
 			this.newBitmap = newBitmap;

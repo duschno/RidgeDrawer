@@ -66,6 +66,7 @@
     <Compile Include="Backend\GDIPlus.cs" />
     <Compile Include="Backend\Cairo.cs" />
     <Compile Include="Params\ParamsBase.cs" />
+    <Compile Include="Params\LogicParams.cs" />
     <Compile Include="Params\RenderParams.cs" />
     <Compile Include="Helpers\ArgsHelper.cs" />
     <Compile Include="Helpers\StringExtension.cs" />

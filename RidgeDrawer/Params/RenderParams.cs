@@ -19,19 +19,6 @@ namespace RidgeDrawer
 		// TODO: коэф стягивания к указанной точке (типа как блюр по z индексу в афтере)
 	}
 
-	public class LogicParams
-	{
-		[ConsoleArgument("input_image", "Input image destination path",
-			null, typeof(string), true, false)]
-		public string InputFilename { get; set; }
-
-		[ConsoleArgument("output_image", "Output image destination path, input_image path by default",
-			null, typeof(string), false, false)]
-		public string OutputFilename { get; set; }
-
-		public RenderParams RenderParams { get; set; }
-	}
-
 	public class RenderParams : ParamsBase
 	{
 		//добавить еще 2 параметра - сколько процентов от общего надо рисовать. если 0 и 100, то рисовать все, если 10 и 90, то с боков не будет
