@@ -31,7 +31,7 @@ jobs:
         msbuild -p:RestorePackagesConfig=true -t:restore;
         msbuild RidgeDrawer.sln -t:build -property:Configuration=Release;
         $version = "v$((Get-Item bin/Release/RidgeDrawer.exe).VersionInfo.FileVersion)";
-        Compress-Archive -Path bin/Release/*.exe -Destination RidgeDrawer.$version.zip;
+        Compress-Archive -Path bin/Release/* -Destination RidgeDrawer.$version.zip;
         echo "::set-output name=version::$version"
 
     - name: Create release
