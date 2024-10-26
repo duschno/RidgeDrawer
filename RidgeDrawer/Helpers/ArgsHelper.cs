@@ -178,11 +178,11 @@ namespace RidgeDrawer
 		/// </summary>
 		/// <param name="imagePath">Original image name</param>
 		/// <returns>Name with postfix</returns>
-		private static string AddPostfix(string imagePath)
+		public static string AddPostfix(string imagePath)
 		{
 			string directory = Path.GetDirectoryName(imagePath);
 			string filename = Path.GetFileNameWithoutExtension(imagePath);
-			string extension = ImageFormat.Png.ToString().ToLower();
+			string extension = ImageFormat.Png.ToString().ToLower(); // TODO: not PNG anymore, may vary
 			return Path.Combine(directory, $"{filename}_processed.{extension}");
 		}
 	}

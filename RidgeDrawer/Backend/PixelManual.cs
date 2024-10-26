@@ -1,14 +1,13 @@
-﻿using RidgeDrawer;
-using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 
 namespace RidgeDrawer
 {
 	public class PixelManual : BackendBase
 	{
+		public override string OutputTypeDescription => "PNG";
+		public override string OutputTypeExtension => "png";
+
 		public override void DrawBezier(MyPoint[] coords)
 		{
 			throw new NotImplementedException();
@@ -105,6 +104,16 @@ namespace RidgeDrawer
 		}
 
 		public override void DrawDebugInfo()
+		{
+			throw new NotImplementedException();
+		}
+
+		public override void Save(string outputFilename)
+		{
+			throw new NotImplementedException();
+		}
+
+		public override void FillRect(int x1, int y1, int x2, int y2)
 		{
 			throw new NotImplementedException();
 		}

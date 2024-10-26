@@ -3,8 +3,11 @@ using System.Drawing;
 
 namespace RidgeDrawer
 {
-	public class DoNotRememberWhatItIs : BackendBase
+	public class DoNotRememberWhatItIs : BackendBase //move to effects
 	{
+		public override string OutputTypeDescription => "PNG";
+		public override string OutputTypeExtension => "png";
+
 		public override void DrawBezier(MyPoint[] coords)
 		{
 			throw new NotImplementedException();
@@ -56,6 +59,16 @@ namespace RidgeDrawer
 		}
 
 		public override void DrawDebugInfo()
+		{
+			throw new NotImplementedException();
+		}
+
+		public override void Save(string outputFilename)
+		{
+			throw new NotImplementedException();
+		}
+
+		public override void FillRect(int x1, int y1, int x2, int y2)
 		{
 			throw new NotImplementedException();
 		}

@@ -1,28 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
-using System.Reflection;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Windows;
-using System.Windows.Interop;
-using System.Windows.Media.Imaging;
-using System.Text.RegularExpressions;
-using RidgeDrawer;
 
 namespace RidgeDrawer
 {
 	[Guid("1A91BC9C-09A1-4817-9C71-4D91A674AAF1")]
 	public class Logic
 	{
+		private static BackendBase backend;
+
 		/// <summary>
-		/// Gets backend drawer implementation
+		/// Gets backend implementation
 		/// </summary>
 		/// <param name="type">Backend to use</param>
-		/// <returns>Drawer instance</returns>
-		private static BackendBase GetBackendDrawer(Type type)
+		/// <returns>Backend instance</returns>
+		private static BackendBase GetBackend(Type type)
 		{
 			try
 			{
@@ -33,6 +27,9 @@ namespace RidgeDrawer
 				throw new NotImplementedException($"{type.Name} backend is not supported", e);
 			}
 		}
+
+		public static string OutputTypeDescription => backend.OutputTypeDescription;
+		public static string OutputType => backend.OutputTypeExtension;
 
 		/// <summary>
 		/// Gets all possible implementations
@@ -49,30 +46,23 @@ namespace RidgeDrawer
 		/// <summary>
 		/// Renders whole image
 		/// </summary>
-		/// <param name="origBitmap">Original bitmap</param>
+		/// <param name="inputFilename">Input file path</param>
 		/// <param name="param">Render params</param>
 		/// <returns>Rendered bitmap</returns>
-		private static Bitmap RenderImage(Bitmap origBitmap, RenderParams param)
+		public static Bitmap Render(string inputFilename, RenderParams param)
 		{
+			Bitmap origBitmap = new Bitmap(inputFilename);
 			Bitmap newBitmap = new Bitmap(origBitmap.Width, origBitmap.Height);
 
 			using (var graphics = Graphics.FromImage(newBitmap))
-			{
-				using (SolidBrush brush = new SolidBrush(Color.White))
-					graphics.FillRectangle(brush, 0, 0, newBitmap.Width, newBitmap.Height);
+			using (SolidBrush brush = new SolidBrush(Color.White))
+				graphics.FillRectangle(brush, 0, 0, newBitmap.Width, newBitmap.Height);
 
-				BackendBase drawer = GetBackendDrawer(param.Backend);
-				drawer.Construct(newBitmap, origBitmap, param);
-				drawer.Draw();
-			}
+			backend = GetBackend(param.Backend);
+			backend.Construct(newBitmap, origBitmap, param);
+			backend.Draw();
 
 			return newBitmap;
-		}
-
-		public static Bitmap ProcessByFilename(string inputFilename, RenderParams param)
-		{
-			Bitmap bmp = new Bitmap(inputFilename);
-			return RenderImage(bmp, param);
 		}
 
 		/// <summary>
@@ -80,39 +70,10 @@ namespace RidgeDrawer
 		/// </summary>
 		/// <param name="bmp">Bitmap to save</param>
 		/// <param name="outputFilename">Name of the file to use</param>
-		public static void SaveAsPng(BitmapSource bmp, string outputFilename)
+		public static void Save(string outputFilename)
 		{
-			using (var fileStream = new FileStream(outputFilename, FileMode.Create))
-			{
-				BitmapEncoder encoder = new PngBitmapEncoder();
-				encoder.Frames.Add(BitmapFrame.Create(bmp));
-				encoder.Save(fileStream);
-			}
+			backend.Save(outputFilename);
 		}
-
-		#region Helpers
-
-		[DllImport("gdi32.dll", EntryPoint = "DeleteObject")]
-		[return: MarshalAs(UnmanagedType.Bool)]
-		private static extern bool DeleteObject([In] IntPtr hObject);
-
-		/// <summary>
-		/// Converts Bitmap to BitmapSource
-		/// </summary>
-		/// <param name="bmp">Bitmap image</param>
-		/// <returns>BitmapSource image</returns>
-		public static BitmapSource BitmapToBitmapSource(Bitmap bmp)
-		{
-			var handle = bmp.GetHbitmap();
-			try
-			{
-				return Imaging.CreateBitmapSourceFromHBitmap(handle, 
-					IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-			}
-			finally { DeleteObject(handle); }
-		}
-
-		#endregion
 
 		#region Console app related stuff
 
@@ -197,8 +158,8 @@ namespace RidgeDrawer
 				Console.WriteLine(e.Message);
 				return;
 			}
-			Bitmap bmp = ProcessByFilename(logicParam.InputFilename, logicParam.RenderParams);
-			SaveAsPng(BitmapToBitmapSource(bmp), logicParam.OutputFilename);
+			Render(logicParam.InputFilename, logicParam.RenderParams); // TODO: для svg не нужно
+			Save(logicParam.OutputFilename);
 		}
 
 #endregion

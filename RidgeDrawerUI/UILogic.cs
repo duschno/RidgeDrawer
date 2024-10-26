@@ -33,7 +33,7 @@ namespace RidgeDrawerUI
 			FillComboBox(Effect, typeof(EffectBase));
 			FillComboBox(Backend, typeof(BackendBase));
 			Model = new RenderParamsModel(
-				new RenderParams
+				param: new RenderParams
 				{
 					LinesCount = 50,
 					Stroke = 1,
@@ -56,8 +56,8 @@ namespace RidgeDrawerUI
 					PullPointX = 960,
 					PullPointY = 540
 				},
-				filename,
-				() =>
+				filename: filename,
+				renderAction: () =>
 				{
 					try
 					{
@@ -74,7 +74,7 @@ namespace RidgeDrawerUI
 						Window.Title = $"{Path.GetFileName(Model.Filename)} - {appName}";
 						Model.OriginalBitmap = new Bitmap(Model.Filename);
 						Model.Original = ConvertToNativeDpi(Model.OriginalBitmap);
-						Model.Processed = ConvertToNativeDpi(Logic.ProcessByFilename(Model.Filename, Model.Param));
+						Model.Processed = ConvertToNativeDpi(Logic.Render(Model.Filename, Model.Param)); // тут возможно изображение 2х памяти будет занимать
 						Image.Source = Model.Processed;
 						scaler.Initialize();
 					}
@@ -129,7 +129,7 @@ namespace RidgeDrawerUI
 
 		private BitmapSource ConvertToNativeDpi(Bitmap bitmap)
 		{
-			BitmapSource bitmapSource = Logic.BitmapToBitmapSource(bitmap);
+			BitmapSource bitmapSource = BitmapHelper.BitmapToBitmapSource(bitmap);
 			DpiScale dpiScale = VisualTreeHelper.GetDpi(this);
 			int width = bitmapSource.PixelWidth;
 			int height = bitmapSource.PixelHeight;

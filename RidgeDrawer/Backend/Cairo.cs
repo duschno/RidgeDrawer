@@ -9,6 +9,9 @@ namespace RidgeDrawer
 {
 	public class Cairo : BackendBase
 	{
+		public override string OutputTypeDescription => "PNG";
+		public override string OutputTypeExtension => "png";
+
 		[DllImport(@"PlusPlus.dll", CallingConvention = CallingConvention.Cdecl)]
 		private extern static void Draw(IntPtr hdc, int[] x, int[] y, int size);
 
@@ -43,6 +46,16 @@ namespace RidgeDrawer
 		}
 
 		public override void DrawDebugInfo()
+		{
+			throw new NotImplementedException();
+		}
+
+		public override void Save(string outputFilename)
+		{
+			throw new NotImplementedException();
+		}
+
+		public override void FillRect(int x1, int y1, int x2, int y2)
 		{
 			throw new NotImplementedException();
 		}

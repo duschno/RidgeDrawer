@@ -13,6 +13,11 @@ namespace RidgeDrawer // TODO: каждая линия со своими пар�
 		public abstract void DrawCurve(MyPoint[] coords);
 		public abstract void DrawBezier(MyPoint[] coords);
 		public abstract void DrawDebugInfo();
+		public abstract void FillRect(int x1, int y1, int x2, int y2);
+		public abstract void Save(string outputFilename);
+		public virtual void Complete() { }
+		public abstract string OutputTypeDescription { get; }
+		public abstract string OutputTypeExtension { get; }
 
 		#endregion
 
@@ -42,6 +47,7 @@ namespace RidgeDrawer // TODO: каждая линия со своими пар�
 			}
 			
 			effect.Apply();
+			Complete();
 			if (param.Debug)
 				DrawDebugInfo();
 		}

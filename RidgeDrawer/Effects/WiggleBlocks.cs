@@ -67,22 +67,7 @@ namespace RidgeDrawer
 							}
 						}
 
-						DrawRect(newBitmap, x1, y1, x2, y2, colors[q++ % colors.Length]);
-					}
-				}
-			}
-
-		}
-
-		private void DrawRect(Bitmap newBitmap, int x1, int y1, int x2, int y2, Color color)
-		{
-			for (int x = x1; x < x2; x++)
-			{
-				for (int y = y1; y < y2; y++)
-				{
-					if (x > 0 && y > 0 && x < newBitmap.Width && y < newBitmap.Height)
-					{
-						newBitmap.SetPixel(x, y, color);
+						backend.FillRect(x1, y1, x2, y2);
 					}
 				}
 			}

@@ -5,7 +5,7 @@ using System.Diagnostics;
 namespace RidgeDrawer
 {
 	[DebuggerDisplay("X = {X} Y = {Y}")]
-	public class MyPoint
+	public struct MyPoint
 	{
 		private Point point;
 		private MyPoint(Point p)
@@ -62,6 +62,16 @@ namespace RidgeDrawer
 		public static implicit operator MyPoint(Point p)
 		{
 			return new MyPoint(p);
+		}
+
+		public static bool operator ==(MyPoint p1, MyPoint p2)
+		{
+			return p1.Equals(p2);
+		}
+
+		public static bool operator !=(MyPoint p1, MyPoint p2)
+		{
+			return !p1.Equals(p2);
 		}
 	}
 }

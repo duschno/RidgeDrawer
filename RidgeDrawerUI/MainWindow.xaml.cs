@@ -46,12 +46,13 @@ namespace RidgeDrawerUI
 
 			Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog
 			{
-				Filter = "Image files (*.png) | *.png"
+				FileName = ArgsHelper.AddPostfix(Model.Filename), // TODO: option to show all types, correct extenstion adding 
+				Filter = $"{Logic.OutputTypeDescription} (*.{Logic.OutputType}) | *.{Logic.OutputType}"
 			};
 
 			bool? result = dlg.ShowDialog();
 			if (result == true)
-				Logic.SaveAsPng(Model.Processed as BitmapSource, dlg.FileName);
+				Logic.Save(dlg.FileName);
 		}
 
 		private void Reset_Click(object sender, RoutedEventArgs e)

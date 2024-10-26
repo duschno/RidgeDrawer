@@ -4,6 +4,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.IO;
+using System.Windows.Media.Imaging;
 
 namespace RidgeDrawer
 {
@@ -14,6 +16,10 @@ namespace RidgeDrawer
 		private Brush brush;
 		private IEnumerator debugFillColorsEnumerator;
 		private IEnumerator debugStrokeColorsEnumerator;
+
+		public override string OutputTypeDescription => "PNG";
+		public override string OutputTypeExtension => "png";
+
 		public override void Construct(Bitmap newBitmap, Bitmap origBitmap, RenderParams param)
 		{
 			base.Construct(newBitmap, origBitmap, param);
@@ -124,6 +130,25 @@ namespace RidgeDrawer
 			int width = 20;
 			graphics.FillRectangle(brush, param.PullPointX - 1, param.PullPointY - width / 2, 2, width);
 			graphics.FillRectangle(brush, param.PullPointX - width / 2, param.PullPointY - 1, width, 2);
+		}
+
+		public override void Save(string outputFilename)
+		{
+			using (var fileStream = new FileStream(outputFilename, FileMode.Create))
+			{
+				BitmapEncoder encoder = new PngBitmapEncoder();
+				encoder.Frames.Add(BitmapFrame.Create(BitmapHelper.BitmapToBitmapSource(newBitmap)));
+				encoder.Save(fileStream);
+			}
+		}
+
+		public override void FillRect(int x1, int y1, int x2, int y2)
+		{
+			int minX = Math.Min(x1, x2);
+			int minY = Math.Min(y1, y2);
+			int maxX = Math.Max(x1, x2);
+			int maxY = Math.Max(y1, y2);
+			graphics.FillRectangle(new SolidBrush(GetColor(false)), minX, minY, maxX - minX, maxY - minY);
 		}
 	}
 
