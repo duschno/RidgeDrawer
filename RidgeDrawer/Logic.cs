@@ -158,10 +158,13 @@ namespace RidgeDrawer
 				Console.WriteLine(e.Message);
 				return;
 			}
-			Render(logicParam.InputFilename, logicParam.RenderParams); // TODO: для svg не нужно
+			Render(logicParam.InputFilename, logicParam.RenderParams); // TODO: not needed when SVG
+			if (logicParam.OutputFilename == null)
+				logicParam.OutputFilename = ArgsHelper.AddPostfix(logicParam.InputFilename, OutputType, true);
 			Save(logicParam.OutputFilename);
+			Console.WriteLine($"Saved to {logicParam.OutputFilename}");
 		}
 
-#endregion
+		#endregion
 	}
 }

@@ -12,7 +12,7 @@ namespace RidgeDrawer
 	{
 		internal static void PrintUsage()
 		{
-			string argLine = "Usage: ridgedrawer";
+			string argLine = $"Usage: {Assembly.GetCallingAssembly().GetName().Name}";
 			int usageIndent = argLine.Length;
 			int longestArg = 0;
 
@@ -102,8 +102,6 @@ namespace RidgeDrawer
 				logicParam.OutputFilename = args[1];
 				args = args.Skip(1).ToArray();
 			}
-			else
-				logicParam.OutputFilename = AddPostfix(logicParam.InputFilename);
 
 			if (logicParam.RenderParams == null)
 				logicParam.RenderParams = new RenderParams();
@@ -178,11 +176,10 @@ namespace RidgeDrawer
 		/// </summary>
 		/// <param name="imagePath">Original image name</param>
 		/// <returns>Name with postfix</returns>
-		public static string AddPostfix(string imagePath)
+		public static string AddPostfix(string imagePath, string extension, bool includeDirectory)
 		{
-			string directory = Path.GetDirectoryName(imagePath);
+			string directory = includeDirectory ? Path.GetDirectoryName(imagePath) : string.Empty;
 			string filename = Path.GetFileNameWithoutExtension(imagePath);
-			string extension = ImageFormat.Png.ToString().ToLower(); // TODO: not PNG anymore, may vary
 			return Path.Combine(directory, $"{filename}_processed.{extension}");
 		}
 	}

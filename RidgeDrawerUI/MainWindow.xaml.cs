@@ -46,7 +46,7 @@ namespace RidgeDrawerUI
 
 			Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog
 			{
-				FileName = ArgsHelper.AddPostfix(Model.Filename), // TODO: option to show all types, correct extenstion adding 
+				FileName = ArgsHelper.AddPostfix(Model.Filename, Logic.OutputType, false),
 				Filter = $"{Logic.OutputTypeDescription} (*.{Logic.OutputType}) | *.{Logic.OutputType}"
 			};
 
