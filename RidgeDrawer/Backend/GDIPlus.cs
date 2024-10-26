@@ -81,7 +81,7 @@ namespace RidgeDrawer
 				strokeAmount = 2;
 			}
 			foreach (MyPoint coord in coords)
-				graphics.FillRectangle(brush, coord.X, coord.Y, strokeAmount, strokeAmount);
+				graphics.FillRectangle(brush, coord.X - strokeAmount / 2, coord.Y - strokeAmount / 2, strokeAmount, strokeAmount);
 		}
 
 		private MyPoint[] GetFillCoordinates(MyPoint[] coords)

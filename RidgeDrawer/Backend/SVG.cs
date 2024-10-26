@@ -48,7 +48,7 @@ namespace RidgeDrawer
 				{
 					CenterX = coord.X,
 					CenterY = coord.Y,
-					Radius = param.Stroke
+					Radius = (float)param.Stroke / 2
 				};
 				svg.Children.Add(circle);
 			}
