@@ -28,7 +28,6 @@ jobs:
     - name: Build solution & zip binaries
       id: build_solution
       run: >
-        nuget restore RidgeDrawer.sln
         msbuild RidgeDrawer.sln -t:rebuild -property:Configuration=Release;
         $version = "v$((Get-Item bin/Release/RidgeDrawer.exe).VersionInfo.FileVersion)";
         Compress-Archive -Path bin/Release/*.exe -Destination RidgeDrawer.$version.zip;
