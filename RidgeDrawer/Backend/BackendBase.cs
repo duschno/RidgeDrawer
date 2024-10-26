@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace RidgeDrawer // TODO: каждая линия со своими параматрами, но это уже в афтере - типа рандом такой
 {
-	public abstract class BackendBase : IBackend
+	public abstract class BackendBase
 	{
 		#region Abstract methods
 

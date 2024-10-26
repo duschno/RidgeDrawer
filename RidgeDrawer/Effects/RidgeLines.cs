@@ -249,7 +249,7 @@ namespace RidgeDrawer
 				lineNumber++;
 			}
 		}
-		protected void RenderLine(IBackend backend, List<MyPoint> coords, RenderParams param, int y)
+		protected void RenderLine(BackendBase backend, List<MyPoint> coords, RenderParams param, int y)
 		{
 			if (coords.Count < 2)
 				return;

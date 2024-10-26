@@ -5,12 +5,12 @@ namespace RidgeDrawer
 {
 	public abstract class EffectBase
 	{
-		protected IBackend backend;
+		protected BackendBase backend;
 		protected Bitmap newBitmap;
 		protected Bitmap origBitmap;
 		protected RenderParams param;
 
-		public virtual void Construct(IBackend backend, Bitmap newBitmap, Bitmap origBitmap, RenderParams param)
+		public virtual void Construct(BackendBase backend, Bitmap newBitmap, Bitmap origBitmap, RenderParams param)
 		{
 			this.backend = backend;
 			this.newBitmap = newBitmap;

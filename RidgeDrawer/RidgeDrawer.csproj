@@ -72,7 +72,6 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Backend\SVG.cs" />
-    <Compile Include="Backend\IBackend.cs" />
     <Compile Include="BitmapHelper.cs" />
     <Compile Include="Logic.cs" />
     <Compile Include="MyPoint.cs" />
