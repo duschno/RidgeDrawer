@@ -49,7 +49,7 @@ namespace RidgeDrawer
 		/// <param name="inputFilename">Input file path</param>
 		/// <param name="param">Render params</param>
 		/// <returns>Rendered bitmap</returns>
-		public static Bitmap Render(string inputFilename, RenderParams param)
+		public static Bitmap Render(string inputFilename, ParamsBase param)
 		{
 			Bitmap origBitmap = new Bitmap(inputFilename);
 			Bitmap newBitmap = new Bitmap(origBitmap.Width, origBitmap.Height);

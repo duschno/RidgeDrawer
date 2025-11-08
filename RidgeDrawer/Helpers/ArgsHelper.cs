@@ -115,7 +115,7 @@ namespace RidgeDrawer
 					propAndAttrs.Add(new Tuple<PropertyInfo, ConsoleArgumentAttribute>(prop, attr));
 			}
 			Regex r = new Regex(@"^-(?<name>\w+)(:(?<value>.+))?$", RegexOptions.ExplicitCapture);
-			RenderParams renderParam = logicParam.RenderParams;
+			ParamsBase renderParam = logicParam.RenderParams;
 			foreach (string arg in args)
 			{
 				Match match = r.Match(arg);
@@ -142,7 +142,7 @@ namespace RidgeDrawer
 			return logicParam;
 		}
 
-		public static string ArgsFromParams(string filename, RenderParams param)
+		public static string ArgsFromParams(string filename, ParamsBase param)
 		{
 			if (string.IsNullOrEmpty(filename))
 				return string.Empty;

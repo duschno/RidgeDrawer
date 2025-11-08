@@ -4,24 +4,17 @@ using System.Threading.Tasks;
 
 namespace RidgeDrawer
 {
-	internal class CAS : EffectBase
+	public class CAS : EffectBase<CASParams>
 	{
-		float Sharpening = 1.0f;
-		float Contrast = 0.0f;
-		int height;
-		int width;
-		Bitmap newBitmap;
-		Bitmap origBitmap;
+		public CAS(BackendBase backend, Bitmap newBitmap, Bitmap origBitmap, CASParams param) : base(backend, newBitmap, origBitmap, param)
+		{
+		}
 
 		public override void Apply()
 		{
-			height = newBitmap.Height;
-			width = newBitmap.Width;
-			this.newBitmap = newBitmap;
-			this.origBitmap = origBitmap;
 			using (Graphics graphics = Graphics.FromImage(newBitmap))
 			{
-				Parallel.For(0, width, Sharpen);
+				Parallel.For(0, newBitmap.Width, Sharpen);
 			}
 		}
 
@@ -43,6 +36,8 @@ namespace RidgeDrawer
 
 		private void Sharpen(int x)
 		{
+			int height = newBitmap.Height;
+			int width = newBitmap.Width;
 			for (int y = 0; y < height; y++)
 			{
 				if (x == 0 || y == 0 ||
@@ -91,7 +86,7 @@ namespace RidgeDrawer
 				// Shaping amount of sharpening.
 				ampRGB = Rsqrt(ampRGB);
 
-				float peak = -3.0f * Contrast + 8.0f;
+				float peak = -3.0f * param.Contrast + 8.0f;
 				Vector3 wRGB = -Rcp(ampRGB * peak);
 
 				Vector3 rcpWeightRGB = Rcp(4f * wRGB + new Vector3(1));
@@ -102,7 +97,7 @@ namespace RidgeDrawer
 				Vector3 window = (b + d) + (f + h);
 				Vector3 outColor = Saturate((window * wRGB + e) * rcpWeightRGB);
 
-				SetPixelLock(newBitmap, x, y, ToColor(Vector3.Lerp(e, outColor, Sharpening)));
+				SetPixelLock(newBitmap, x, y, ToColor(Vector3.Lerp(e, outColor, param.Sharpening)));
 			}
 		}
 

@@ -23,9 +23,9 @@ namespace RidgeDrawer // TODO: каждая линия со своими пар�
 
 		protected Bitmap newBitmap;
 		protected Bitmap origBitmap;
-		protected RenderParams param;
+		protected ParamsBase param;
 
-		public virtual void Construct(Bitmap newBitmap, Bitmap origBitmap, RenderParams param)
+		public virtual void Construct(Bitmap newBitmap, Bitmap origBitmap, ParamsBase param)
 		{
 			this.newBitmap = newBitmap;
 			this.origBitmap = origBitmap;
@@ -34,12 +34,15 @@ namespace RidgeDrawer // TODO: каждая линия со своими пар�
 
 		public void Draw()
 		{
-			EffectBase effect;
+			IEffect effect;
 			try
 			{
 				// TODO: не рисовать линии, у которых не было приращения
-				effect = Activator.CreateInstance(param.Effect) as EffectBase;
-				effect.Construct(this, newBitmap, origBitmap, param);
+				effect = Activator.CreateInstance(
+					param.Effect, this, newBitmap, origBitmap, param) as IEffect;
+				//effect = Activator.CreateInstance(
+				//	param.Effect.MakeGenericType(new Type[] { param.GetType() }),
+				//	this, newBitmap, origBitmap, param) as IEffect;
 			}
 			catch (Exception)
 			{

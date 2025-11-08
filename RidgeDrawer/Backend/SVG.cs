@@ -11,10 +11,10 @@ namespace RidgeDrawer
 	{
 		private SvgDocument svg;
 
-		public override string OutputTypeDescription => "SVG";
+		public override string OutputTypeDescription => "SVG"; /*wtf is this, re-check and delete maybe*/
 		public override string OutputTypeExtension => "svg";
 
-		public override void Construct(Bitmap newBitmap, Bitmap origBitmap, RenderParams param)
+		public override void Construct(Bitmap newBitmap, Bitmap origBitmap, ParamsBase param)
 		{
 			base.Construct(newBitmap, origBitmap, param);
 			svg = new SvgDocument

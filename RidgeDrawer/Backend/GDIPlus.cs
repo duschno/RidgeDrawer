@@ -20,7 +20,7 @@ namespace RidgeDrawer
 		public override string OutputTypeDescription => "PNG";
 		public override string OutputTypeExtension => "png";
 
-		public override void Construct(Bitmap newBitmap, Bitmap origBitmap, RenderParams param)
+		public override void Construct(Bitmap newBitmap, Bitmap origBitmap, ParamsBase param)
 		{
 			base.Construct(newBitmap, origBitmap, param);
 			graphics = Graphics.FromImage(newBitmap);

@@ -4,8 +4,12 @@ using System.Drawing;
 
 namespace RidgeDrawer
 {
-	public class RidgeLines : EffectBase
+	public class RidgeLines : EffectBase<RenderParams>
 	{
+		public RidgeLines(BackendBase backend, Bitmap newBitmap, Bitmap origBitmap, RenderParams param) : base(backend, newBitmap, origBitmap, param)
+		{
+		}
+
 		public override void Apply()
 		{
 			switch (param.Method) // TODO: не рисовать линии без приращения

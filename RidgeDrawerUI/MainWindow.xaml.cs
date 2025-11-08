@@ -203,8 +203,11 @@ namespace RidgeDrawerUI
 			System.Windows.Point? point = GetCursorPositionOverImage();
 			if (point.HasValue)
 			{
-				Model.Param.PullPointX = (int)point.Value.X;
-				Model.Param.PullPointY = (int)point.Value.Y;
+				if (Model.Param is RenderParams)
+				{
+					(Model.Param as RenderParams).PullPointX = (int)point.Value.X;
+					(Model.Param as RenderParams).PullPointY = (int)point.Value.Y;
+				}
 				UpdateView();
 			}
 		}

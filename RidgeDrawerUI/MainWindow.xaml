@@ -111,7 +111,7 @@
                                           DisplayMemberPath="Name"/>
                             </StackPanel>
                         </GroupBox.Header>
-                        <StackPanel>
+                        <StackPanel x:Name="BackendParams">
                             <TextBlock Text="Smoothing"/>
                             <ComboBox x:Name="Smoothing" TabIndex="9"
                                       Style="{StaticResource ComboBoxEnumStyle}" SelectedItem="{Binding Param.Smoothing}"/>
@@ -134,7 +134,7 @@
                               DisplayMemberPath="Name"/>
                             </StackPanel>
                         </GroupBox.Header>
-                        <StackPanel>
+                        <StackPanel x:Name="EffectParams">
                             <TextBlock Text="Method"/>
                             <ComboBox x:Name="Method" TabIndex="11" 
                               Style="{StaticResource ComboBoxEnumStyle}" SelectedItem="{Binding Param.Method}"/>

@@ -3,11 +3,15 @@ using System.Drawing;
 
 namespace RidgeDrawer
 {
-	public class WiggleBlocks : EffectBase
+	public class WiggleBlocks : EffectBase<RenderParams>
 	{
 		int height;
 		int width;
 		Color[] colors = new Color[] { Color.Black };
+
+		public WiggleBlocks(BackendBase backend, Bitmap newBitmap, Bitmap origBitmap, RenderParams param) : base(backend, newBitmap, origBitmap, param)
+		{
+		}
 
 		public override void Apply()
 		{

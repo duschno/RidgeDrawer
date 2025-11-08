@@ -9,7 +9,7 @@ namespace RidgeDrawerUI
 	public class RenderParamsModel : INotifyPropertyChanged
 	{
 		private Action render;
-		private RenderParams prevParam;
+		private ParamsBase prevParam;
 		private string prevFilename;
 
 		public RenderParamsModel(RenderParams param, string filename, Action renderAction)
@@ -20,8 +20,8 @@ namespace RidgeDrawerUI
 			render = renderAction;
 		}
 
-		public RenderParams Param { get; set; }
-		public RenderParams DefaultParam { get; private set; }
+		public ParamsBase Param { get; set; }
+		public ParamsBase DefaultParam { get; private set; }
 		public string Filename { get; set; }
 		public Bitmap OriginalBitmap { get; set; }
 		public ImageSource Original { get; set; }

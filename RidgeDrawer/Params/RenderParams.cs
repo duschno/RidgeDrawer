@@ -27,9 +27,6 @@ namespace RidgeDrawer
 		[ConsoleArgument("l", "Amount of lines", "Lines count")]
 		public int LinesCount { get; set; }
 
-		[ConsoleArgument("s", "Line stroke width", "Stroke")]
-		public int Stroke { get; set; } // в конце прямо перед отрисовкой
-
 		[ConsoleArgument("f", "Multiply factor", "Factor")]
 		public int Factor { get; set; }
 
@@ -48,8 +45,6 @@ namespace RidgeDrawer
 		[ConsoleArgument("a", "Angle")]
 		public int Angle { get; set; }
 
-		[ConsoleArgument("lt", "Line type", type: typeof(LineType))]
-		public LineType LineType { get; set; } // в конце
 
 		[ConsoleArgument("mt", "Render algorithm method", "Method", typeof(MethodType))]
 		public MethodType Method { get; set; } // в начале
@@ -60,39 +55,12 @@ namespace RidgeDrawer
 		[ConsoleArgument("pap", "Amount of points around peaks\nDoes not work at the moment", "Points around peak")]
 		public int PointsAroundPeak { get; set; }
 
-		[ConsoleArgument("fi", "Prevent lines overlapping", "Fill inside", type: typeof(bool))]
-		public bool FillInside { get; set; }
-
 		[ConsoleArgument("inv", "Invert", type: typeof(bool))]
 		public bool Invert { get; set; }
 
-		[ConsoleArgument("ptx", "Pull lines to point (X axis)\nDoes not work at the moment", "Pull to X")]
-		public int PullPointX { get; set; } // todo: make so that it is image center if this param is not specified // \d+(.\d+)?(,\d+(.\d+)?)?
-
-		[ConsoleArgument("pty", "Pull lines to point (Y axis)\nDoes not work at the moment", "Pull to Y")]
-		public int PullPointY { get; set; }
-
-		public RenderParams Clone()
+		public override ParamsBase Clone()
 		{
-			RenderParams clone = new RenderParams();
-			foreach (PropertyInfo prop in typeof(RenderParams).GetProperties())
-				prop.SetValue(clone, prop.GetValue(this));
-			return clone;
-		}
-
-		public bool Equals(RenderParams other)
-		{
-			if (other == null)
-				return false;
-			foreach (PropertyInfo prop in typeof(RenderParams).GetProperties())
-			{
-				var v1 = prop.GetValue(this);
-				var v2 = prop.GetValue(other);
-				if (!Equals(v1, v2))
-					return false;
-			}
-
-			return true;
+			return CloneImpl<RenderParams>();
 		}
 	}
 }

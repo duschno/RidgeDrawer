@@ -10,6 +10,6 @@
 			null, typeof(string), false, false)]
 		public string OutputFilename { get; set; }
 
-		public RenderParams RenderParams { get; set; }
+		public ParamsBase RenderParams { get; set; }
 	}
 }

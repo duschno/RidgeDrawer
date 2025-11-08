@@ -1,16 +1,15 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 
 namespace RidgeDrawer
 {
-	public abstract class EffectBase
+	public abstract class EffectBase<T> : IEffect where T : ParamsBase
 	{
 		protected BackendBase backend;
 		protected Bitmap newBitmap;
 		protected Bitmap origBitmap;
-		protected RenderParams param;
+		protected T param;
 
-		public virtual void Construct(BackendBase backend, Bitmap newBitmap, Bitmap origBitmap, RenderParams param)
+		public EffectBase(BackendBase backend, Bitmap newBitmap, Bitmap origBitmap, T param)
 		{
 			this.backend = backend;
 			this.newBitmap = newBitmap;
