@@ -20,6 +20,9 @@ namespace RidgeDrawer
 				case MethodType.Squiggle:
 					MethodSquiggle();
 					break;
+				case MethodType.SquiggleLegacy:
+					MethodSquiggleLegacy();
+					break;
 				default:
 					throw new NotImplementedException($"{param.Method} drawing method is not supported");
 			}
@@ -170,6 +173,34 @@ namespace RidgeDrawer
 		{
 			//	точное положение линии от нуля							прибавляем половину интервала, чтобы было посередине
 			return (origBitmap.Height * lineNumber / param.LinesCount) + (origBitmap.Height / (param.LinesCount * 2));
+		}
+
+		public void MethodSquiggleLegacy()
+		{
+			int lineNumber = 0;
+			while (lineNumber < param.LinesCount)
+			{
+				List<MyPoint> coords = new List<MyPoint>();
+				int sign = -1;
+				int y = origBitmap.Height * lineNumber / param.LinesCount + origBitmap.Height / (param.LinesCount * 2);
+				coords.Add(new System.Drawing.Point(0, y));
+				int accumulator = param.ChunkSize;
+				for (int x = 1; x < origBitmap.Width; x += accumulator)
+				{
+					System.Drawing.Color pixel = origBitmap.GetPixel(x, y);
+					int grayscale = 255 - (pixel.R + pixel.G + pixel.B) / 3;
+					accumulator = (param.ChunkSize * (255 - grayscale) + 10) / 10;
+					int factor = param.Factor;
+					/**/
+					grayscale = grayscale == 0 ? 1 : grayscale;
+					coords.Add(new System.Drawing.Point(
+						x + accumulator, y + (sign * factor * grayscale / 80)));
+					sign *= -1;
+				}
+
+				RenderLine(backend, coords, param, y);
+				lineNumber++;
+			}
 		}
 
 		public void MethodSquiggle()
